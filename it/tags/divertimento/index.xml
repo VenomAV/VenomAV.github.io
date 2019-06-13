@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Divertimento on Development: people, code &amp; me</title>
+    <link>http://www.andreavallotti.tech/it/tags/divertimento/</link>
+    <description>Recent content in Divertimento on Development: people, code &amp; me</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 29 Aug 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.andreavallotti.tech/it/tags/divertimento/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Console.WriteLine( &#34;Hello, World!&#34; );</title>
+      <link>http://www.andreavallotti.tech/it/2017/08/console.writeline-hello-world/</link>
+      <pubDate>Tue, 29 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/2017/08/console.writeline-hello-world/</guid>
+      <description>Così sono iniziati tutti gli esperimenti che ho fatto nella mia vita da informatico: scrivere Hello, World! a video. Quindi ho pensato di iniziare nello stesso modo questo nuovo esperimento: tenere un blog in cui scrivere di argomenti che ritengo interessanti e sui quali mi piacerebbe sentire l&amp;rsquo;opinione degli altri.
+Chi mi conosce sa benissimo che le materie umanistiche non sono mai state il mio forte per cui &amp;ldquo;scrivere un blog&amp;rdquo; non è esattamente nelle mie corde.</description>
+    </item>
+    
+  </channel>
+</rss>

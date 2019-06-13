@@ -1,0 +1,1126 @@
+
+
+  
+    
+  
+
+
+  
+
+
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.54.0">
+    <meta name="theme" content="Tranquilpeak 0.3.1-BETA">
+    <title>Strategic Domain-Driven Design</title>
+    <meta name="author" content="Andrea Vallotti">
+    <meta name="keywords" content="ddd, design, architecture, development, dot-net, agile, cloud, azure, developers">
+
+    <link rel="icon" href="http://www.andreavallotti.tech/images/favicon.png">
+    
+
+    
+    <meta name="description" content="Dopo la lettura del libro blu di Evans mi sono appassionato al Domain-Driven Design. Ero ancora in America quando, con quattro mesi di anticipo, mi iscrissi al workshop Strategic Domain-Driven Design di Alberto Brandolini (aka ziobrando) organizzato da Avanscoperta. Non volevo certo perdermelo.
+Poi, preso dal caos di tutti i giorni, avevo perso il senso del tempo quando, a metà ottobre, ho ricevuto una mail da parte di Avanscoperta che mi ha ricordato del corso imminente: è stato come se qualcuno mi avesse regalato un fine settimana alla spa!">
+    <meta property="og:description" content="Dopo la lettura del libro blu di Evans mi sono appassionato al Domain-Driven Design. Ero ancora in America quando, con quattro mesi di anticipo, mi iscrissi al workshop Strategic Domain-Driven Design di Alberto Brandolini (aka ziobrando) organizzato da Avanscoperta. Non volevo certo perdermelo.
+Poi, preso dal caos di tutti i giorni, avevo perso il senso del tempo quando, a metà ottobre, ho ricevuto una mail da parte di Avanscoperta che mi ha ricordato del corso imminente: è stato come se qualcuno mi avesse regalato un fine settimana alla spa!">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Strategic Domain-Driven Design">
+    <meta property="og:url" content="http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/">
+    <meta property="og:site_name" content="Development: people, code &amp; me">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Dopo la lettura del libro blu di Evans mi sono appassionato al Domain-Driven Design. Ero ancora in America quando, con quattro mesi di anticipo, mi iscrissi al workshop Strategic Domain-Driven Design di Alberto Brandolini (aka ziobrando) organizzato da Avanscoperta. Non volevo certo perdermelo.
+Poi, preso dal caos di tutti i giorni, avevo perso il senso del tempo quando, a metà ottobre, ho ricevuto una mail da parte di Avanscoperta che mi ha ricordato del corso imminente: è stato come se qualcuno mi avesse regalato un fine settimana alla spa!">
+    
+      <meta name="twitter:creator" content="@AndreaVallotti">
+    
+    
+      <meta property="fb:app_id" content="170534096895468">
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/ddd-workshop/DDD_Workshop.jpg">
+    
+
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://www.andreavallotti.tech/css/style-u6mk0ojoywresbx8iepslrmmhl4stuhrsxuwhkpwrkrx7mryjcaimasnk4pi.min.css" />
+    
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-105324949-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://www.andreavallotti.tech/it/">Development: people, code &amp; me</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://www.andreavallotti.tech/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=90" alt="Foto dell&#39;autore" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://www.andreavallotti.tech/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Foto dell&#39;autore" />
+        </a>
+        <h4 class="sidebar-profile-name">Andrea Vallotti</h4>
+        
+          <h5 class="sidebar-profile-bio">Appassionato di software: architetto, sviluppatore e technology scout. Agilista entusiasta. MCSD - App Builder, MCSA - Cloud Platform, CSM, e CSPO. Mi diverte imparare sempre cose nuove, mentre creo <em>software eccezionale</em> e aiuto gli altri a fare lo stesso. <a href="http://www.andreavallotti.tech/it/page/about">Continua.</a></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categorie</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archivio</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">Chi sono</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/andrea-vallotti-b379313/" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+      
+      <span class="sidebar-button-desc">LinkedIn</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/AndreaVallotti" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-language"></i>
+      
+      <span class="sidebar-button-desc">English</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              post-header-cover--partial"
+       style="background-image:url('https://res.cloudinary.com/andreavallotti/image/upload/blog/images/ddd-workshop/DDD_Workshop.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Strategic Domain-Driven Design
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  
+    <time itemprop="datePublished" datetime="2017-11-22T00:00:00Z">
+      
+  
+  
+  
+  
+    22 Novembre 2017
+  
+
+    </time>
+  
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://www.andreavallotti.tech/it/categories/formazione">Formazione</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               hasCoverCaption">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+            <span class="post-header-cover-caption caption">Credit Avanscoperta</span>
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>Dopo la lettura del <a href="https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215">libro blu di Evans</a>
+mi sono appassionato al Domain-Driven Design. Ero ancora in America quando, con quattro
+mesi di anticipo, mi iscrissi al workshop Strategic Domain-Driven Design di Alberto
+Brandolini (aka <a href="https://twitter.com/ziobrando">ziobrando</a>) organizzato da <a href="https://www.avanscoperta.it/it/training/strategic-domain-driven-design/">Avanscoperta</a>.
+Non volevo certo perdermelo.</p>
+
+<p>Poi, preso dal caos di tutti i giorni, avevo perso il senso del tempo quando,
+a metà ottobre, ho ricevuto una mail da parte di Avanscoperta che mi ha ricordato
+del corso imminente: è stato come se qualcuno mi avesse regalato un fine settimana
+alla spa!</p>
+
+<h2 id="cosa-vuol-dire-sviluppare-software">Cosa vuol dire sviluppare software?</h2>
+
+<p>Una delle prime attività proposte da Alberto è stata quella di definire insieme cosa
+vuol dire sviluppare software utilizzando altri lavori come metafora. I lavori
+più gettonati sono stati l&rsquo;architetto, e l&rsquo;artigiano, ma ziobrando ne ha proposti
+alcuni non immediati e molto calzanti:</p>
+
+<ul>
+<li><strong>l&rsquo;artificiere</strong>: quando siamo chiamati ad intervenire sul codice scritto da qualcun
+altro il quale &ldquo;non si occupa più del progetto&rdquo;;</li>
+<li><strong>il quinto Beatles</strong>: ovvero quello che quando va tutto bene non se lo fila nessuno
+ma che ha tutte le colpe quando qualcosa non va come atteso;</li>
+<li><strong>il fumettista</strong>: perché spesso abbiamo scadenze prefissate e dobbiamo cercare
+di esprimere al meglio la nostra arte nel tempo che abbiamo a disposizione.</li>
+</ul>
+
+<p>La figura dell&rsquo;artificiere è quella che sicuramente mi ha colpito di più perché ho
+ripensato a tutte quelle volte in cui sono stato chiamato ad intervenire su applicazioni
+esistenti dovendo risolvere problemi fantasma senza il supporto di alcun tipo di
+test. E ripensandoci ora non so come ho fatto a non fare la fine di Dylan nel
+<a href="https://it.wikipedia.org/wiki/Episodi_di_Grey%27s_Anatomy_(seconda_stagione)#/media/File:Grey%27s_anatomy_2.png">diciassettesimo episodio della seconda stagione di Grey&rsquo;s Anatomy</a>!</p>
+
+<p>Questo confronto ha portato Alberto a spiegarci il suo modello dello sviluppo software,
+la cui magistrale illustrazione riporto qui sotto.</p>
+
+<figure>
+    <img src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/ddd-workshop/001-software-development-model.jpg"
+         alt="Modello di sviluppo software secondo ziobrando"/> 
+</figure>
+
+
+<p>Sostanzialmente lo sviluppo software è un cocktail di quattro componenti: costruire,
+imparare, decidere e aspettare/nulla.</p>
+
+<p><strong>Costruire</strong>: se vogliamo la parte più semplice, e meno divertente, dello sviluppo
+software, ovvero quando sappiamo esattamente cosa dobbiamo fare, e come dobbiamo
+farlo. Questa è la parte più deterministica e pianificabile del nostro lavoro. Quella
+che meglio si adatta ad una gestione stile waterfall. Se non fosse per le altre componenti
+ogni progetto software potrebbe essere gestito nello stesso modo della costruzione
+di un palazzo!</p>
+
+<p><strong>Imparare</strong>: quando iniziamo un nuovo progetto la nostra ignoranza è elevata.
+Ignoriamo cosa serve veramente al cliente, ignoriamo qual è il modo migliore per
+risolvere il problema, ignoriamo quale sia l&rsquo;architettura più adeguata. Con l&rsquo;avanzare
+del progetto impariamo, o almeno dovremmo imparare, sempre cose nuove e la nostra
+ignoranza diminuisce. Quello che però molti non sanno è che le persone apprendono
+di più, e meglio, quando <em>non</em> sono stressate o impaurite, in quanto lo stress e
+la paura sono inibitori dell&rsquo;apprendimento. Inoltre l&rsquo;apprendimento non è lineare
+con il tempo. Per questo il team di sviluppo deve sentirsi libero di investire il
+proprio tempo per approfondire gli aspetti più critici del progetto, siano essi tecnici
+o meno.</p>
+
+<p><strong>Decidere</strong>: prendiamo continuamente decisioni, siano esse relative ad un pattern
+da utilizzare, all&rsquo;usabilità di un&rsquo;interfaccia o all&rsquo;architettura del sistema. Come
+è chiaro dal punto precedente, spesso dobbiamo prendere decisioni avendo solo informazioni
+parziali o ignorando parte dei fattori che dovremmo tenere in considerazione nella
+nostra decisione. Dobbiamo quindi cercare di metterci sempre nella condizione in
+cui le nostre decisioni sono reversibili, e dobbiamo cercare di rimandare le decisioni
+critiche all&rsquo;ultimo momento utile disponibile. Ovvero il momento in cui la nostra
+conoscenza è la migliore possibile e la decisione è ancora di valore per il progetto.
+<figure>
+    <img src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/ddd-workshop/002b-decisions.jpg"
+         alt="Decisioni e ignoranza"/> 
+</figure>
+</p>
+
+<p><strong>Aspettare/Nulla</strong>: spesso spendiamo il nostro tempo aspettando qualcuno o qualcosa.
+Magari aspettiamo perché ci mancano delle informazioni o dei dati di prova. Oppure
+aspettiamo che qualcun altro finisca uno sviluppo che a noi serve per iniziarne uno
+nuovo. Tutto questo è ovviamente uno spreco che possiamo, e dobbiamo, ottimizzare.
+Fortunatamente esistono molte metodologie, e.g. Lean e Kanban, che ci possono aiutare
+ad affrontare queste problematiche. Aggredire questo tipo di problemi consente di
+focalizzarci al meglio sulle vere sfide del nostro progetto e di affrontarle al massimo.</p>
+
+<p>Ogni azienda mescola queste quattro componenti a modo proprio. Ovviamente ci sono
+proporzioni più funzionali ed altre meno. Questo mi ha fatto pensare al Negroni
+(si, il cocktail) perché utilizzando gli stessi ingredienti si può servire il cocktail
+del secolo oppure il peggiore stura lavandini possibile!</p>
+
+<h2 id="strategic-ddd-in-breve">Strategic DDD in breve</h2>
+
+<p>Prima di passare alla parte più interattiva del corso, Alberto ha fatto una breve
+introduzione sui concetti strategici del DDD e su quando ha senso affrontare un progetto
+con questa metodologia.</p>
+
+<p>Il DDD richiede un certo impegno in termini di tempo e sforzo da parte del team di
+sviluppo e del business. Per questo motivo non ha senso applicarlo a tutti i progetti,
+ma solo a quelli ad alto valore aggiunto: domini complessi e/o in evoluzione. Ovvero
+i domini nei quali non si può pensare di trovare la soluzione giusta al primo tentativo!
+In questi casi, lo sforzo richiesto dalla costante raffinazione del linguaggio e
+dei modelli, propria del Domain-Driven Design, è giustificato dall&rsquo;aumentata capacità
+di inseguire i continui cambiamenti dettati dal business.</p>
+
+<figure>
+    <img src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/ddd-workshop/003-following-business.jpg"
+         alt="Inseguire il business"/> 
+</figure>
+
+
+<p>In progetti così complessi la vera sfida è riuscire a tenere allineato il nostro
+codice con la nostra comprensione del dominio, ed entrambi con il dominio reale il
+quale è in continua evoluzione. Se infatti riusciamo a mantenere allineati il codice,
+e la comprensione che abbiamo di esso, con le esigenze di business, abbiamo la possibilità
+di rispondere velocemente, e correttamente, ai cambiamenti imposti dal mercato/business.
+In caso contrario il nostro progetto è destinato a fallire nel momento in cui i cambiamenti
+saranno troppo repentini per riuscire a soddisfare le nuove richieste in tempi utili.
+Per riuscire a mantenere l&rsquo;allineamento necessario il DDD ci mette a disposizione
+due strumenti molto potenti: <em>Ubiquitous Language</em> e <em>Bounded Context</em>.</p>
+
+<p>Come dice il nome stesso, l&rsquo;Ubiquitous Language richiede di utilizzare un unico linguaggio
+onnipresente all&rsquo;interno del progetto. Il linguaggio, ovviamente, è quello degli
+esperti di dominio e non quello tecnico. Il codice stesso dovrà riflettere tale linguaggio:
+in questo modo il codice comunicherà efficacemente il proprio intento e sarà più
+facilmente comprensibile. Infine, essendoci meno traduzioni fra il linguaggio utilizzato
+dalle persone di business e quelle tecniche, le comunicazioni saranno estremamente
+più efficaci.</p>
+
+<p>Purtroppo non è possibile pretendere che all&rsquo;interno di un&rsquo;organizzazione tutti utilizzino
+gli stessi termini con lo stesso significato. Facendo un semplice esercizio di gruppo
+di classificazione di termini &ldquo;banali&rdquo;, è facile constatare che una stessa parola
+può essere interpretata in <a href="https://twitter.com/malk_zameth/status/928974920276697088">modi molto diversi in contesti diversi</a>.</p>
+
+<figure>
+    <img src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/ddd-workshop/005-tomatos.jpg"
+         alt="Pomodori"/> 
+</figure>
+
+
+<p>Per risolvere questo problema è indispensabile l&rsquo;utilizzo dei Bounded Context. Un
+Bounded Context non è altro che un confine linguistico all&rsquo;interno del quale siamo
+sicuri che ogni termine utilizzato ha un solo significato ben definito.</p>
+
+<p>DDD mette al centro dell&rsquo;attenzione del team di sviluppo l&rsquo;uso di un linguaggio chiaro
+e condiviso con il business, il quale sia utilizzato anche nel codice sorgente. Questa
+affermazione mi ha portato a farmi una domanda: quindi, se stiamo lavorando con degli
+esperti di dominio che parlano italiano, dobbiamo &ldquo;programmare&rdquo; in italiano? La risposta
+è molto più articolata di quanto possa sembrare! Analizzando il problema con ziobrando
+sono venute fuori diverse sfumature.</p>
+
+<p>Sicuramente il fatto che i linguaggi di programmazione siano anglofoni (<code>if</code>, <code>for</code>,
+getter, setter, etc.) non deve essere un impedimento ad utilizzare i termini del
+Ubiquitous Language. Quindi un nome di metodo come <em>SetIndirizzoSpedizione</em> è accettabile
+se consente di aumentare la comprensibilità del codice rispetto al dominio per il
+quale è stato sviluppato.</p>
+
+<p>Cosa succede se il business parla italiano ma il team di sviluppo no? In questo caso
+dovremmo trovare una soluzione che consenta di mantenere la comunicazione con gli
+esperti di dominio efficace e che, contemporaneamente, permetta a chi sviluppa di
+capire facilmente il codice. Ad esempio, potremmo costruire un glossario condiviso
+di termini che contenga le traduzioni fra la lingua utilizzata dagli esperti di business
+e quella utilizzata dagli sviluppatori.</p>
+
+<p>Questo porta ad un altro quesito: siamo sicuri che esista una traduzione per qualsiasi
+concetto espresso dal business? Per capire meglio la complessità di questo problema
+prendiamo in considerazione un dominio comune: i documenti fiscali. In Italia utilizziamo
+il termine <em>fattura</em> per indicare il documento fiscale che viene rilasciato, normalmente
+fra aziende, a fronte di un servizio sia che il pagamento sia già avvenuto o meno.
+Normalmente <em>fattura</em> viene tradotto in <em>invoice</em> ma per gli anglosassoni <em>invoice</em>
+è un documento che viene emesso quando il pagamento non è stato ancora effettuato.
+In caso contrario loro parlano di <em>receipt</em> che in italiano viene tradotto come <em>ricevuta</em>
+o <em>scontrino</em>. Pensate poi al concetto di <em>nota proforma</em>, in inglese non riusciamo
+nemmeno a trovare una traduzione!</p>
+
+<figure>
+    <img src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/ddd-workshop/004-translations.jpg"
+         alt="Traduzioni"/> 
+</figure>
+
+
+<p>In DDD questi problemi &ldquo;linguistici&rdquo; devono ancora essere affrontati sistematicamente.
+In fin dei conti <a href="https://twitter.com/ericevans0">Eric Evans</a> è americano e probabilmente
+ha sempre lavorato con team e domini in cui l&rsquo;inglese era l&rsquo;unica lingua utilizzata.</p>
+
+<p>Abbiamo appurato che aumentare la conoscenza del team, e adottare un unico linguaggio
+non ambiguo con il business, sono elementi essenziali per la riuscita di un progetto.
+Ma che strumenti abbiamo a disposizione per raggiungere questi obiettivi? Per rispondere
+a questa domanda ziobrando ci ha proposto, e fatto sperimentare, uno strumento di
+sua invenzione: <em>Big Picture EventStorming</em>.</p>
+
+<h2 id="big-picture-eventstorming">Big Picture EventStorming</h2>
+
+<p>Come recita il sottotitolo del libro di ziobrando, <a href="http://leanpub.com/introducing_eventstorming">Introducing EventStorming</a>,
+EventStorming è &ldquo;un&rsquo;azione di apprendimento intenzionale e collettivo&rdquo;. In particolare
+è uno strumento che consente di esplorare/modellare un intero dominio/business e
+di condividerne la conoscenza. Se riusciamo a mettere nella stessa stanza le persone
+che hanno la conoscenza, chi sa fare le domande giuste, e qualcuno che faciliti la
+discussione, possiamo creare una fotografia condivisa di un intero business la quale
+può essere utilizzata come strumento decisionale.</p>
+
+<p>Per spiegarci come funziona EventStorming, e per farci assaporare cosa vuol dire
+partecipare a una vera sessione di modellazione, Alberto ci ha fatto fare un gioco
+di ruolo: ha scelto un business a lui molto caro, Trenitalia, ci ha fatto scegliere
+un ruolo da impersonare (capostazione, passeggero, etc.), e ha dato il via ad una
+vera e propria sessione di modellazione.</p>
+
+<p>Tutto parte con due semplici ingredienti:</p>
+
+<ul>
+<li>una <strong>superficie di modellazione pressoché illimitata</strong>, nel nostro caso almeno
+dieci metri di parete!</li>
+<li>una marea di <strong>post-it arancioni</strong>, su cui scrivere gli eventi del dominio, con
+verbi al passato, e che vanno ordinati temporalmente sulla superficie a disposizione.</li>
+</ul>
+
+<p>Senza entrare nei dettagli, per i quali vi consiglio di seguire un workshop di Alberto,
+dopo quattro ore di lavoro siamo riusciti a modellare una fetta del business di
+Trenitalia che comprendeva i punti di vista di tutti gli attori coinvolti.</p>
+
+<figure>
+    <img src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/ddd-workshop/006-big-picture-eventstorming.jpg"
+         alt="Big Picture EventStorming"/> 
+</figure>
+
+
+<p>Al di là dell&rsquo;impressionante impatto visivo, che comunque dà soddisfazione, l&rsquo;esercizio
+ci ha permesso di:</p>
+
+<ul>
+<li>avere chiara l&rsquo;<em>intera catena del valore</em> e il business dell&rsquo;azienda attraverso
+la narrazione fatta tramite gli eventi di dominio;</li>
+<li>catturare la <em>definizione di termini</em> specifici del dominio, post-it a righe posti
+sotto la superficie di modellazione;</li>
+<li>evidenziare tutte le <em>criticità</em> del sistema, post-it fucsia, siano esse dovute
+a mancanze, disallineamenti fra funzioni del business, customer experience o altro;</li>
+<li>proporre <em>possibili miglioramenti</em> al sistema, post-it verde acido&hellip; per me sono
+gialli e per questo mi sono sentito daltonico per tutto il workshop!</li>
+<li>identificare chiaramente quali sono le <em>persone coinvolte</em> nei vari flussi, post-it
+gialli piccoli (con gli omini stilizzati);</li>
+<li>identificare i <em>sistemi esterni</em> con i quali il nostro business si interfaccia,
+post-it rosa grandi.</li>
+</ul>
+
+<p>Tutte queste informazioni visibili a colpo d&rsquo;occhio, ci hanno permesso di scegliere
+quali fossero i problemi/opportunità da affrontare con la più alta priorità. La scelta
+è avvenuta con una semplice votazione in stile dot voting (post-it blu piccoli).
+L&rsquo;aspetto più interessante è che c&rsquo;è stato un consenso quasi unanime sui punti più
+importanti da affrontare. Questo perché la condivisione delle informazioni che avviene
+durante una sessione di EventStorming porta inevitabilmente ad un forte allineamento
+nella comprensione delle priorità aziendali.</p>
+
+<figure>
+    <img src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/ddd-workshop/007-arrows-cluster.jpg"
+         alt="Cluster di frecce"/> 
+</figure>
+
+
+<p>Questo clustering delle scelte fa sì che ci sia un forte impegno da parte di tutti
+i partecipanti per la risoluzione dei problemi individuati.</p>
+
+<p>EventStorming è uno strumento molto potente da avere nella propria cassetta degli
+attrezzi. Dato che la discussione può far emergere alcuni conflitti fra i partecipanti,
+è fondamentale la presenza di un facilitatore il quale possa coadiuvare il confronto
+e massimizzare il contributo di tutti i partecipanti.</p>
+
+<h2 id="process-modeling-eventstorming">Process Modeling EventStorming</h2>
+
+<p>Il secondo giorno di workshop abbiamo cambiato il focus della nostra analisi. Avendo
+chiare le priorità aziendali, grazie al lavoro del giorno precedente, abbiamo scelto
+un problema e lo abbiamo analizzato approfonditamente con l&rsquo;obiettivo di progettare
+il software necessario a risolvere il problema stesso. Per fare questo ci siamo avvalsi
+nuovamente di EventStorming in un&rsquo;altra variante: <em>Process Modeling</em>. L&rsquo;ambito di
+una modellazione di questo tipo può essere un&rsquo;epica o una feature.</p>
+
+<p>Anche in questo caso gli ingredienti di partenza sono gli stessi, superficie di modellazione
+ampia, ed eventi di dominio (post-it arancioni), ma con un focus più stretto e un
+obiettivo diverso: trovare, e progettare, la soluzione ad un problema specifico.
+Per fare questo siamo partiti creando uno scheletro di eventi di dominio relativi al
+problema in esame, e poi abbiamo cercato di unire gli eventi costruendo una narrazione
+consistente utilizzando i seguenti elementi:</p>
+
+<ul>
+<li><em>utenti</em>, post-it gialli piccoli, ovvero le persone che interagiscono con il sistema;</li>
+<li><em>comandi/decisioni/azioni</em>, post-it azzurri, prese dagli utenti in risposta a
+qualche necessità o stimolo (vedi read model sotto);</li>
+<li><em>sistemi</em>, post-it rosa grandi, i quali modificano il proprio stato in funzione
+delle azioni degli utenti;</li>
+<li><em>eventi di dominio</em>, post-it arancioni, generati dai sistemi in conseguenza ai
+cambi di stato;</li>
+<li><em>read model</em>, post-it verde acido, costruiti a partire dagli eventi.</li>
+</ul>
+
+<p>I read model a loro volta possono essere di ulteriore stimolo all&rsquo;utente per prendere
+altre decisioni e quindi la modellazione può proseguire seguendo lo stesso schema.</p>
+
+<p>Un&rsquo;eccezione a questo flusso è costituita dalle logiche reattive che possono essere
+presenti nel nostro processo. Ad esempio, il sistema può inviare automaticamente
+una mail dopo che un biglietto è stato venduto, oppure un controllore deve fare una
+multa a seguito di una verifica fallita. Queste esempi sono entrambi delle policy
+che devono essere identificate nel processo di modellazione. La differenza fra le
+due è che la prima sarà implementata nel codice mentre la seconda è una regola
+che il controllore deve applicare in autonomia ma che comunque fa parte del processo.</p>
+
+<p>Per essere più efficienti nella modellazione, abbiamo prima di tutto definito il
+caso semplice, ovvero quello in cui l&rsquo;interazione fra utente e sistema era più lineare.
+Ad esempio, pensando all&rsquo;acquisto di un biglietto ferroviario online, dovremmo analizzare
+prima di tutto il caso in cui c&rsquo;è posto sul treno, l&rsquo;utente paga con una carta valida,
+etc.</p>
+
+<p>Mentre modellavamo il caso semplice, ci siamo segnati le eventuali alternative (e.g.
+carta di credito non valida) con dei post-it fucsia. Una volta conclusa l&rsquo;analisi
+di un flusso siamo tornati sui nostri passi per analizzare l&rsquo;alternativa più significativa.
+Questo processo può essere ripetuto finché non si ritiene di aver coperto le casistiche
+più importanti. Per fare questo tipo di valutazione è sempre utile avere un Product
+Owner, o comunque un esperto del dominio, che partecipa alla fase di modellazione.</p>
+
+<p>Un aspetto importante che abbiamo cercato di catturare durante questa sessione è
+stato il valore creato o distrutto, per tutti gli utenti coinvolti, nei vari passaggi
+della nostra soluzione. Questo è molto importante per verificare che la soluzione
+individuata per risolvere il problema originale porti, nel suo complesso, un valore
+positivo al sistema.</p>
+
+<p>Un altro aspetto molto importante di questa sessione è l&rsquo;attenzione che abbiamo posto
+nel raffinamento del linguaggio utilizzato. Questo è essenziale per definire chiaramente
+e senza ambiguità i concetti modellati.</p>
+
+<p>La seconda giornata si è poi conclusa con un approfondimento sul Context Mapping
+e le relazioni che possono esistere fra i diversi contesti di un dominio: Partnership,
+Shared Kernel, Customer/Supplier, Conformist, Anticorruption Layer, Open-host Service,
+Published Language, Separate Ways e Big Ball of Mud. Nel libro <a href="http://domainlanguage.com/ddd/reference/">DDD Reference</a>
+di Eric Evans, e su tante altre risorse online, si possono trovare molti dettagli
+sull&rsquo;argomento.</p>
+
+<h2 id="architetture">Architetture</h2>
+
+<p>Il terzo giorno del workshop è stato dedicato ad una carrellata sull&rsquo;evoluzione delle
+architetture dalla pubblicazione del primo libro su Domain-Driven Design ad oggi,
+con un particolare focus su <a href="https://martinfowler.com/bliki/CQRS.html">CQRS</a> ed
+<a href="https://martinfowler.com/eaaDev/EventSourcing.html">Event Sourcing</a>.
+È impressionante constatare come il DDD sia rimasto uguale nei suoi concetti fondamentali
+mentre il modo di costruire le applicazioni e le tecnologie a nostra disposizione
+sono completamente cambiate. Questo è sicuramente dovuto alla bontà dell&rsquo;approccio
+e all&rsquo;attenzione che viene data alla creazione di un modello che sia privo di contaminazioni
+da parte dell&rsquo;infrastruttura e delle tecnologie di supporto.</p>
+
+<p>CQRS e Event Sourcing meritano sicuramente un approfondimento con degli esempi pratici,
+per cui il mio prossimo post sarà proprio su questi argomenti.</p>
+
+<h2 id="riferimenti">Riferimenti</h2>
+
+<p>Approfondimenti su <a href="https://www.eventstorming.com/">EventStorming</a></p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGS</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/ddd/">ddd</a>
+
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/design/">design</a>
+
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/architecture/">architecture</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/" data-tooltip="Event Sourcing e CQRS in C#">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">SUCCESSIVA</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/" data-tooltip="Utilizzare le migrazioni di EF Core con Docker e MySQL">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PRECEDENTE</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f11%2fstrategic-domain-driven-design%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f11%2fstrategic-domain-driven-design%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f11%2fstrategic-domain-driven-design%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 Andrea Vallotti. Tutti i diritti riservati
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/" data-tooltip="Event Sourcing e CQRS in C#">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">SUCCESSIVA</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/" data-tooltip="Utilizzare le migrazioni di EF Core con Docker e MySQL">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PRECEDENTE</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f11%2fstrategic-domain-driven-design%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f11%2fstrategic-domain-driven-design%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f11%2fstrategic-domain-driven-design%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f11%2fstrategic-domain-driven-design%2f">
+        <i class="fa fa-google-plus"></i><span>Condividi su Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f11%2fstrategic-domain-driven-design%2f">
+        <i class="fa fa-facebook-official"></i><span>Condividi su Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f11%2fstrategic-domain-driven-design%2f">
+        <i class="fa fa-twitter"></i><span>Condividi su Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Foto dell&#39;autore" />
+    
+    <h4 id="about-card-name">Andrea Vallotti</h4>
+    
+      <div id="about-card-bio">Appassionato di software: architetto, sviluppatore e technology scout. Agilista entusiasta. MCSD - App Builder, MCSA - Cloud Platform, CSM, e CSPO. Mi diverte imparare sempre cose nuove, mentre creo <em>software eccezionale</em> e aiuto gli altri a fare lo stesso. <a href="http://www.andreavallotti.tech/it/page/about">Continua.</a></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Software Adventurer
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Italia
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Ricerca" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">Nessun articolo trovato</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/">
+                <h3 class="media-heading">Modellazione e separazione delle responsabilità con la programmazione funzionale</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Dopo il mio primo esperimento con la programmazione funzionale, ho deciso di approfondire ulteriormente l&rsquo;argomento. Per questo ho partecipato al workshop &ldquo;Lean and Functional Domain Modelling&rdquo; organizzato da Avanscoperta e tenuto da Marcello Duarte lo scorso marzo. Il workshop mi ha fornito dei buoni spunti su come affrontare la modellazione in ottica funzionale e ha alimentato ancor di più la mia voglia di sperimentare questo paradigma utilizzando Scala.
+Per affrontare questa sfida c&rsquo;è voluto studio e allenamento.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/">
+                <h3 class="media-heading">Coderetreat Firenze</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">“Quello che conta è il viaggio” (cit. Stefano Leli). Questa è l’essenza del Coderetreat.
+Ho scoperto questo format durante gli Italian Agile Day 2017 di Urbino. In quell&rsquo;occasione mi sono divertito ad esercitarmi con gli altri partecipanti mentre a farci da facilitatori c&rsquo;erano Matteo Vaccari, Stefano Leli e Gabriele Tondi. Il formato mi è piaciuto a tal punto che ho deciso di riproporlo a Firenze, dove vivo, per dare la possibilità di fare la mia stessa esperienza alla mia comunità di sviluppatori.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/">
+                <h3 class="media-heading">Event Sourcing e CQRS in C#</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Come promesso al termine del post precedente, in questo articolo approfondirò gli aspetti pratici legati al DDD ed in particolare ai pattern CQRS ed Event Sourcing.
+L’obiettivo principale dell’esperimento è quello di implementare un aggregato secondo il paradigma Event Sourcing e di creare un modello di lettura separato per alimentare le pagine di un&rsquo;applicazione Web.
+Prima di presentare l&rsquo;esempio pratico farò una breve introduzione dei principali pattern architetturali che sono stati utilizzati dalla nascita del DDD.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/">
+                <h3 class="media-heading">Strategic Domain-Driven Design</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Dopo la lettura del libro blu di Evans mi sono appassionato al Domain-Driven Design. Ero ancora in America quando, con quattro mesi di anticipo, mi iscrissi al workshop Strategic Domain-Driven Design di Alberto Brandolini (aka ziobrando) organizzato da Avanscoperta. Non volevo certo perdermelo.
+Poi, preso dal caos di tutti i giorni, avevo perso il senso del tempo quando, a metà ottobre, ho ricevuto una mail da parte di Avanscoperta che mi ha ricordato del corso imminente: è stato come se qualcuno mi avesse regalato un fine settimana alla spa!</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/">
+                <h3 class="media-heading">Utilizzare le migrazioni di EF Core con Docker e MySQL</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">In questo post spiegherò come creare un&rsquo;applicazione console .NET Core 2.0 la quale legga e scriva i propri dati su MySQL e che utilizzi Entity Framework Core, e le migrazioni, per la persistenza e l&rsquo;aggiornamento dello schema del DB. Inoltre mostrerò come utilizzare Docker in modo da poter sviluppare l&rsquo;applicazione indipendentemente dall&rsquo;ambiente utilizzato.
+Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente modo:
+ creazione progetto console .</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/09/there-and-back-again/">
+                <h3 class="media-heading">There and Back Again</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Sep 9, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Per gli estimatori di Tolkien, il titolo del post può sembrare presuntuoso ma in fin dei conti ho viaggiato per 7.600 km, molti più di Bilbo e compagnia, ho incontrato persone delle quali non capivo la lingua, più o meno, e ho parlato con un drago&hellip; Ok, questo non l&rsquo;ho fatto, ma lasciatemelo credere 😃
+Scherzi a parte, ho passato i primi sei mesi di quest&rsquo;anno ad Indianapolis negli Stati Uniti.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/08/console.writeline-hello-world/">
+                <h3 class="media-heading">Console.WriteLine( &#34;Hello, World!&#34; );</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Così sono iniziati tutti gli esperimenti che ho fatto nella mia vita da informatico: scrivere Hello, World! a video. Quindi ho pensato di iniziare nello stesso modo questo nuovo esperimento: tenere un blog in cui scrivere di argomenti che ritengo interessanti e sui quali mi piacerebbe sentire l&rsquo;opinione degli altri.
+Chi mi conosce sa benissimo che le materie umanistiche non sono mai state il mio forte per cui &ldquo;scrivere un blog&rdquo; non è esattamente nelle mie corde.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/post/">
+                <h3 class="media-heading">Posts</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="Nessun articolo trovato"
+         data-message-one="1 articolo trovato"
+         data-message-other="{n} articoli trovati">
+         8 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/andreavallotti/image/upload/blog/images/cover-NGC4258-M106.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+
+
+<script src="http://www.andreavallotti.tech/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.registerLanguage("fsharp",function(e){var t={b:"<",e:">",c:[e.inherit(e.TM,{b:/'[a-zA-Z0-9_]+/})]};return{aliases:["fs"],k:"abstract and as assert base begin class default delegate do done downcast downto elif else end exception extern false finally for fun function global if in inherit inline interface internal lazy let match member module mutable namespace new null of open or override private public rec return select sig static struct then to true try type upcast use val void when where while with yield",i:/\/\*/,c:[{cN:"keyword",b:/\b(yield|return|let|do)!/},{cN:"string",b:'@"',e:'"',c:[{b:'""'}]},{cN:"string",b:'"""',e:'"""'},e.C("\\(\\*","\\*\\)"),{cN:"class",bK:"type",e:"\\(|=|$",eE:!0,c:[e.UTM,t]},{cN:"meta",b:"\\[<",e:">\\]",r:10},{cN:"symbol",b:"\\B('[A-Za-z])\\b",c:[e.BE]},e.CLCM,e.inherit(e.QSM,{i:null}),e.CNM]}});
+  hljs.registerLanguage("yaml", function(e) { var b = "true false yes no null", a = "^[ \\-]*", r = "[a-zA-Z_][\\w\\-]*", t = { cN: "attr", v: [{ b: a + r + ":" }, { b: a + '"' + r + '":' }, { b: a + "'" + r + "':" }] }, c = { cN: "template-variable", v: [{ b: ", e: " }, { b: "%{", e: "}" }] }, l = { cN: "string", r: 0, v: [{ b: /'/, e: /'/ }, { b: /"/, e: /"/ }, { b: /\S+/ }], c: [e.BE, c] }; return { cI: !0, aliases: ["yml", "YAML", "yaml"], c: [t, { cN: "meta", b: "^---s*$", r: 10 }, { cN: "string", b: "[\\|>] *$", rE: !0, c: l.c, e: t.v[0].b }, { b: "<%[%=-]?", e: "[%-]?%>", sL: "ruby", eB: !0, eE: !0, r: 0 }, { cN: "type", b: "!!" + e.UIR }, { cN: "meta", b: "&" + e.UIR + "$" }, { cN: "meta", b: "\\*" + e.UIR + "$" }, { cN: "bullet", b: "^ *-", r: 0 }, e.HCM, { bK: b, k: { literal: b } }, e.CNM, l] } });
+  hljs.registerLanguage("dockerfile", function(e) { return { aliases: ["docker"], cI: !0, k: "from maintainer expose env arg user onbuild stopsignal", c: [e.HCM, e.ASM, e.QSM, e.NM, { bK: "run cmd entrypoint volume add copy workdir label healthcheck shell", starts: { e: /[^\\]\n/, sL: "bash" } }], i: "</" } });
+  hljs.registerLanguage("scala",function(e){var t={cN:"meta",b:"@[A-Za-z]+"},a={cN:"subst",v:[{b:"\\$[A-Za-z0-9_]+"},{b:"\\${",e:"}"}]},r={cN:"string",v:[{b:'"',e:'"',i:"\\n",c:[e.BE]},{b:'"""',e:'"""',r:10},{b:'[a-z]+"',e:'"',i:"\\n",c:[e.BE,a]},{cN:"string",b:'[a-z]+"""',e:'"""',c:[a],r:10}]},c={cN:"symbol",b:"'\\w[\\w\\d_]*(?!')"},i={cN:"type",b:"\\b[A-Z][A-Za-z0-9_]*",r:0},s={cN:"title",b:/[^0-9\n\t "'(),.`{}\[\]:;][^\n\t "'(),.`{}\[\]:;]+|[^0-9\n\t "'(),.`{}\[\]:;=]/,r:0},n={cN:"class",bK:"class object trait type",e:/[:={\[\n;]/,eE:!0,c:[{bK:"extends with",r:10},{b:/\[/,e:/\]/,eB:!0,eE:!0,r:0,c:[i]},{cN:"params",b:/\(/,e:/\)/,eB:!0,eE:!0,r:0,c:[i]},s]},l={cN:"function",bK:"def",e:/[:={\[(\n;]/,eE:!0,c:[s]};return{k:{literal:"true false null",keyword:"type yield lazy override def with val var sealed abstract private trait object if forSome for while throw finally protected extends import final return else break new catch super class case package default try this match continue throws implicit"},c:[e.CLCM,e.CBCM,r,c,i,l,n,e.CNM,t]}});
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    var languageFilter = (block.classList && block.classList.length > 1) ? [].slice.apply(block.classList) : null;
+    var autoDetected = hljs.highlightAuto(block.innerText, languageFilter);
+
+    autoDetected.value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/www.andreavallotti.tech\/it\/2017\/11\/strategic-domain-driven-design\/';
+          
+            this.page.identifier = '\/it\/2017\/11\/strategic-domain-driven-design\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'andreavallotti';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#000"
+    },
+    "button": {
+      "background": "#f1d600"
+    }
+  },
+  "content": {
+    "message": "Questo sito utilizza cookie per offrire agli utenti servizi e funzionalità avanzate. Continuando la navigazione nel sito autorizzi l’uso dei cookie.",
+    "dismiss": "Accetto i cookie",
+    "link": "Per saperne di più clicca qui",
+    "href": "/it/page/cookie"
+  }
+})});
+</script>
+    
+  </body>
+</html>
+

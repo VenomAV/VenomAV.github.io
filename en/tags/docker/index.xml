@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker on Development: people, code &amp; me</title>
+    <link>http://www.andreavallotti.tech/en/tags/docker/</link>
+    <description>Recent content in Docker on Development: people, code &amp; me</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 10 Oct 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.andreavallotti.tech/en/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using EF Core&#39;s migration with Docker and MySQL</title>
+      <link>http://www.andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/</link>
+      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/</guid>
+      <description>In this post I explain how to create a .NET Core 2.0 console application which reads, and writes, data from MySQL, and uses Entity Framework Core, and migrations, in order to persist data and manage the DB schema. Furthermore I will show how to use Docker to be able to develop the application independently by the chosen environment.
+In order to highlight the needed steps, I split the post in this way:</description>
+    </item>
+    
+  </channel>
+</rss>

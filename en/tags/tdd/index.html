@@ -1,0 +1,583 @@
+
+
+
+  
+
+
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.54.0">
+    <meta name="theme" content="Tranquilpeak 0.3.1-BETA">
+    <title>Tdd</title>
+    <meta name="author" content="Andrea Vallotti">
+    <meta name="keywords" content=", development, dot-net, agile, cloud, azure, developers">
+
+    <link rel="icon" href="http://www.andreavallotti.tech/images/favicon.png">
+    
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.andreavallotti.tech/en/tags/tdd/index.xml">
+    
+
+    
+    <meta name="description" content="Andrea Vallotti&#39;s blog">
+    <meta property="og:description" content="Andrea Vallotti&#39;s blog">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Tdd">
+    <meta property="og:url" content="http://www.andreavallotti.tech/en/tags/tdd/">
+    <meta property="og:site_name" content="Development: people, code &amp; me">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Andrea Vallotti&#39;s blog">
+    
+      <meta name="twitter:creator" content="@AndreaVallotti">
+    
+    
+      <meta property="fb:app_id" content="170534096895468">
+    
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://www.andreavallotti.tech/css/style-u6mk0ojoywresbx8iepslrmmhl4stuhrsxuwhkpwrkrx7mryjcaimasnk4pi.min.css" />
+    
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-105324949-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="1">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://www.andreavallotti.tech/en/">Development: people, code &amp; me</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://www.andreavallotti.tech/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="1">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://www.andreavallotti.tech/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Andrea Vallotti</h4>
+        
+          <h5 class="sidebar-profile-bio">Software enthusiast: architect, developer, and technology scout. Agile addicted. MCSD - App Builder, MCSA - Cloud Platform, CSM, and CSPO. Enjoy in constantly growing while crafting <em>awesome software</em>, and helping others doing the same. <a href="http://www.andreavallotti.tech/en/page/about">More.</a></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/andrea-vallotti-b379313/" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+      
+      <span class="sidebar-button-desc">LinkedIn</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/AndreaVallotti" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-language"></i>
+      
+      <span class="sidebar-button-desc">Italiano</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+        
+
+      
+      <div id="main" data-behavior="1"
+        class="
+               hasCoverMetaIn
+               ">
+        
+          <section class="postShorten-group main-content-wrap">
+            
+            
+              
+  
+    
+  
+
+
+  
+
+<article class="postShorten postShorten--thumbnailimg-left" itemscope itemType="http://schema.org/BlogPosting">
+  <div class="postShorten-wrap">
+    
+    <div class="postShorten-header">
+      <h1 class="postShorten-title" itemprop="headline">
+        <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2018/01/coderetreat-florence/">
+          Coderetreat Florence
+        </a>
+      </h1>
+      <div class="postShorten-meta post-meta">
+  
+    <time itemprop="datePublished" datetime="2018-01-31T00:00:00Z">
+      
+  
+  
+  
+  
+    31 January 2018
+  
+
+    </time>
+  
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://www.andreavallotti.tech/en/categories/training">Training</a>
+    
+  
+
+
+</div>
+
+    </div>
+    <div class="postShorten-excerpt" itemprop="articleBody">
+      <p>
+        &ldquo;What matters is the journey&rdquo; (cit. Stefano Leli). This is the essence of Coderetreat.
+I discovered this format during Urbino&rsquo;s Italian Agile Day 2017. During that event, I enjoyed practicing Test Driven Development (TDD) with other participants, and learning from the facilitators Matteo Vaccari, Stefano Leli and Gabriele Tondi. I liked the format so much that I decided to propose it in Florence, where I live, in order to let developers of my community to enjoy it and have fun together.
+        <br>
+        <a href="http://www.andreavallotti.tech/en/2018/01/coderetreat-florence/" class="postShorten-excerpt_link link">Continue reading</a>
+        
+      </p>
+    </div>
+  </div>
+  
+    <a href="http://www.andreavallotti.tech/en/2018/01/coderetreat-florence/">
+      <div class="postShorten-thumbnailimg">
+        <img alt="" itemprop="image" src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/coderetreat-january-2018/Coderetreat_January_2018-140x140.jpg"/>
+      </div>
+    </a>
+  
+</article>
+
+            
+            
+
+          </section>
+        
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 Andrea Vallotti. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Andrea Vallotti</h4>
+    
+      <div id="about-card-bio">Software enthusiast: architect, developer, and technology scout. Agile addicted. MCSD - App Builder, MCSA - Cloud Platform, CSM, and CSPO. Enjoy in constantly growing while crafting <em>awesome software</em>, and helping others doing the same. <a href="http://www.andreavallotti.tech/en/page/about">More.</a></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Software Adventurer
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Italy
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2018/08/modeling-and-separation-of-concerns-in-functional-programming/">
+                <h3 class="media-heading">Modeling and separation of concerns in functional programming</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">After my first experiment with functional programming, I decided to further study it in depth. Therefore, last March I attended &ldquo;Lean and Functional Domain Modelling&rdquo; workshop, organized by Avanscoperta, and held by Marcello Duarte. The workshop gave me good hints about functional modeling and fueled my curiosity to learn Scala and experiment more this paradigm.
+In order to tackle this challenge I studied and practiced a lot. After some months, and several discussions with Matteo Baglini, I have been able to put together the puzzle, and I wrote this post.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2018/01/coderetreat-florence/">
+                <h3 class="media-heading">Coderetreat Florence</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">&ldquo;What matters is the journey&rdquo; (cit. Stefano Leli). This is the essence of Coderetreat.
+I discovered this format during Urbino&rsquo;s Italian Agile Day 2017. During that event, I enjoyed practicing Test Driven Development (TDD) with other participants, and learning from the facilitators Matteo Vaccari, Stefano Leli and Gabriele Tondi. I liked the format so much that I decided to propose it in Florence, where I live, in order to let developers of my community to enjoy it and have fun together.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2018/01/event-sourcing-and-cqrs-in-c/">
+                <h3 class="media-heading">Event Sourcing and CQRS in C#</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">As promised in my previous post, in this article I examine practical aspects related to DDD and, in particular to CQRS and Event Sourcing patterns.
+The main goal of my experiment is to implement an aggregate according to the Event Sourcing paradigm, and to create a separate read model to feed the pages of a Web application.
+Before presenting the example, I am going to briefly introduce the main architectural patterns that have been used since DDD launch.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2017/11/strategic-domain-driven-design/">
+                <h3 class="media-heading">Strategic Domain-Driven Design</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">I was inspired to such an extent by Evans&rsquo; Blue Book, that I got passionate about Domain-Driven Design. I was still in the United States when, four months in advance, I registered to the Strategic Domain-Driven Design workshop held by Alberto Brandolini (aka ziobrando) and organized by Avanscoperta. I definitely wanted to attend.
+Then, taken from the day to day activities, I lost the sense of time, when mid-October, I received an email from Avanscoperta that reminded me of the upcoming course.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/">
+                <h3 class="media-heading">Using EF Core&#39;s migration with Docker and MySQL</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">In this post I explain how to create a .NET Core 2.0 console application which reads, and writes, data from MySQL, and uses Entity Framework Core, and migrations, in order to persist data and manage the DB schema. Furthermore I will show how to use Docker to be able to develop the application independently by the chosen environment.
+In order to highlight the needed steps, I split the post in this way:</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2017/09/there-and-back-again/">
+                <h3 class="media-heading">There and Back Again</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Sep 9, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">For those who loves Tolkien, the title could seem uppish. After all, I traveled 7.600 km, much more than Bilbo and fellowship, I met people I could hardly understand, and I talked to a dragon&hellip; Ok, the latter is not true, but let me believe so 😃
+Jokes aside, I spent the first six months of this year in Indianapolis, USA. In this period, I had the chance to appreciate how lively Indiana&rsquo;s tech community is.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2017/08/console.writeline-hello-world/">
+                <h3 class="media-heading">Console.WriteLine( &#34;Hello, World!&#34; );</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Every single experiment I did as a programmer began in this way: show Hello, World! on the monitor. Therefore I decided to start this new experiment (writing a blog) in the same way.
+Who knows me well can tell that I never did my best in humanities, therefore &ldquo;writing a blog&rdquo; is not exactly in my style. However, I strongly believe that sharing experiences is essential in my job for two main reasons:</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/post/">
+                <h3 class="media-heading">Posts</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         8 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/andreavallotti/image/upload/blog/images/cover-NGC4258-M106.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+
+
+<script src="http://www.andreavallotti.tech/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.registerLanguage("fsharp",function(e){var t={b:"<",e:">",c:[e.inherit(e.TM,{b:/'[a-zA-Z0-9_]+/})]};return{aliases:["fs"],k:"abstract and as assert base begin class default delegate do done downcast downto elif else end exception extern false finally for fun function global if in inherit inline interface internal lazy let match member module mutable namespace new null of open or override private public rec return select sig static struct then to true try type upcast use val void when where while with yield",i:/\/\*/,c:[{cN:"keyword",b:/\b(yield|return|let|do)!/},{cN:"string",b:'@"',e:'"',c:[{b:'""'}]},{cN:"string",b:'"""',e:'"""'},e.C("\\(\\*","\\*\\)"),{cN:"class",bK:"type",e:"\\(|=|$",eE:!0,c:[e.UTM,t]},{cN:"meta",b:"\\[<",e:">\\]",r:10},{cN:"symbol",b:"\\B('[A-Za-z])\\b",c:[e.BE]},e.CLCM,e.inherit(e.QSM,{i:null}),e.CNM]}});
+  hljs.registerLanguage("yaml", function(e) { var b = "true false yes no null", a = "^[ \\-]*", r = "[a-zA-Z_][\\w\\-]*", t = { cN: "attr", v: [{ b: a + r + ":" }, { b: a + '"' + r + '":' }, { b: a + "'" + r + "':" }] }, c = { cN: "template-variable", v: [{ b: ", e: " }, { b: "%{", e: "}" }] }, l = { cN: "string", r: 0, v: [{ b: /'/, e: /'/ }, { b: /"/, e: /"/ }, { b: /\S+/ }], c: [e.BE, c] }; return { cI: !0, aliases: ["yml", "YAML", "yaml"], c: [t, { cN: "meta", b: "^---s*$", r: 10 }, { cN: "string", b: "[\\|>] *$", rE: !0, c: l.c, e: t.v[0].b }, { b: "<%[%=-]?", e: "[%-]?%>", sL: "ruby", eB: !0, eE: !0, r: 0 }, { cN: "type", b: "!!" + e.UIR }, { cN: "meta", b: "&" + e.UIR + "$" }, { cN: "meta", b: "\\*" + e.UIR + "$" }, { cN: "bullet", b: "^ *-", r: 0 }, e.HCM, { bK: b, k: { literal: b } }, e.CNM, l] } });
+  hljs.registerLanguage("dockerfile", function(e) { return { aliases: ["docker"], cI: !0, k: "from maintainer expose env arg user onbuild stopsignal", c: [e.HCM, e.ASM, e.QSM, e.NM, { bK: "run cmd entrypoint volume add copy workdir label healthcheck shell", starts: { e: /[^\\]\n/, sL: "bash" } }], i: "</" } });
+  hljs.registerLanguage("scala",function(e){var t={cN:"meta",b:"@[A-Za-z]+"},a={cN:"subst",v:[{b:"\\$[A-Za-z0-9_]+"},{b:"\\${",e:"}"}]},r={cN:"string",v:[{b:'"',e:'"',i:"\\n",c:[e.BE]},{b:'"""',e:'"""',r:10},{b:'[a-z]+"',e:'"',i:"\\n",c:[e.BE,a]},{cN:"string",b:'[a-z]+"""',e:'"""',c:[a],r:10}]},c={cN:"symbol",b:"'\\w[\\w\\d_]*(?!')"},i={cN:"type",b:"\\b[A-Z][A-Za-z0-9_]*",r:0},s={cN:"title",b:/[^0-9\n\t "'(),.`{}\[\]:;][^\n\t "'(),.`{}\[\]:;]+|[^0-9\n\t "'(),.`{}\[\]:;=]/,r:0},n={cN:"class",bK:"class object trait type",e:/[:={\[\n;]/,eE:!0,c:[{bK:"extends with",r:10},{b:/\[/,e:/\]/,eB:!0,eE:!0,r:0,c:[i]},{cN:"params",b:/\(/,e:/\)/,eB:!0,eE:!0,r:0,c:[i]},s]},l={cN:"function",bK:"def",e:/[:={\[(\n;]/,eE:!0,c:[s]};return{k:{literal:"true false null",keyword:"type yield lazy override def with val var sealed abstract private trait object if forSome for while throw finally protected extends import final return else break new catch super class case package default try this match continue throws implicit"},c:[e.CLCM,e.CBCM,r,c,i,l,n,e.CNM,t]}});
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    var languageFilter = (block.classList && block.classList.length > 1) ? [].slice.apply(block.classList) : null;
+    var autoDetected = hljs.highlightAuto(block.innerText, languageFilter);
+
+    autoDetected.value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+
+
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#000"
+    },
+    "button": {
+      "background": "#f1d600"
+    }
+  },
+  "content": {
+    "message": "This website uses cookies to ensure you get the best experience on our website.",
+    "dismiss": "Got it!",
+    "link": "Learn more",
+    "href": "/en/page/cookie"
+  }
+})});
+</script>
+    
+  </body>
+</html>
+

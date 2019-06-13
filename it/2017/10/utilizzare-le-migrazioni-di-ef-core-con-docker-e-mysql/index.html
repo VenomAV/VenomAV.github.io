@@ -1,0 +1,1653 @@
+
+
+  
+    
+  
+
+
+  
+
+
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.54.0">
+    <meta name="theme" content="Tranquilpeak 0.3.1-BETA">
+    <title>Utilizzare le migrazioni di EF Core con Docker e MySQL</title>
+    <meta name="author" content="Andrea Vallotti">
+    <meta name="keywords" content="docker, mysql, entity framework core, dotnet core, migrations, development, dot-net, agile, cloud, azure, developers">
+
+    <link rel="icon" href="http://www.andreavallotti.tech/images/favicon.png">
+    
+
+    
+    <meta name="description" content="In questo post spiegherò come creare un&rsquo;applicazione console .NET Core 2.0 la quale legga e scriva i propri dati su MySQL e che utilizzi Entity Framework Core, e le migrazioni, per la persistenza e l&rsquo;aggiornamento dello schema del DB. Inoltre mostrerò come utilizzare Docker in modo da poter sviluppare l&rsquo;applicazione indipendentemente dall&rsquo;ambiente utilizzato.
+Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente modo:
+ creazione progetto console .">
+    <meta property="og:description" content="In questo post spiegherò come creare un&rsquo;applicazione console .NET Core 2.0 la quale legga e scriva i propri dati su MySQL e che utilizzi Entity Framework Core, e le migrazioni, per la persistenza e l&rsquo;aggiornamento dello schema del DB. Inoltre mostrerò come utilizzare Docker in modo da poter sviluppare l&rsquo;applicazione indipendentemente dall&rsquo;ambiente utilizzato.
+Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente modo:
+ creazione progetto console .">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Utilizzare le migrazioni di EF Core con Docker e MySQL">
+    <meta property="og:url" content="http://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/">
+    <meta property="og:site_name" content="Development: people, code &amp; me">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="In questo post spiegherò come creare un&rsquo;applicazione console .NET Core 2.0 la quale legga e scriva i propri dati su MySQL e che utilizzi Entity Framework Core, e le migrazioni, per la persistenza e l&rsquo;aggiornamento dello schema del DB. Inoltre mostrerò come utilizzare Docker in modo da poter sviluppare l&rsquo;applicazione indipendentemente dall&rsquo;ambiente utilizzato.
+Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente modo:
+ creazione progetto console .">
+    
+      <meta name="twitter:creator" content="@AndreaVallotti">
+    
+    
+      <meta property="fb:app_id" content="170534096895468">
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/efcore-docker-mysql/EF_Core_Docker_MySQL.jpg">
+    
+
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://www.andreavallotti.tech/css/style-u6mk0ojoywresbx8iepslrmmhl4stuhrsxuwhkpwrkrx7mryjcaimasnk4pi.min.css" />
+    
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-105324949-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://www.andreavallotti.tech/it/">Development: people, code &amp; me</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://www.andreavallotti.tech/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=90" alt="Foto dell&#39;autore" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://www.andreavallotti.tech/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Foto dell&#39;autore" />
+        </a>
+        <h4 class="sidebar-profile-name">Andrea Vallotti</h4>
+        
+          <h5 class="sidebar-profile-bio">Appassionato di software: architetto, sviluppatore e technology scout. Agilista entusiasta. MCSD - App Builder, MCSA - Cloud Platform, CSM, e CSPO. Mi diverte imparare sempre cose nuove, mentre creo <em>software eccezionale</em> e aiuto gli altri a fare lo stesso. <a href="http://www.andreavallotti.tech/it/page/about">Continua.</a></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categorie</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archivio</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">Chi sono</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/andrea-vallotti-b379313/" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+      
+      <span class="sidebar-button-desc">LinkedIn</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/AndreaVallotti" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-language"></i>
+      
+      <span class="sidebar-button-desc">English</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              post-header-cover--partial"
+       style="background-image:url('https://res.cloudinary.com/andreavallotti/image/upload/blog/images/efcore-docker-mysql/EF_Core_Docker_MySQL.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Utilizzare le migrazioni di EF Core con Docker e MySQL
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  
+    <time itemprop="datePublished" datetime="2017-10-10T00:00:00Z">
+      
+  
+  
+  
+  
+    10 Ottobre 2017
+  
+
+    </time>
+  
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://www.andreavallotti.tech/it/categories/sviluppo">Sviluppo</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>In questo post spiegherò come creare un&rsquo;applicazione console <a href="https://www.microsoft.com/net/core">.NET Core 2.0</a>
+la quale legga e scriva i propri dati su MySQL e che utilizzi <a href="https://docs.microsoft.com/en-us/ef/core/">Entity Framework Core</a>,
+e le <a href="https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/migrations">migrazioni</a>,
+per la persistenza e l&rsquo;aggiornamento dello schema del DB. Inoltre mostrerò come utilizzare
+<a href="https://www.docker.com/">Docker</a> in modo da poter sviluppare l&rsquo;applicazione indipendentemente
+dall&rsquo;ambiente utilizzato.</p>
+
+<p>Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente modo:</p>
+
+<ul>
+<li>creazione progetto console .NET Core 2.0 con supporto per Docker;</li>
+<li>aggiunta container MySQL per gestire la persistenza;</li>
+<li>creazione modello dati e delle configurazioni necessarie per persisterlo con Entity
+Framework Core;</li>
+<li>inizializzazione della struttura del DB tramite script SQL;</li>
+<li>implementazione di un&rsquo;applicazione d&rsquo;esempio per verificare il funzionamento del
+sistema;</li>
+<li>utilizzo delle migrazioni per l&rsquo;inizializzazione del DB al posto degli script SQL;</li>
+</ul>
+
+<h2 id="creazione-del-progetto">Creazione del progetto</h2>
+
+<p>Ho iniziato creando un nuovo progetto (<em>File</em> -&gt; <em>New</em> -&gt; <em>Project&hellip;</em>) di
+tipo <em>Console App (.NET Core)</em> con Visual Studio.</p>
+
+<p><img src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/efcore-docker-mysql/001-Create-project.png" alt="VS screenshot" title="Creazione del progetto" /></p>
+
+<p>Dopodiché ho abilitato il supporto per Docker cliccando con il tasto destro sul
+progetto, selezionando <em>Add</em> -&gt; <em>Docker Support</em> e scegliendo <em>Linux</em> come sistema
+operativo di riferimento.</p>
+
+<p><img src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/efcore-docker-mysql/002-Add-Docker-support.png" alt="VS screenshot" title="Aggiunta del supporto per Docker" /></p>
+
+<p>Con questa operazione VS aggiunge i file <code>Dockerfile</code> e <code>.dockerignore</code> al progetto
+dell&rsquo;applicazione e un progetto <em>docker-compose</em> alla soluzione.</p>
+
+<p>Il file <code>Dockefile</code> descrive come dovrà essere creato il container dell&rsquo;applicazione.
+
+  
+    
+  
+  
+  
+  
+
+
+<figure class="highlight ">
+  <figcaption>
+    
+      <span>Dockerfile</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class=" code-highlight">FROM microsoft/dotnet:2.0-runtime
+ARG source
+WORKDIR /app
+COPY ${source:-obj/Docker/publish} .
+ENTRYPOINT [&#34;dotnet&#34;, &#34;EFCoreDockerMySQL.dll&#34;]</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Il parametro <code>source</code> utlizzato dal comando <code>COPY</code>, che verrà attualizzato in fase
+di costruzione del container, indica qual&rsquo;è la directory del file system host da
+cui copiare i file che compongono l&rsquo;applicazione. Questa variabile consente di
+specificare un comportamento diverso nel caso in cui l&rsquo;applicazione venga eseguita
+in debug o release.</p>
+
+<p>Il file <code>.dockerignore</code> indica a Docker quale porzione del file system host, a partire
+dalla cartella dove si trova il file <code>Dockerfile</code>, deve essere ignorato, o considerato
+(righe che iniziano con <code>'!'</code>), nel processo di build.
+
+  
+    
+  
+  
+  
+  
+
+
+<figure class="highlight ">
+  <figcaption>
+    
+      <span>.dockerignore</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class=" code-highlight">*
+!obj/Docker/publish/*
+!obj/Docker/empty/</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<p>Il progetto <code>docker-compose</code>, che viene automaticamente preimpostato come <em>StartUp
+Project</em>, invece contiene il file <code>docker-compose.yml</code> il quale descrive i container
+che devono essere avviati quando si vuole eseguire l&rsquo;applicazione.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight yaml">
+  <figcaption>
+    
+      <span>docker-compose.yml</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="yaml code-highlight">version: &#39;3&#39;
+services:
+  efcoredockermysql:
+    image: efcoredockermysql
+    build:
+      context: ./EFCoreDockerMySQL
+      dockerfile: Dockerfile</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<code>docker-compose.yml</code> fa riferimento al file <code>Dockerfile</code> contenuto nel progetto console.</p>
+
+<p><a href="https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore2x">Compilando l&rsquo;applicazione</a>,
+e copiando l&rsquo;output della compilazione in <code>obj/Docker/publish/</code>, è possibile, grazie
+ai file descritti sopra, costruire il container ed avviarlo direttamente da riga
+di comando digitando <code>docker-compose up</code> (come mostrato sotto).</p>
+
+<pre><code>PS C:\EFCoreDockerMySQL&gt; dotnet publish .\EFCoreDockerMySQL\EFCoreDockerMySQL.csproj
+Microsoft (R) Build Engine versione 15.3.409.57025 per .NET Core
+Copyright (C) Microsoft Corporation. Tutti i diritti sono riservati.
+
+  EFCoreDockerMySQL -&gt; C:\EFCoreDockerMySQL\EFCoreDockerMySQL\bin\Debug\netcoreapp2.0\EFCoreDockerMySQL.dll
+  EFCoreDockerMySQL -&gt; C:\EFCoreDockerMySQL\EFCoreDockerMySQL\bin\Debug\netcoreapp2.0\publish\
+PS C:\EFCoreDockerMySQL&gt; Copy-Item .\EFCoreDockerMySQL\bin\Debug\netcoreapp2.0\publish\ .\EFCoreDockerMySQL\obj\Docker\publish\ -Force -Recurse
+PS C:\EFCoreDockerMySQL&gt; docker-compose.exe up
+Building efcoredockermysql
+Step 1/5 : FROM microsoft/dotnet:2.0-runtime
+ ---&gt; e3b41abbf6c2
+Step 2/5 : ARG source
+ ---&gt; Using cache
+ ---&gt; b9164fbe106e
+Step 3/5 : WORKDIR /app
+ ---&gt; Using cache
+ ---&gt; dc8b3389277a
+Step 4/5 : COPY ${source:-obj/Docker/publish} .
+ ---&gt; 4ff8a44571cf
+Removing intermediate container 0a696ed5881b
+Step 5/5 : ENTRYPOINT dotnet EFCoreDockerMySQL.dll
+ ---&gt; Running in e75f74109286
+ ---&gt; 637957331a79
+Removing intermediate container e75f74109286
+Successfully built 637957331a79
+Successfully tagged efcoredockermysql:latest
+WARNING: Image for service efcoredockermysql was built because it did not already exist. To rebuild this image you must use `docker-compose build` or `docker-compose up --build`.
+Creating efcoredockermysql_efcoredockermysql_1 ...
+Creating efcoredockermysql_efcoredockermysql_1 ... done
+Attaching to efcoredockermysql_efcoredockermysql_1
+efcoredockermysql_1  | Hello World!
+efcoredockermysql_efcoredockermysql_1 exited with code 0
+</code></pre>
+
+<p>Ovviamente è anche possibile compilare e avviare l&rsquo;applicazione direttamente da
+VS dimenticandosi della complessità di quanto appena descritto. Per farlo è sufficiente
+premere <code>F5</code> o selezionare <em>Debug</em> -&gt; <em>Start Debugging</em>. In questo caso però, oltre
+ai file che ho descritto sopra, VS utilizza alcuni file generati automaticamente
+che consentono di debuggare l&rsquo;applicazione direttamente dall&rsquo;ambiente di sviluppo.
+Per vedere dove si trovano tali file è sufficiente guardare la finestra di <em>Output</em>
+del <em>Build</em> e analizzare le invocazioni di <code>docker-compose</code>.</p>
+
+<h2 id="aggiunta-container-mysql">Aggiunta container MySQL</h2>
+
+<p>Dopodiché ho aggiunto un contenitore MySQL mettendolo nella stessa rete virtuale
+dell&rsquo;applicazione.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight yaml">
+  <figcaption>
+    
+      <span>docker-compose.yml</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="yaml code-highlight">version: &#39;3&#39;
+services:
+  mysql:
+    image: mysql:5.7.18
+    container_name: efcoredockermysql-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: &#34;p4ssw0r#&#34;
+      MYSQL_DATABASE: &#34;efcoredockermysql&#34;
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    restart: always
+    networks:
+      - efcoredockermysql-net
+  efcoredockermysql:
+    image: efcoredockermysql
+    build:
+      context: ./EFCoreDockerMySQL
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    networks:
+      - efcoredockermysql-net
+volumes:
+  mysql-data:
+networks:
+  efcoredockermysql-net:
+    driver: bridge</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+La dichiarazione della rete e l&rsquo;assegnazione dei due container alla stessa è essenziale
+per consentire la comunicazione fra i due. Senza questa operazione i due container
+verrebbero avviati ma, ad esempio, l&rsquo;applicazione non riuscirebbe a connettersi al
+DB.</p>
+
+<h2 id="creazione-modello-dati-e-aggiunta-ef-core">Creazione modello dati e aggiunta EF Core</h2>
+
+<p>Ho poi aggiunto Entity Framework Core al progetto utilizzando il seguente comando
+dalla <em>Package Manager Console</em> di VS:</p>
+
+<pre><code>Install-Package Microsoft.EntityFrameworkCore -Version 2.0.0
+</code></pre>
+
+<p>Ho quindi sviluppato un semplice modello dati da persistere e ho creato il <code>DbContext</code>
+di EF Core.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>Person.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class Person
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Surname { get; set; }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>ApplicationDbContext.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class ApplicationDbContext : DbContext
+{
+    public ApplicationDbContext(DbContextOptions&lt;ApplicationDbContext&gt; options) : 
+        base(options)
+    {
+    }
+    public DbSet&lt;Person&gt; People { get; set; }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<h2 id="inizializzazione-db-tramite-script-sql">Inizializzazione DB tramite script SQL</h2>
+
+<p>Prima di poter utilizzare il modello dati nell&rsquo;applicazione è necessario creare
+la tabella <code>People</code> nel DB. Il database <code>efcoredockermysql</code> viene creato automaticamente
+dal container all&rsquo;avvio ma, come si può verificare ispezionando la cartella <code>mysql-data\efcoredockermysql</code>,
+non viene creata alcuna tabella.</p>
+
+<p>Anche se l&rsquo;obiettivo finale del post è di utilizzare le migrazioni, come primo passo
+ho deciso di utilizzare uno script di inizializzazione in modo da creare la
+tabella all&rsquo;avvio di MySQL. Così facendo ho la possibilità di verificare che il sistema
+funzioni correttamente prima di introdurre un&rsquo;altra variabile all&rsquo;equazione.
+Per fare questo ho:</p>
+
+<ul>
+<li>creato il file <code>init.sql</code> nella cartella <code>mysql-initdb</code>, il quale contiene le istruzioni
+SQL per creare la tabella <code>People</code> e popolarla con alcuni dati di test;</li>
+<li>ho modificato il file <code>docker-compose.yml</code> per mappare la cartella <code>mysql-initdb</code>
+del file system host con la cartella <code>/docker-entrypoint-initdb.d</code> del container
+MySQL.</li>
+</ul>
+
+<p>
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight sql">
+  <figcaption>
+    
+      <span>init.sql</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="sql code-highlight">USE efcoredockermysql;
+CREATE TABLE People (
+    Id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255) NULL,
+    Surname VARCHAR(255) NULL
+);
+INSERT INTO People (Name, Surname) VALUES (&#39;Alice&#39;, &#39;Cooper&#39;);
+INSERT INTO People (Name, Surname) VALUES (&#39;Bob&#39;, &#39;Marley&#39;);
+INSERT INTO People (Name, Surname) VALUES (&#39;Charles&#39;, &#39;Xavier&#39;);</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight yaml">
+  <figcaption>
+    
+      <span>Estratto di docker-compose.yml</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="yaml code-highlight">...
+  mysql:
+    image: mysql:5.7.18
+    ...
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./mysql-initdb:/docker-entrypoint-initdb.d
+...
+volumes:
+  mysql-data:
+  mysql-initdb:
+...</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Per verificare l&rsquo;effetto delle modifiche è sufficiente avviare docker, <a href="https://docs.docker.com/engine/reference/commandline/exec/#examples">collegarsi
+al container MySQL con la bash</a>,
+ed utilizzare il client <code>mysql</code> per controllare il contenuto del DB.</p>
+
+<h2 id="applicazione-di-esempio">Applicazione di esempio</h2>
+
+<p>Avendo predisposto tutto il necessario, container, DB e modello dati, ho realizzato
+un programma per leggere e modificare i dati contenuti nel database.
+Per poter utilizzare EF Core 2.0 con MySQL ho installato il pacchetto NuGet <em>Pomelo.EntityFrameworkCore.MySql</em>
+con il seguente comando dalla <em>Package Manager Console</em>:</p>
+
+<pre><code>Install-Package Pomelo.EntityFrameworkCore.MySql -Version 2.0.0
+</code></pre>
+
+<p>Ho utilizzato la libreria <em>Pomelo</em> perché, al momento della scrittura del post, il
+pacchetto ufficiale <em>MySql.Data.EntityFrameworkCore</em> non è compatibile con EF Core
+2.0.</p>
+
+<p>L&rsquo;applicazione, riportata qui sotto, fa due operazioni:</p>
+
+<ul>
+<li>inserisce/aggiorna un record della tabella <code>People</code>;</li>
+<li>mostra tutti i record presenti nella tabella stessa.</li>
+</ul>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">class Program
+{
+    static void Main(string[] args)
+    {
+        var builder = new DbContextOptionsBuilder&lt;ApplicationDbContext&gt;();
+        builder.UseMySql(&#34;server=efcoredockermysql-mysql;userid=root;pwd=p4ssw0r#;&#34; &#43; 
+          &#34;port=3306;database=efcoredockermysql;sslmode=none;&#34;);
+        AddOrUpdateDavid(builder.Options);
+        ShowAllPeople(builder.Options);
+    }
+    private static void AddOrUpdateDavid(
+        DbContextOptions&lt;ApplicationDbContext&gt; options)
+    {
+        using (var context = new ApplicationDbContext(options))
+        {
+            var david = context.People
+              .FirstOrDefaultAsync(x =&gt; x.Name == &#34;David&#34;).Result;
+            if (david != null)
+            {
+                david.Surname &#43;= &#34;*&#34;;
+            }
+            else
+            {
+                david = new Person { Name = &#34;David&#34;, Surname = &#34;Gilmour&#34; };
+                context.People.Add(david);
+            }
+            context.SaveChanges();
+        }
+    }
+    private static void ShowAllPeople(DbContextOptions&lt;ApplicationDbContext&gt; options)
+    {
+        using (var context = new ApplicationDbContext(options))
+        {
+            foreach (var person in context.People)
+            {
+                Console.WriteLine($&#34;{person.Name} {person.Surname}&#34;);
+            }
+        }
+    }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Da notare la stringa di connessione: il nome del container viene utilizzato come
+nome del server MySQL. Infatti Docker, quando si utilizza una rete di tipo <code>bridge</code>,
+mette a disposizione dei container che stanno sulla rete stessa un servizio di DNS
+che risolvere i nomi dati ai container tramite l&rsquo;attributo <code>container_name</code>. La stringa
+di connessione viene passata al metodo di estensione <code>UseMySql</code> il quale è fornito
+dalla libreria <em>Pomelo</em>.</p>
+
+<p>Eseguendo l&rsquo;applicazione da VS, nella finestra di <em>Output</em> si vedrà quanto mostrato
+nell&rsquo;immagine qui sotto.</p>
+
+<p><img src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/efcore-docker-mysql/004-Run-application.png" alt="Output screenshot" title="Esecuzione del programma" /></p>
+
+<p>Nota sulla prima esecuzione: nonostante venga utilizzato l&rsquo;attributo <code>depends_on</code>
+per indicare che il container applicativo deve essere avviato dopo quello di MySQL,
+può succedere che l&rsquo;applicazione cerchi di aprire la connessione con il database
+prima che questo sia effettivamente disponibile. Questo è dovuto al fatto che
+Docker garantisce che i container vengano avviati nel giusto ordine, ma non può
+garantire che i servizi che ci girano dentro siano effettivamente pronti a rispondere
+alle richieste. Esistono vari metodi per avere questo tipo di garanzia ma esulano
+dallo scopo di questo post.
+Nel caso in cui alla prima esecuzione l&rsquo;applicazione abbia dei problemi di connessione,
+è sufficiente riavviarla per far sì che tutto funzioni correttamente.</p>
+
+<h2 id="utilizzo-delle-migrazioni">Utilizzo delle migrazioni</h2>
+
+<p>Dopo aver verificato che l&rsquo;applicazione e MySQL interagiscono correttamente, arriviamo
+finalmente al cuore del post: l&rsquo;uso delle migrazioni. Come succede a volte nell&rsquo;informatica,
+per andare avanti dobbiamo prima fare un passo indietro. Ho quindi annullato le modifiche
+fatte nel paragrafo <em>Inizializzazione DB tramite script SQL</em> in modo da ripartire
+con un database pulito, ed in particolare:</p>
+
+<ul>
+<li>ho rimosso i container precedentemente creati utilizzando il comando <code>docker rm -f &lt;id container&gt; &lt;id container&gt;</code>;</li>
+<li>ho cancellato le cartelle <code>mysql-data</code> e <code>mysql-initdb</code>;</li>
+<li>e ho rimosso il mapping di quest&rsquo;ultima cartella dal file <code>docker-compose.yml</code>.</li>
+</ul>
+
+<p>A dimostrazione del fatto che il DB non è più inizializzato, avviando l&rsquo;applicazione
+vedrò il seguente errore:</p>
+
+<pre><code>MySqlException:Table 'efcoredockermysql.People' doesn't exist
+</code></pre>
+
+<p>Per poter utilizzare la .NET Core CLI per EF Core per prima cosa ho installato il
+pacchetto <code>Microsoft.EntityFrameworkCore.Tools.DotNet</code>. Per farlo, come descritto in
+<a href="https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/migrations">questo articolo</a>,
+ho modificato manualmente il file <code>EFCoreDockerMySQL.csproj</code> aggiungendo le seguenti
+righe:
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight xml">
+  <figcaption>
+    
+      <span>Estratto di EFCoreDockerMySQL.csproj</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="xml code-highlight">&lt;ItemGroup&gt;
+  &lt;DotNetCliToolReference Include=&#34;Microsoft.EntityFrameworkCore.Tools.DotNet&#34;
+    Version=&#34;2.0.0&#34; /&gt;
+&lt;/ItemGroup&gt;</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<p>Dopodiché ho creato la classe <code>ApplicationDbContextFactory</code>, la quale implementa
+l&rsquo;interfaccia <code>IDesignTimeDbContextFactory&lt;ApplicationDbContext&gt;</code> per poter instanziare
+correttamente il <code>DbContext</code> dell&rsquo;applicazione al momento dell&rsquo;invocazione della
+CLI.</p>
+
+<p>Per evitare di duplicare la stringa di connessione del DB all&rsquo;interno del codice
+dell&rsquo;applicazione, ho deciso di utilizzare il meccanismo standard di configurazione
+JSON di .NET Core, pacchetto NuGet <code>Microsoft.Extensions.Configuration.Json</code>. Ho
+quindi modificato il codice del main come segue e ho aggiunto un file di configurazione.</p>
+
+<p>
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>Estratto di Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">...
+static void Main(string[] args)
+{
+    var builder = new DbContextOptionsBuilder&lt;ApplicationDbContext&gt;();
+
+    builder.UseMySql(Configuration.GetConnectionString(&#34;DefaultConnection&#34;));
+    AddOrUpdateDavid(builder.Options);
+    ShowAllPeople(builder.Options);
+}
+
+public static IConfigurationRoot Configuration
+{
+  get
+  {
+    var environmentName = Environment.GetEnvironmentVariable(
+      &#34;DOTNETCORE_ENVIRONMENT&#34;);
+    var builder = new ConfigurationBuilder()
+      .AddJsonFile(&#34;appsettings.json&#34;, optional: true, reloadOnChange: true)
+      .AddJsonFile($&#34;appsettings.{environmentName}.json&#34;, optional: true);
+    return builder.Build();
+  }
+}
+&#39;&#39;&#39;</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight json">
+  <figcaption>
+    
+      <span>appsettings.json</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="json code-highlight">{
+  &#34;ConnectionStrings&#34;: {
+    &#34;DefaultConnection&#34;: &#34;server=efcoredockermysql-mysql;userid=root;pwd=p4ssw0r#;port=3306;database=efcoredockermysql;sslmode=none;&#34;
+  }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<p>Infine, prima di poter generare la prima migrazione, ho fatto in modo che il DB
+MySQL fosse raggiungibile dalla macchina host, ovvero quella di sviluppo. Per
+fare questo è stato sufficiente modificare il file <code>docker-compose.override.yml</code>
+come segue e riavviare il container MySQL.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight yaml">
+  <figcaption>
+    
+      <span>docker-compose.override.yml</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="yaml code-highlight">version: &#39;3&#39;
+services:
+  mysql:
+    ports:
+      - &#34;3306:3306&#34;</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Modificando questo file e non <code>docker-compose.yml</code>, mi sono assicurato che queste
+modifiche non finiscano per sbaglio nella configurazione di release.</p>
+
+<p>Dato che, dopo la modifica precedente, MySQL è raggiungibile all&rsquo;indirizzo <code>localhost:3306</code>,
+ho aggiunto la seguente stringa di connessione al file <code>appsettings.json</code> e ho modificato
+la classe <code>ApplicationDbContextFactory</code> perché la utilizzase:</p>
+
+<pre><code>&quot;MigrationConnection&quot;: &quot;server=localhost;userid=root;pwd=p4ssw0r#;port=3306;database=efcoredockermysql;sslmode=none;&quot;
+</code></pre>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>ApplicationDbContextFactory.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class ApplicationDbContextFactory : 
+  IDesignTimeDbContextFactory&lt;ApplicationDbContext&gt;
+{
+  public ApplicationDbContext CreateDbContext(string[] args)
+  {
+    return new ApplicationDbContext(new DbContextOptionsBuilder&lt;ApplicationDbContext&gt;()
+      .UseMySql(Program.Configuration.GetConnectionString(&#34;MigrationConnection&#34;))
+      .Options);
+  }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Una volta finiti i preparativi descritti sopra, ho aperto la <em>Package Manager Console</em>
+ed eseguito i seguenti comandi per creare la prima migrazione del progetto:</p>
+
+<pre><code>PM&gt; cd .\EFCoreDockerMySQL
+PM&gt; dotnet ef migrations add InitialCreate
+Done. To undo this action, use 'ef migrations remove'
+</code></pre>
+
+<p>Così facendo la CLI di EF Core mi ha creato i seguenti file:</p>
+
+<ul>
+<li><code>20171003202500_InitialCreate.cs</code>, il quale contiene la vera e propria migrazione,
+sia <code>Up</code> che <code>Down</code>, che deve essere applicata al DB per allineare quest&rsquo;ultimo
+alla struttura del modello dati;</li>
+<li><code>20171003202500_InitialCreate.Designer.cs</code>, il quale descrive la struttura attesa
+della tabella <code>People</code> dopo l&rsquo;applicazione della migrazione;</li>
+<li><code>ApplicationDbContextModelSnapshot.cs</code>, il quale descrive la struttura attesa del
+DB dopo l&rsquo;applicazione della migrazione.</li>
+</ul>
+
+<p>Gli ultimi due file di fatto hanno la funzione che in Entity Framework svolgevano
+i file di risorsa associati alle migrazioni.</p>
+
+<p>Una volta creata la migrazione, l&rsquo;ho applicata al DB utilizzando il seguente comando
+da <em>Package Manager Console</em>:</p>
+
+<pre><code>PM&gt; dotnet ef database update
+Applying migration '20171003202500_InitialCreate'.
+Done.
+</code></pre>
+
+<p>Per verificare il tutto è stato sufficiente eseguire l&rsquo;applicazione e controllare
+la finestra di <em>Output</em>.</p>
+
+<p>Così facendo è possibile modificare il modello dati e tenere lo schema del DB sincronizzato
+semplicemente utilizzato la CLI di EF Core ed in particolare i comandi
+<code>dotnet ef migrations add</code> e <code>dotnet ef database update</code>. Tali comandi sono del tutto
+equivalenti, anche se con alcune opzioni in meno, ai comandi <code>Add-Migration</code> e <code>Update-Database</code>
+che si utilizzano normalmente con Entity Framework.</p>
+
+<h2 id="conclusioni">Conclusioni</h2>
+
+<p>L&rsquo;utilizzo di .NET Core consente di sviluppare applicazioni leggere e multipiattaforma.
+Riuscire ad utilizzarlo correttamente insieme a Docker e MySQL consente di sfruttare
+a pieno le potenzialità di questa piattaforma.</p>
+
+<p>Ho sempre torvato molto utile l&rsquo;approccio <a href="https://msdn.microsoft.com/en-us/library/jj193542(v=vs.113).aspx">code first</a>
+per la gestione del modello dati e dello schema del DB. Con questo post, ho dimostrato
+come impostare un progetto, e l&rsquo;ambiente di sviluppo, in modo da utilizzare le migrazioni
+di EF Core direttamente con MySQL. Così facendo, è possibile usare in sviluppo la
+stessa versione del database che sarà utilizzata in produzione.</p>
+
+<p>Inoltre con questo approccio, grazie a Docker, è possibile utilizzare versioni distinte
+di framework e database per ogni progetto, senza nemmeno avere la necessità di installare
+tali versioni sul proprio computer.</p>
+
+<p>Per quanto riguarda EF Core c&rsquo;è ancora molto da esplorare, ad esempio il seed del
+database o l&rsquo;applicazione delle migrazioni in produzione, etc. Tutti ottimi argomenti
+da approfondire in articoli futuri.</p>
+
+<p>Il codice sorgente relativo a questo post è disponibile su <a href="https://github.com/VenomAV/EFCoreDockerMySQL">GitHub</a>.
+La configurazione dell&rsquo;ambiente di sviluppo utilizzata è stata la seguente:</p>
+
+<ul>
+<li>Windows 10 Pro;</li>
+<li>Visual Studio Professional 2017, version 15.3.4;</li>
+<li>Docker Community Edition for Windows, version 17.09.0-ce-win33 (13620);</li>
+</ul>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGS</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/docker/">docker</a>
+
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/dotnet-core/">dotnet core</a>
+
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/migrations/">migrations</a>
+
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/entity-framework-core/">entity framework core</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/" data-tooltip="Strategic Domain-Driven Design">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">SUCCESSIVA</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/09/there-and-back-again/" data-tooltip="There and Back Again">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PRECEDENTE</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f10%2futilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f10%2futilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f10%2futilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 Andrea Vallotti. Tutti i diritti riservati
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/" data-tooltip="Strategic Domain-Driven Design">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">SUCCESSIVA</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/09/there-and-back-again/" data-tooltip="There and Back Again">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PRECEDENTE</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f10%2futilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f10%2futilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f10%2futilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f10%2futilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql%2f">
+        <i class="fa fa-google-plus"></i><span>Condividi su Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f10%2futilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql%2f">
+        <i class="fa fa-facebook-official"></i><span>Condividi su Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f10%2futilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql%2f">
+        <i class="fa fa-twitter"></i><span>Condividi su Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Foto dell&#39;autore" />
+    
+    <h4 id="about-card-name">Andrea Vallotti</h4>
+    
+      <div id="about-card-bio">Appassionato di software: architetto, sviluppatore e technology scout. Agilista entusiasta. MCSD - App Builder, MCSA - Cloud Platform, CSM, e CSPO. Mi diverte imparare sempre cose nuove, mentre creo <em>software eccezionale</em> e aiuto gli altri a fare lo stesso. <a href="http://www.andreavallotti.tech/it/page/about">Continua.</a></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Software Adventurer
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Italia
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Ricerca" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">Nessun articolo trovato</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/">
+                <h3 class="media-heading">Modellazione e separazione delle responsabilità con la programmazione funzionale</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Dopo il mio primo esperimento con la programmazione funzionale, ho deciso di approfondire ulteriormente l&rsquo;argomento. Per questo ho partecipato al workshop &ldquo;Lean and Functional Domain Modelling&rdquo; organizzato da Avanscoperta e tenuto da Marcello Duarte lo scorso marzo. Il workshop mi ha fornito dei buoni spunti su come affrontare la modellazione in ottica funzionale e ha alimentato ancor di più la mia voglia di sperimentare questo paradigma utilizzando Scala.
+Per affrontare questa sfida c&rsquo;è voluto studio e allenamento.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/">
+                <h3 class="media-heading">Coderetreat Firenze</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">“Quello che conta è il viaggio” (cit. Stefano Leli). Questa è l’essenza del Coderetreat.
+Ho scoperto questo format durante gli Italian Agile Day 2017 di Urbino. In quell&rsquo;occasione mi sono divertito ad esercitarmi con gli altri partecipanti mentre a farci da facilitatori c&rsquo;erano Matteo Vaccari, Stefano Leli e Gabriele Tondi. Il formato mi è piaciuto a tal punto che ho deciso di riproporlo a Firenze, dove vivo, per dare la possibilità di fare la mia stessa esperienza alla mia comunità di sviluppatori.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/">
+                <h3 class="media-heading">Event Sourcing e CQRS in C#</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Come promesso al termine del post precedente, in questo articolo approfondirò gli aspetti pratici legati al DDD ed in particolare ai pattern CQRS ed Event Sourcing.
+L’obiettivo principale dell’esperimento è quello di implementare un aggregato secondo il paradigma Event Sourcing e di creare un modello di lettura separato per alimentare le pagine di un&rsquo;applicazione Web.
+Prima di presentare l&rsquo;esempio pratico farò una breve introduzione dei principali pattern architetturali che sono stati utilizzati dalla nascita del DDD.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/">
+                <h3 class="media-heading">Strategic Domain-Driven Design</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Dopo la lettura del libro blu di Evans mi sono appassionato al Domain-Driven Design. Ero ancora in America quando, con quattro mesi di anticipo, mi iscrissi al workshop Strategic Domain-Driven Design di Alberto Brandolini (aka ziobrando) organizzato da Avanscoperta. Non volevo certo perdermelo.
+Poi, preso dal caos di tutti i giorni, avevo perso il senso del tempo quando, a metà ottobre, ho ricevuto una mail da parte di Avanscoperta che mi ha ricordato del corso imminente: è stato come se qualcuno mi avesse regalato un fine settimana alla spa!</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/">
+                <h3 class="media-heading">Utilizzare le migrazioni di EF Core con Docker e MySQL</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">In questo post spiegherò come creare un&rsquo;applicazione console .NET Core 2.0 la quale legga e scriva i propri dati su MySQL e che utilizzi Entity Framework Core, e le migrazioni, per la persistenza e l&rsquo;aggiornamento dello schema del DB. Inoltre mostrerò come utilizzare Docker in modo da poter sviluppare l&rsquo;applicazione indipendentemente dall&rsquo;ambiente utilizzato.
+Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente modo:
+ creazione progetto console .</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/09/there-and-back-again/">
+                <h3 class="media-heading">There and Back Again</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Sep 9, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Per gli estimatori di Tolkien, il titolo del post può sembrare presuntuoso ma in fin dei conti ho viaggiato per 7.600 km, molti più di Bilbo e compagnia, ho incontrato persone delle quali non capivo la lingua, più o meno, e ho parlato con un drago&hellip; Ok, questo non l&rsquo;ho fatto, ma lasciatemelo credere 😃
+Scherzi a parte, ho passato i primi sei mesi di quest&rsquo;anno ad Indianapolis negli Stati Uniti.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/08/console.writeline-hello-world/">
+                <h3 class="media-heading">Console.WriteLine( &#34;Hello, World!&#34; );</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Così sono iniziati tutti gli esperimenti che ho fatto nella mia vita da informatico: scrivere Hello, World! a video. Quindi ho pensato di iniziare nello stesso modo questo nuovo esperimento: tenere un blog in cui scrivere di argomenti che ritengo interessanti e sui quali mi piacerebbe sentire l&rsquo;opinione degli altri.
+Chi mi conosce sa benissimo che le materie umanistiche non sono mai state il mio forte per cui &ldquo;scrivere un blog&rdquo; non è esattamente nelle mie corde.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/post/">
+                <h3 class="media-heading">Posts</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="Nessun articolo trovato"
+         data-message-one="1 articolo trovato"
+         data-message-other="{n} articoli trovati">
+         8 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/andreavallotti/image/upload/blog/images/cover-NGC4258-M106.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+
+
+<script src="http://www.andreavallotti.tech/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.registerLanguage("fsharp",function(e){var t={b:"<",e:">",c:[e.inherit(e.TM,{b:/'[a-zA-Z0-9_]+/})]};return{aliases:["fs"],k:"abstract and as assert base begin class default delegate do done downcast downto elif else end exception extern false finally for fun function global if in inherit inline interface internal lazy let match member module mutable namespace new null of open or override private public rec return select sig static struct then to true try type upcast use val void when where while with yield",i:/\/\*/,c:[{cN:"keyword",b:/\b(yield|return|let|do)!/},{cN:"string",b:'@"',e:'"',c:[{b:'""'}]},{cN:"string",b:'"""',e:'"""'},e.C("\\(\\*","\\*\\)"),{cN:"class",bK:"type",e:"\\(|=|$",eE:!0,c:[e.UTM,t]},{cN:"meta",b:"\\[<",e:">\\]",r:10},{cN:"symbol",b:"\\B('[A-Za-z])\\b",c:[e.BE]},e.CLCM,e.inherit(e.QSM,{i:null}),e.CNM]}});
+  hljs.registerLanguage("yaml", function(e) { var b = "true false yes no null", a = "^[ \\-]*", r = "[a-zA-Z_][\\w\\-]*", t = { cN: "attr", v: [{ b: a + r + ":" }, { b: a + '"' + r + '":' }, { b: a + "'" + r + "':" }] }, c = { cN: "template-variable", v: [{ b: ", e: " }, { b: "%{", e: "}" }] }, l = { cN: "string", r: 0, v: [{ b: /'/, e: /'/ }, { b: /"/, e: /"/ }, { b: /\S+/ }], c: [e.BE, c] }; return { cI: !0, aliases: ["yml", "YAML", "yaml"], c: [t, { cN: "meta", b: "^---s*$", r: 10 }, { cN: "string", b: "[\\|>] *$", rE: !0, c: l.c, e: t.v[0].b }, { b: "<%[%=-]?", e: "[%-]?%>", sL: "ruby", eB: !0, eE: !0, r: 0 }, { cN: "type", b: "!!" + e.UIR }, { cN: "meta", b: "&" + e.UIR + "$" }, { cN: "meta", b: "\\*" + e.UIR + "$" }, { cN: "bullet", b: "^ *-", r: 0 }, e.HCM, { bK: b, k: { literal: b } }, e.CNM, l] } });
+  hljs.registerLanguage("dockerfile", function(e) { return { aliases: ["docker"], cI: !0, k: "from maintainer expose env arg user onbuild stopsignal", c: [e.HCM, e.ASM, e.QSM, e.NM, { bK: "run cmd entrypoint volume add copy workdir label healthcheck shell", starts: { e: /[^\\]\n/, sL: "bash" } }], i: "</" } });
+  hljs.registerLanguage("scala",function(e){var t={cN:"meta",b:"@[A-Za-z]+"},a={cN:"subst",v:[{b:"\\$[A-Za-z0-9_]+"},{b:"\\${",e:"}"}]},r={cN:"string",v:[{b:'"',e:'"',i:"\\n",c:[e.BE]},{b:'"""',e:'"""',r:10},{b:'[a-z]+"',e:'"',i:"\\n",c:[e.BE,a]},{cN:"string",b:'[a-z]+"""',e:'"""',c:[a],r:10}]},c={cN:"symbol",b:"'\\w[\\w\\d_]*(?!')"},i={cN:"type",b:"\\b[A-Z][A-Za-z0-9_]*",r:0},s={cN:"title",b:/[^0-9\n\t "'(),.`{}\[\]:;][^\n\t "'(),.`{}\[\]:;]+|[^0-9\n\t "'(),.`{}\[\]:;=]/,r:0},n={cN:"class",bK:"class object trait type",e:/[:={\[\n;]/,eE:!0,c:[{bK:"extends with",r:10},{b:/\[/,e:/\]/,eB:!0,eE:!0,r:0,c:[i]},{cN:"params",b:/\(/,e:/\)/,eB:!0,eE:!0,r:0,c:[i]},s]},l={cN:"function",bK:"def",e:/[:={\[(\n;]/,eE:!0,c:[s]};return{k:{literal:"true false null",keyword:"type yield lazy override def with val var sealed abstract private trait object if forSome for while throw finally protected extends import final return else break new catch super class case package default try this match continue throws implicit"},c:[e.CLCM,e.CBCM,r,c,i,l,n,e.CNM,t]}});
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    var languageFilter = (block.classList && block.classList.length > 1) ? [].slice.apply(block.classList) : null;
+    var autoDetected = hljs.highlightAuto(block.innerText, languageFilter);
+
+    autoDetected.value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/www.andreavallotti.tech\/it\/2017\/10\/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql\/';
+          
+            this.page.identifier = '\/it\/2017\/10\/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'andreavallotti';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#000"
+    },
+    "button": {
+      "background": "#f1d600"
+    }
+  },
+  "content": {
+    "message": "Questo sito utilizza cookie per offrire agli utenti servizi e funzionalità avanzate. Continuando la navigazione nel sito autorizzi l’uso dei cookie.",
+    "dismiss": "Accetto i cookie",
+    "link": "Per saperne di più clicca qui",
+    "href": "/it/page/cookie"
+  }
+})});
+</script>
+    
+  </body>
+</html>
+

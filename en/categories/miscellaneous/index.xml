@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Miscellaneous on Development: people, code &amp; me</title>
+    <link>http://www.andreavallotti.tech/en/categories/miscellaneous/</link>
+    <description>Recent content in Miscellaneous on Development: people, code &amp; me</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 29 Aug 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.andreavallotti.tech/en/categories/miscellaneous/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Console.WriteLine( &#34;Hello, World!&#34; );</title>
+      <link>http://www.andreavallotti.tech/en/2017/08/console.writeline-hello-world/</link>
+      <pubDate>Tue, 29 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/2017/08/console.writeline-hello-world/</guid>
+      <description>Every single experiment I did as a programmer began in this way: show Hello, World! on the monitor. Therefore I decided to start this new experiment (writing a blog) in the same way.
+Who knows me well can tell that I never did my best in humanities, therefore &amp;ldquo;writing a blog&amp;rdquo; is not exactly in my style. However, I strongly believe that sharing experiences is essential in my job for two main reasons:</description>
+    </item>
+    
+  </channel>
+</rss>

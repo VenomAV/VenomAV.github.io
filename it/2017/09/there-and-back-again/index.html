@@ -1,0 +1,1268 @@
+
+
+  
+    
+  
+
+
+  
+
+
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.54.0">
+    <meta name="theme" content="Tranquilpeak 0.3.1-BETA">
+    <title>There and Back Again</title>
+    <meta name="author" content="Andrea Vallotti">
+    <meta name="keywords" content="functional programming, F#, development, dot-net, agile, cloud, azure, developers">
+
+    <link rel="icon" href="http://www.andreavallotti.tech/images/favicon.png">
+    
+
+    
+    <meta name="description" content="Per gli estimatori di Tolkien, il titolo del post può sembrare presuntuoso ma in fin dei conti ho viaggiato per 7.600 km, molti più di Bilbo e compagnia, ho incontrato persone delle quali non capivo la lingua, più o meno, e ho parlato con un drago&hellip; Ok, questo non l&rsquo;ho fatto, ma lasciatemelo credere 😃
+Scherzi a parte, ho passato i primi sei mesi di quest&rsquo;anno ad Indianapolis negli Stati Uniti.">
+    <meta property="og:description" content="Per gli estimatori di Tolkien, il titolo del post può sembrare presuntuoso ma in fin dei conti ho viaggiato per 7.600 km, molti più di Bilbo e compagnia, ho incontrato persone delle quali non capivo la lingua, più o meno, e ho parlato con un drago&hellip; Ok, questo non l&rsquo;ho fatto, ma lasciatemelo credere 😃
+Scherzi a parte, ho passato i primi sei mesi di quest&rsquo;anno ad Indianapolis negli Stati Uniti.">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="There and Back Again">
+    <meta property="og:url" content="http://www.andreavallotti.tech/it/2017/09/there-and-back-again/">
+    <meta property="og:site_name" content="Development: people, code &amp; me">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Per gli estimatori di Tolkien, il titolo del post può sembrare presuntuoso ma in fin dei conti ho viaggiato per 7.600 km, molti più di Bilbo e compagnia, ho incontrato persone delle quali non capivo la lingua, più o meno, e ho parlato con un drago&hellip; Ok, questo non l&rsquo;ho fatto, ma lasciatemelo credere 😃
+Scherzi a parte, ho passato i primi sei mesi di quest&rsquo;anno ad Indianapolis negli Stati Uniti.">
+    
+      <meta name="twitter:creator" content="@AndreaVallotti">
+    
+    
+      <meta property="fb:app_id" content="170534096895468">
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/there-and-back-again/There_And_Back_Again.jpg">
+    
+
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://www.andreavallotti.tech/css/style-u6mk0ojoywresbx8iepslrmmhl4stuhrsxuwhkpwrkrx7mryjcaimasnk4pi.min.css" />
+    
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-105324949-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://www.andreavallotti.tech/it/">Development: people, code &amp; me</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://www.andreavallotti.tech/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=90" alt="Foto dell&#39;autore" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://www.andreavallotti.tech/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Foto dell&#39;autore" />
+        </a>
+        <h4 class="sidebar-profile-name">Andrea Vallotti</h4>
+        
+          <h5 class="sidebar-profile-bio">Appassionato di software: architetto, sviluppatore e technology scout. Agilista entusiasta. MCSD - App Builder, MCSA - Cloud Platform, CSM, e CSPO. Mi diverte imparare sempre cose nuove, mentre creo <em>software eccezionale</em> e aiuto gli altri a fare lo stesso. <a href="http://www.andreavallotti.tech/it/page/about">Continua.</a></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categorie</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archivio</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">Chi sono</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/andrea-vallotti-b379313/" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+      
+      <span class="sidebar-button-desc">LinkedIn</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/AndreaVallotti" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-language"></i>
+      
+      <span class="sidebar-button-desc">English</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              post-header-cover--partial"
+       style="background-image:url('https://res.cloudinary.com/andreavallotti/image/upload/blog/images/there-and-back-again/There_And_Back_Again.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      There and Back Again
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  
+    <time itemprop="datePublished" datetime="2017-09-04T00:00:00Z">
+      
+  
+  
+  
+  
+    4 Settembre 2017
+  
+
+    </time>
+  
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://www.andreavallotti.tech/it/categories/sviluppo">Sviluppo</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>Per gli estimatori di Tolkien, il titolo del post può sembrare presuntuoso ma in
+fin dei conti ho viaggiato per 7.600 km, molti più di Bilbo e compagnia, ho incontrato
+persone delle quali non capivo la lingua, più o meno, e ho parlato con un drago&hellip;
+Ok, questo non l&rsquo;ho fatto, ma lasciatemelo credere 😃</p>
+
+<p>Scherzi a parte, ho passato i primi sei mesi di quest&rsquo;anno ad Indianapolis negli
+Stati Uniti. In questo periodo ho avuto la fortuna di toccare con mano la vivacità
+della comunità tecnologica dell&rsquo;Indiana partecipando a due conferenze, <a href="https://indycode.amegala.com/">Indy.Code</a>
+e <a href="http://agileindy.org/conference/">AgileIndy conference</a>, e a svariati meetup:
+<a href="https://www.meetup.com/agileindy/">Agileindy</a>, <a href="https://www.meetup.com/indysa/">Indy Software Artisans</a>,
+<a href="https://www.meetup.com/Agile-Games/">Agile Games</a>, <a href="https://www.meetup.com/Indy-NET-Consortium/">Indy .NET Consortium</a>,
+etc.</p>
+
+<p>Uno degli argomenti che più ha attirato la mia curiosità è stata la
+<a href="https://it.wikipedia.org/wiki/Programmazione_funzionale">programmazione funzionale</a>.
+Il motivo di questo interesse è stato triplice: l&rsquo;approccio per me nuovo; le promesse
+di questo paradigma; e la passione trasmessa da <a href="https://davefancher.com/">Dave Fancher</a>
+sull&rsquo;argomento.</p>
+
+<p>Uno delle caratteristiche più interessanti della programmazione funzionale è sicuramente
+l&rsquo;immutabilità delle &ldquo;variabili&rdquo; (anche se sarebbe più corretto chiamarle &ldquo;immutabili&rdquo;
+😃) e come essa porta a strutturare diversamente il codice dell&rsquo;applicazione
+rispetto alla programmazione orientata agli oggetti (OOP).</p>
+
+<p>Per evidenziare le differenze dei due approcci, su questo specifico aspetto, ho
+implementato una stessa applicazione d&rsquo;esempio due volte, utilizzando sia C# (OOP)
+che F# (programmazione funzionale). L&rsquo;applicazione deve consentire di:</p>
+
+<ul>
+<li>selezionare un conto corrente fornendo il nome dell&rsquo;intestatario, e leggendo i
+dati corrispondenti da DB;</li>
+<li>richiedere il prelievo di una data somma di denaro dal conto corrente selezionato
+visualizzando il nuovo saldo;</li>
+<li>chiedere conferma all&rsquo;utente, e salvare il nuovo saldo sul DB in caso di risposta
+affermativa;</li>
+<li>reiterare le operazioni sopra fino a quando l&rsquo;utente non decide di uscire.</li>
+</ul>
+
+<p>Il codice completo degli esempi sotto è disponibile su <a href="https://github.com/VenomAV/OOPComparedToFP.git">GitHub</a>.</p>
+
+<h2 id="c">C#</h2>
+
+<p>Per prima cosa ho definito il modello del conto corrente.
+<!--"http://underscorejs.org/#compact" "BankAccount.cs"-->
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>BankAccount.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class BankAccount
+{
+    public BankAccount()
+    {
+    }
+
+    public BankAccount(string owner, decimal balance)
+    {
+        Owner = owner;
+        Balance = balance;
+    }
+
+    public int Id { get; private set; }
+    public string Owner { get; private set; }
+    public decimal Balance { get; private set; }
+
+    public void Withdraw(decimal amount)
+    {
+        Balance -= amount;
+    }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+La classe è molto semplice. La proprietà <code>Id</code> serve ad agevolare l&rsquo;utilizzo di Entity
+Framework per la persistenza dei dati su DB. Tralascerò tutto il codice relativo
+ad EF perché di scarso interesse ai fini di questo post.</p>
+
+<p>Dopodiché ho creato un applicazione console per soddisfare i requisiti di cui sopra.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">using System;
+using System.Linq;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        using (BankAccountContext context = new BankAccountContext())
+        {
+            while (TryWithdrawFromAccount(context)) ;
+        }
+    }
+
+    private static bool TryWithdrawFromAccount(BankAccountContext context)
+    {
+        string owner;
+        BankAccount bankAccount;
+
+        Console.Write(&#34;Type owner (or &#39;q&#39; to exit): &#34;);
+        owner = Console.ReadLine();
+        if (owner == &#34;q&#34;)
+        {
+            return false;
+        }
+        bankAccount = context.BanckAccounts.FirstOrDefault(ba =&gt; ba.Owner == owner);
+        if (bankAccount != null)
+        {
+            WithdrawFromAccount(context, bankAccount);
+        }
+        return true;
+    }
+
+    private static void WithdrawFromAccount(BankAccountContext context,
+        BankAccount bankAccount)
+    {
+        Console.WriteLine($&#34;{bankAccount.Owner} has {bankAccount.Balance}$&#34;);
+
+        Console.Write(&#34;How much you want to withdraw? &#34;);
+        bankAccount.Withdraw(decimal.Parse(Console.ReadLine()));
+
+        if (ConfirmWithdraw(bankAccount) == &#34;y&#34;)
+        {
+            context.SaveChanges();
+        }
+    }
+
+    private static string ConfirmWithdraw(BankAccount bankAccount)
+    {
+        Console.Write($&#34;{bankAccount.Owner} new balance will be &#34; &#43;
+            $&#34;{bankAccount.Balance}. Confirm operation? [y/n] &#34;);
+        return Console.ReadLine();
+    }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Nel metodo <code>Main</code> viene creato il contesto di EF mentre tutta la logica è implementata
+nei metodi <code>TryWithdrawFromAccount</code> e <code>WithdrawFromAccount</code>. I punti principali
+dell&rsquo;applicazione sono:</p>
+
+<ul>
+<li>il recupero del conto corrente alla riga <em>25</em>;</li>
+<li>il prelievio della somma di denaro dal conto corrente alla riga <em>39</em>;</li>
+<li>e la richiesta di conferma con salvataggio alle righe <em>41-44</em>.</li>
+</ul>
+
+<p>Tutto facile, tutto perfetto&hellip; o forse no? Eseguendo il programma tutto funziona
+correttamente nel caso di conferma del prelievo. Viceversa, se l&rsquo;utente non conferma
+il prelievo, e richiede nuovamente il saldo dello stesso conto, il programma ha
+il comportamento mostrato qui sotto.</p>
+
+<p><img src="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/there-and-back-again/BankAccountCSharp.png" alt="Console screenshot" title="Esecuzione del programma C#" /></p>
+
+<p>Ai più esperti sarà subito saltato all&rsquo;occhio l&rsquo;errore: anche se il salvataggio
+del nuovo saldo è condizionato alla conferma dell&rsquo;utente, riga <em>41</em>, l&rsquo;oggetto <code>bankAccount</code>
+è già stato modificato e fa parte del contesto di EF, il quale viene disposto solo
+alla chiusura dell&rsquo;applicazione. Questo fa sì che la seconda volta che l&rsquo;utente richiede
+il saldo del conto di Alice il valore visualizzato non sia quello originale ma quello
+modificato.</p>
+
+<p>Qui sotto riporto i metodi modificati rispetto al programma precedente per ottenere
+il comportamento desiderato.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">private static bool TryWithdrawFromAccount(BankAccountContext context)
+{
+    string owner;
+    BankAccount bankAccount;
+
+    Console.Write(&#34;Type owner (or &#39;q&#39; to exit): &#34;);
+    owner = Console.ReadLine();
+    if (owner == &#34;q&#34;)
+    {
+        return false;
+    }
+    bankAccount = TryGetBankAccountByOwner(context, owner);
+    if (bankAccount != null)
+    {
+        WithdrawFromAccount(context, bankAccount);
+    }
+    return true;
+}
+
+private static void WithdrawFromAccount(BankAccountContext context,
+    BankAccount bankAccount)
+{
+    Console.WriteLine($&#34;{bankAccount.Owner} has {bankAccount.Balance}$&#34;);
+
+    Console.Write(&#34;How much you want to withdraw? &#34;);
+    bankAccount.Withdraw(decimal.Parse(Console.ReadLine()));
+
+    if (ConfirmWithdraw(bankAccount) == &#34;y&#34;)
+    {
+        UpdateBankAccount(context, bankAccount);
+    }
+}
+
+private static BankAccount TryGetBankAccountByOwner(BankAccountContext context,
+    string owner)
+{
+    /*** Load detached object ***/
+    return context.BanckAccounts.AsNoTracking()
+        .FirstOrDefault(ba =&gt; ba.Owner == owner);
+}
+
+private static void UpdateBankAccount(BankAccountContext context, 
+    BankAccount bankAccount)
+{
+    /*** Attach the modified object to the context ***/
+    context.Entry(bankAccount).State = System.Data.Entity.EntityState.Modified;
+    context.SaveChanges();
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Per poter lavorare con l&rsquo;oggetto di dominio senza sporcare il contesto di EF è
+necessario caricare il conto corrente scollegandolo dal contesto (metodo <code>AsNoTracking</code>
+a riga <em>38</em>) e ricollegarlo alla sessione soltanto dopo la conferma da parte dell&rsquo;utente
+(riga <em>46</em>).</p>
+
+<p>Vediamo ora come è possibile risolvere lo stesso problema in F#.</p>
+
+<h2 id="f">F#</h2>
+
+<p>Anche in questo caso, ho definito immediatamente il modello di dominio. Esso consiste
+di un <a href="https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/records">record</a>
+e una funzione <code>withdraw</code> la quale, seguendo il principio dell&rsquo;immutabilità, crea
+un nuovo record uguale a quello passato come parametro ma con il saldo aggiornato.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight fsharp">
+  <figcaption>
+    
+      <span>BankAccount.fs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="fsharp code-highlight">module BankAccount
+
+type BankAccount = {Id:int; Owner:string; Balance:decimal}
+
+let withdraw = fun bankAccount (amount:decimal) -&gt;
+  ({ bankAccount with Balance = bankAccount.Balance - amount })</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<p>Dopodiché ho definito le funzioni di accesso ai dati le quali, sfruttando la potenza
+del Data Provider di F# per SQL Server, e lo stesso DB utilizzato per l&rsquo;esempio C#,
+mappano semplicemente il record <code>BanckAccount</code> definito sopra con i campi del DB.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight fsharp">
+  <figcaption>
+    
+      <span>DataAccess.fs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="fsharp code-highlight">module DataAccess
+
+open Microsoft.FSharp.Data.TypeProviders
+open BankAccount
+
+[&lt;Literal&gt;]
+let connectionString = &#34;Data Source=(localdb)\mssqllocaldb;Initial Catalog=BankAccounts;Integrated Security=True&#34;
+
+type dbSchema = SqlDataConnection&lt;connectionString&gt;
+
+let tryGetBankAccountByOwner =
+  fun (db:dbSchema.ServiceTypes.SimpleDataContextTypes.BankAccounts) owner -&gt;
+    (query { for ba in db.BankAccounts1 do
+             where (ba.Owner = owner);
+             select {
+               Id = ba.Id;
+               Owner = ba.Owner;
+               Balance = ba.Balance
+             }
+           } |&gt; Seq.tryHead)
+
+let updateBankAccount =
+  fun (db:dbSchema.ServiceTypes.SimpleDataContextTypes.BankAccounts) bankAccount -&gt;
+    (query { for ba in db.BankAccounts1 do
+             where (ba.Id = bankAccount.Id);
+             select ba
+           } |&gt; Seq.iter(fun ba -&gt;
+                             ba.Owner &lt;- bankAccount.Owner;
+                             ba.Balance &lt;- bankAccount.Balance)
+     db.DataContext.SubmitChanges())</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+E&rsquo; interessante notare come, con questo approccio, l&rsquo;applicazione sia naturalmente
+disconnessa dal database.</p>
+
+<p>Infine ho creato un&rsquo;applicazione console la quale assomiglia in tutto e per
+tutto a quella C#.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight fsharp">
+  <figcaption>
+    
+      <span>Program.fs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="fsharp code-highlight">module Program
+
+open System
+open BankAccount
+open DataAccess
+
+let printConfirmWithdraw = fun bankAccount -&gt;
+  printf &#34;%s new balance will be %M. Confirm operation? [y/n] &#34;
+    bankAccount.Owner bankAccount.Balance
+
+let confirmWithdraw =
+  fun bankAccount amount -&gt; amount |&gt; withdraw bankAccount |&gt; printConfirmWithdraw
+                            Console.ReadLine()
+
+let withdrawFromAccount = fun db bankAccount -&gt;
+  (printfn &#34;%s has %M$&#34; bankAccount.Owner bankAccount.Balance
+   printf &#34;How much you want to withdraw? &#34;
+   let amount = Console.ReadLine() |&gt; decimal
+   match confirmWithdraw bankAccount amount with
+     | &#34;y&#34; -&gt; amount |&gt; withdraw bankAccount |&gt; updateBankAccount db
+     | _ -&gt; ())
+
+let tryWithdrawFromAccount = fun db -&gt;
+  printf &#34;Type owner (or &#39;q&#39; to exit): &#34;
+  match Console.ReadLine() with
+    | &#34;q&#34; -&gt; false
+    | owner -&gt; (match tryGetBankAccountByOwner db owner with
+                  | None -&gt; ()
+                  | Some bankAccount -&gt; withdrawFromAccount db bankAccount
+                true)
+
+[&lt;EntryPoint&gt;]
+let main argv =
+  let db = dbSchema.GetDataContext()
+  while tryWithdrawFromAccount(db) do ()
+  0</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Anche in questo caso infatti abbiamo una funzione <code>main</code> che si occupa di recuperare
+la connessione al DB (riga <em>34</em>) e la logica di interazione con l&rsquo;utente è implementata
+nelle funzioni <code>tryWithdrawFromAccount</code> e <code>withdrawFromAccount</code>.
+I punti principali dell&rsquo;applicazione sono:</p>
+
+<ul>
+<li>il recupero del conto corrente alla riga <em>27</em>;</li>
+<li>il prelievio della somma di denaro dal conto corrente alla riga <em>20</em>;</li>
+<li>e la richiesta di conferma con salvataggio sempre alla riga <em>20</em>.</li>
+</ul>
+
+<p>In questo caso posso dire: tutto perfetto, tutto facile&hellip; un po&rsquo; meno per uno abituato
+da sempre alla programmazione ad oggetti.</p>
+
+<h2 id="conclusioni">Conclusioni</h2>
+
+<p>Sviluppando questa semplice applicazione d&rsquo;esempio, l&rsquo;immutabilità mi ha aiutato,
+in modo molto naturale, a definire chiaramente il confine fra lettura/scrittura dei
+dati e elaborazione degli stessi. Come ho cercato di evidenziare nell&rsquo;esempio C#,
+anche utilizzando la OOP si può ottenere lo stesso grado di separazione.</p>
+
+<p>La differenza fra i due approcci sta nel fatto che in OOP, per scrivere del buon
+codice, si deve essere molto disciplinati mentre in programmazione funzionale per
+riuscire a scrivere del cattivo codice si deve essere particolarmente indisciplinati
+😃
+D&rsquo;altro canto la programmazione orientata agli oggetti è probabilmente più intuitiva
+rispetto a quella funzionale la quale, di base, è più formale.</p>
+
+<p>Ci sono molte altre caratteristiche di cui si legge normalmente nei confronti fra
+programmazione funzionale e programmazione orientata gli oggetti: leggibilità del
+codice, prolissità dello stesso, performance, etc. Se ne avrò l&rsquo;occasione farò
+qualche altro esperimento per capirci qualcosa di più e ne condividerò i risultati.</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGS</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/programmazione-funzionale/">programmazione funzionale</a>
+
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/f/">F#</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/" data-tooltip="Utilizzare le migrazioni di EF Core con Docker e MySQL">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">SUCCESSIVA</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/08/console.writeline-hello-world/" data-tooltip="Console.WriteLine( &#34;Hello, World!&#34; );">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PRECEDENTE</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f09%2fthere-and-back-again%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f09%2fthere-and-back-again%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f09%2fthere-and-back-again%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 Andrea Vallotti. Tutti i diritti riservati
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/" data-tooltip="Utilizzare le migrazioni di EF Core con Docker e MySQL">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">SUCCESSIVA</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/08/console.writeline-hello-world/" data-tooltip="Console.WriteLine( &#34;Hello, World!&#34; );">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PRECEDENTE</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f09%2fthere-and-back-again%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f09%2fthere-and-back-again%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f09%2fthere-and-back-again%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f09%2fthere-and-back-again%2f">
+        <i class="fa fa-google-plus"></i><span>Condividi su Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f09%2fthere-and-back-again%2f">
+        <i class="fa fa-facebook-official"></i><span>Condividi su Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2017%2f09%2fthere-and-back-again%2f">
+        <i class="fa fa-twitter"></i><span>Condividi su Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Foto dell&#39;autore" />
+    
+    <h4 id="about-card-name">Andrea Vallotti</h4>
+    
+      <div id="about-card-bio">Appassionato di software: architetto, sviluppatore e technology scout. Agilista entusiasta. MCSD - App Builder, MCSA - Cloud Platform, CSM, e CSPO. Mi diverte imparare sempre cose nuove, mentre creo <em>software eccezionale</em> e aiuto gli altri a fare lo stesso. <a href="http://www.andreavallotti.tech/it/page/about">Continua.</a></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Software Adventurer
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Italia
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Ricerca" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">Nessun articolo trovato</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/">
+                <h3 class="media-heading">Modellazione e separazione delle responsabilità con la programmazione funzionale</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Dopo il mio primo esperimento con la programmazione funzionale, ho deciso di approfondire ulteriormente l&rsquo;argomento. Per questo ho partecipato al workshop &ldquo;Lean and Functional Domain Modelling&rdquo; organizzato da Avanscoperta e tenuto da Marcello Duarte lo scorso marzo. Il workshop mi ha fornito dei buoni spunti su come affrontare la modellazione in ottica funzionale e ha alimentato ancor di più la mia voglia di sperimentare questo paradigma utilizzando Scala.
+Per affrontare questa sfida c&rsquo;è voluto studio e allenamento.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/">
+                <h3 class="media-heading">Coderetreat Firenze</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">“Quello che conta è il viaggio” (cit. Stefano Leli). Questa è l’essenza del Coderetreat.
+Ho scoperto questo format durante gli Italian Agile Day 2017 di Urbino. In quell&rsquo;occasione mi sono divertito ad esercitarmi con gli altri partecipanti mentre a farci da facilitatori c&rsquo;erano Matteo Vaccari, Stefano Leli e Gabriele Tondi. Il formato mi è piaciuto a tal punto che ho deciso di riproporlo a Firenze, dove vivo, per dare la possibilità di fare la mia stessa esperienza alla mia comunità di sviluppatori.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/">
+                <h3 class="media-heading">Event Sourcing e CQRS in C#</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Come promesso al termine del post precedente, in questo articolo approfondirò gli aspetti pratici legati al DDD ed in particolare ai pattern CQRS ed Event Sourcing.
+L’obiettivo principale dell’esperimento è quello di implementare un aggregato secondo il paradigma Event Sourcing e di creare un modello di lettura separato per alimentare le pagine di un&rsquo;applicazione Web.
+Prima di presentare l&rsquo;esempio pratico farò una breve introduzione dei principali pattern architetturali che sono stati utilizzati dalla nascita del DDD.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/">
+                <h3 class="media-heading">Strategic Domain-Driven Design</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Dopo la lettura del libro blu di Evans mi sono appassionato al Domain-Driven Design. Ero ancora in America quando, con quattro mesi di anticipo, mi iscrissi al workshop Strategic Domain-Driven Design di Alberto Brandolini (aka ziobrando) organizzato da Avanscoperta. Non volevo certo perdermelo.
+Poi, preso dal caos di tutti i giorni, avevo perso il senso del tempo quando, a metà ottobre, ho ricevuto una mail da parte di Avanscoperta che mi ha ricordato del corso imminente: è stato come se qualcuno mi avesse regalato un fine settimana alla spa!</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/">
+                <h3 class="media-heading">Utilizzare le migrazioni di EF Core con Docker e MySQL</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">In questo post spiegherò come creare un&rsquo;applicazione console .NET Core 2.0 la quale legga e scriva i propri dati su MySQL e che utilizzi Entity Framework Core, e le migrazioni, per la persistenza e l&rsquo;aggiornamento dello schema del DB. Inoltre mostrerò come utilizzare Docker in modo da poter sviluppare l&rsquo;applicazione indipendentemente dall&rsquo;ambiente utilizzato.
+Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente modo:
+ creazione progetto console .</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/09/there-and-back-again/">
+                <h3 class="media-heading">There and Back Again</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Sep 9, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Per gli estimatori di Tolkien, il titolo del post può sembrare presuntuoso ma in fin dei conti ho viaggiato per 7.600 km, molti più di Bilbo e compagnia, ho incontrato persone delle quali non capivo la lingua, più o meno, e ho parlato con un drago&hellip; Ok, questo non l&rsquo;ho fatto, ma lasciatemelo credere 😃
+Scherzi a parte, ho passato i primi sei mesi di quest&rsquo;anno ad Indianapolis negli Stati Uniti.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/08/console.writeline-hello-world/">
+                <h3 class="media-heading">Console.WriteLine( &#34;Hello, World!&#34; );</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Così sono iniziati tutti gli esperimenti che ho fatto nella mia vita da informatico: scrivere Hello, World! a video. Quindi ho pensato di iniziare nello stesso modo questo nuovo esperimento: tenere un blog in cui scrivere di argomenti che ritengo interessanti e sui quali mi piacerebbe sentire l&rsquo;opinione degli altri.
+Chi mi conosce sa benissimo che le materie umanistiche non sono mai state il mio forte per cui &ldquo;scrivere un blog&rdquo; non è esattamente nelle mie corde.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/post/">
+                <h3 class="media-heading">Posts</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="Nessun articolo trovato"
+         data-message-one="1 articolo trovato"
+         data-message-other="{n} articoli trovati">
+         8 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/andreavallotti/image/upload/blog/images/cover-NGC4258-M106.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+
+
+<script src="http://www.andreavallotti.tech/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.registerLanguage("fsharp",function(e){var t={b:"<",e:">",c:[e.inherit(e.TM,{b:/'[a-zA-Z0-9_]+/})]};return{aliases:["fs"],k:"abstract and as assert base begin class default delegate do done downcast downto elif else end exception extern false finally for fun function global if in inherit inline interface internal lazy let match member module mutable namespace new null of open or override private public rec return select sig static struct then to true try type upcast use val void when where while with yield",i:/\/\*/,c:[{cN:"keyword",b:/\b(yield|return|let|do)!/},{cN:"string",b:'@"',e:'"',c:[{b:'""'}]},{cN:"string",b:'"""',e:'"""'},e.C("\\(\\*","\\*\\)"),{cN:"class",bK:"type",e:"\\(|=|$",eE:!0,c:[e.UTM,t]},{cN:"meta",b:"\\[<",e:">\\]",r:10},{cN:"symbol",b:"\\B('[A-Za-z])\\b",c:[e.BE]},e.CLCM,e.inherit(e.QSM,{i:null}),e.CNM]}});
+  hljs.registerLanguage("yaml", function(e) { var b = "true false yes no null", a = "^[ \\-]*", r = "[a-zA-Z_][\\w\\-]*", t = { cN: "attr", v: [{ b: a + r + ":" }, { b: a + '"' + r + '":' }, { b: a + "'" + r + "':" }] }, c = { cN: "template-variable", v: [{ b: ", e: " }, { b: "%{", e: "}" }] }, l = { cN: "string", r: 0, v: [{ b: /'/, e: /'/ }, { b: /"/, e: /"/ }, { b: /\S+/ }], c: [e.BE, c] }; return { cI: !0, aliases: ["yml", "YAML", "yaml"], c: [t, { cN: "meta", b: "^---s*$", r: 10 }, { cN: "string", b: "[\\|>] *$", rE: !0, c: l.c, e: t.v[0].b }, { b: "<%[%=-]?", e: "[%-]?%>", sL: "ruby", eB: !0, eE: !0, r: 0 }, { cN: "type", b: "!!" + e.UIR }, { cN: "meta", b: "&" + e.UIR + "$" }, { cN: "meta", b: "\\*" + e.UIR + "$" }, { cN: "bullet", b: "^ *-", r: 0 }, e.HCM, { bK: b, k: { literal: b } }, e.CNM, l] } });
+  hljs.registerLanguage("dockerfile", function(e) { return { aliases: ["docker"], cI: !0, k: "from maintainer expose env arg user onbuild stopsignal", c: [e.HCM, e.ASM, e.QSM, e.NM, { bK: "run cmd entrypoint volume add copy workdir label healthcheck shell", starts: { e: /[^\\]\n/, sL: "bash" } }], i: "</" } });
+  hljs.registerLanguage("scala",function(e){var t={cN:"meta",b:"@[A-Za-z]+"},a={cN:"subst",v:[{b:"\\$[A-Za-z0-9_]+"},{b:"\\${",e:"}"}]},r={cN:"string",v:[{b:'"',e:'"',i:"\\n",c:[e.BE]},{b:'"""',e:'"""',r:10},{b:'[a-z]+"',e:'"',i:"\\n",c:[e.BE,a]},{cN:"string",b:'[a-z]+"""',e:'"""',c:[a],r:10}]},c={cN:"symbol",b:"'\\w[\\w\\d_]*(?!')"},i={cN:"type",b:"\\b[A-Z][A-Za-z0-9_]*",r:0},s={cN:"title",b:/[^0-9\n\t "'(),.`{}\[\]:;][^\n\t "'(),.`{}\[\]:;]+|[^0-9\n\t "'(),.`{}\[\]:;=]/,r:0},n={cN:"class",bK:"class object trait type",e:/[:={\[\n;]/,eE:!0,c:[{bK:"extends with",r:10},{b:/\[/,e:/\]/,eB:!0,eE:!0,r:0,c:[i]},{cN:"params",b:/\(/,e:/\)/,eB:!0,eE:!0,r:0,c:[i]},s]},l={cN:"function",bK:"def",e:/[:={\[(\n;]/,eE:!0,c:[s]};return{k:{literal:"true false null",keyword:"type yield lazy override def with val var sealed abstract private trait object if forSome for while throw finally protected extends import final return else break new catch super class case package default try this match continue throws implicit"},c:[e.CLCM,e.CBCM,r,c,i,l,n,e.CNM,t]}});
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    var languageFilter = (block.classList && block.classList.length > 1) ? [].slice.apply(block.classList) : null;
+    var autoDetected = hljs.highlightAuto(block.innerText, languageFilter);
+
+    autoDetected.value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/www.andreavallotti.tech\/it\/2017\/09\/there-and-back-again\/';
+          
+            this.page.identifier = '\/it\/2017\/09\/there-and-back-again\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'andreavallotti';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#000"
+    },
+    "button": {
+      "background": "#f1d600"
+    }
+  },
+  "content": {
+    "message": "Questo sito utilizza cookie per offrire agli utenti servizi e funzionalità avanzate. Continuando la navigazione nel sito autorizzi l’uso dei cookie.",
+    "dismiss": "Accetto i cookie",
+    "link": "Per saperne di più clicca qui",
+    "href": "/it/page/cookie"
+  }
+})});
+</script>
+    
+  </body>
+</html>
+

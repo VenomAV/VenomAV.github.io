@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Design on Development: people, code &amp; me</title>
+    <link>http://www.andreavallotti.tech/en/tags/design/</link>
+    <description>Recent content in Design on Development: people, code &amp; me</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 22 Nov 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.andreavallotti.tech/en/tags/design/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Strategic Domain-Driven Design</title>
+      <link>http://www.andreavallotti.tech/en/2017/11/strategic-domain-driven-design/</link>
+      <pubDate>Wed, 22 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/2017/11/strategic-domain-driven-design/</guid>
+      <description>I was inspired to such an extent by Evans&amp;rsquo; Blue Book, that I got passionate about Domain-Driven Design. I was still in the United States when, four months in advance, I registered to the Strategic Domain-Driven Design workshop held by Alberto Brandolini (aka ziobrando) and organized by Avanscoperta. I definitely wanted to attend.
+Then, taken from the day to day activities, I lost the sense of time, when mid-October, I received an email from Avanscoperta that reminded me of the upcoming course.</description>
+    </item>
+    
+  </channel>
+</rss>

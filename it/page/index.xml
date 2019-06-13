@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pages on Development: people, code &amp; me</title>
+    <link>http://www.andreavallotti.tech/it/page/</link>
+    <description>Recent content in Pages on Development: people, code &amp; me</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 26 Jul 2017 18:01:31 +0200</lastBuildDate>
+    
+	<atom:link href="http://www.andreavallotti.tech/it/page/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Chi sono</title>
+      <link>http://www.andreavallotti.tech/it/page/about/</link>
+      <pubDate>Wed, 26 Jul 2017 18:01:31 +0200</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/page/about/</guid>
+      <description>Facevo ancora le elementari a Castello quando ebbi il primo incontro con il Commodore 64. Il gioco non partì e rimase solo un cursore lampeggiante a video. Provai subito a scrivere qualcosa aspettandomi che il PC rispondesse&amp;hellip; in fin dei conti WarGames era uscito pochi anni prima!
+A tredici anni probabilmente ero uno dei pochi a sapere cosa avrebbe fatto da grande: programmare i computer perché facessero quello che volevo. Non sapevo esattamente cosa questo significasse, ma non appena ne ebbi l&amp;rsquo;occasione iniziai a sperimentare!</description>
+    </item>
+    
+    <item>
+      <title>Cookies</title>
+      <link>http://www.andreavallotti.tech/it/page/cookie/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/page/cookie/</guid>
+      <description>Per far funzionare bene questo sito, a volte installiamo sul tuo dispositivo dei piccoli file di dati che si chiamano &amp;ldquo;cookies&amp;rdquo;. Anche la maggior parte dei grandi siti fanno lo stesso.
+Cosa sono i cookies? Un cookie è un piccolo file di testo che i siti salvano sul tuo computer o dispositivo mobile mentre li visiti. Grazie ai cookies il sito ricorda le tue azioni e preferenze (per es. login, lingua, dimensioni dei caratteri e altre impostazioni di visualizzazione) in modo che tu non debba reinserirle quando torni sul sito o navighi da una pagina all&amp;rsquo;altra.</description>
+    </item>
+    
+  </channel>
+</rss>

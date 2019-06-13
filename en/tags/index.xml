@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Development: people, code &amp; me</title>
+    <link>http://www.andreavallotti.tech/en/tags/</link>
+    <description>Recent content in Tags on Development: people, code &amp; me</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 08 Jan 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.andreavallotti.tech/en/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Architecture</title>
+      <link>http://www.andreavallotti.tech/en/tags/architecture/</link>
+      <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/architecture/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Coderetreat</title>
+      <link>http://www.andreavallotti.tech/en/tags/coderetreat/</link>
+      <pubDate>Wed, 31 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/coderetreat/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cqrs</title>
+      <link>http://www.andreavallotti.tech/en/tags/cqrs/</link>
+      <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/cqrs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ddd</title>
+      <link>http://www.andreavallotti.tech/en/tags/ddd/</link>
+      <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/ddd/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Design</title>
+      <link>http://www.andreavallotti.tech/en/tags/design/</link>
+      <pubDate>Wed, 22 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/design/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Docker</title>
+      <link>http://www.andreavallotti.tech/en/tags/docker/</link>
+      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Dotnet Core</title>
+      <link>http://www.andreavallotti.tech/en/tags/dotnet-core/</link>
+      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/dotnet-core/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Entity Framework Core</title>
+      <link>http://www.andreavallotti.tech/en/tags/entity-framework-core/</link>
+      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/entity-framework-core/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Event Sourcing</title>
+      <link>http://www.andreavallotti.tech/en/tags/event-sourcing/</link>
+      <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/event-sourcing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>F#</title>
+      <link>http://www.andreavallotti.tech/en/tags/f#/</link>
+      <pubDate>Mon, 04 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/f#/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Facilitator</title>
+      <link>http://www.andreavallotti.tech/en/tags/facilitator/</link>
+      <pubDate>Wed, 31 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/facilitator/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Fun</title>
+      <link>http://www.andreavallotti.tech/en/tags/fun/</link>
+      <pubDate>Tue, 29 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/fun/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Functional Programming</title>
+      <link>http://www.andreavallotti.tech/en/tags/functional-programming/</link>
+      <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/functional-programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Migrations</title>
+      <link>http://www.andreavallotti.tech/en/tags/migrations/</link>
+      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/migrations/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Modeling</title>
+      <link>http://www.andreavallotti.tech/en/tags/modeling/</link>
+      <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/modeling/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Scala</title>
+      <link>http://www.andreavallotti.tech/en/tags/scala/</link>
+      <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/scala/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tdd</title>
+      <link>http://www.andreavallotti.tech/en/tags/tdd/</link>
+      <pubDate>Wed, 31 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/en/tags/tdd/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,2021 @@
+
+
+  
+    
+  
+
+
+  
+
+
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.54.0">
+    <meta name="theme" content="Tranquilpeak 0.3.1-BETA">
+    <title>Modeling and separation of concerns in functional programming</title>
+    <meta name="author" content="Andrea Vallotti">
+    <meta name="keywords" content="functional programming, modeling, scala, development, dot-net, agile, cloud, azure, developers">
+
+    <link rel="icon" href="http://www.andreavallotti.tech/images/favicon.png">
+    
+
+    
+    <meta name="description" content="After my first experiment with functional programming, I decided to further study it in depth. Therefore, last March I attended &ldquo;Lean and Functional Domain Modelling&rdquo; workshop, organized by Avanscoperta, and held by Marcello Duarte. The workshop gave me good hints about functional modeling and fueled my curiosity to learn Scala and experiment more this paradigm.
+In order to tackle this challenge I studied and practiced a lot. After some months, and several discussions with Matteo Baglini, I have been able to put together the puzzle, and I wrote this post.">
+    <meta property="og:description" content="After my first experiment with functional programming, I decided to further study it in depth. Therefore, last March I attended &ldquo;Lean and Functional Domain Modelling&rdquo; workshop, organized by Avanscoperta, and held by Marcello Duarte. The workshop gave me good hints about functional modeling and fueled my curiosity to learn Scala and experiment more this paradigm.
+In order to tackle this challenge I studied and practiced a lot. After some months, and several discussions with Matteo Baglini, I have been able to put together the puzzle, and I wrote this post.">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Modeling and separation of concerns in functional programming">
+    <meta property="og:url" content="http://www.andreavallotti.tech/en/2018/08/modeling-and-separation-of-concerns-in-functional-programming/">
+    <meta property="og:site_name" content="Development: people, code &amp; me">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="After my first experiment with functional programming, I decided to further study it in depth. Therefore, last March I attended &ldquo;Lean and Functional Domain Modelling&rdquo; workshop, organized by Avanscoperta, and held by Marcello Duarte. The workshop gave me good hints about functional modeling and fueled my curiosity to learn Scala and experiment more this paradigm.
+In order to tackle this challenge I studied and practiced a lot. After some months, and several discussions with Matteo Baglini, I have been able to put together the puzzle, and I wrote this post.">
+    
+      <meta name="twitter:creator" content="@AndreaVallotti">
+    
+    
+      <meta property="fb:app_id" content="170534096895468">
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="http://res.cloudinary.com/andreavallotti/image/upload/v1535206236/blog/images/fp-modeling/fp_modeling.jpg">
+    
+
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://www.andreavallotti.tech/css/style-u6mk0ojoywresbx8iepslrmmhl4stuhrsxuwhkpwrkrx7mryjcaimasnk4pi.min.css" />
+    
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-105324949-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://www.andreavallotti.tech/en/">Development: people, code &amp; me</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://www.andreavallotti.tech/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://www.andreavallotti.tech/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Andrea Vallotti</h4>
+        
+          <h5 class="sidebar-profile-bio">Software enthusiast: architect, developer, and technology scout. Agile addicted. MCSD - App Builder, MCSA - Cloud Platform, CSM, and CSPO. Enjoy in constantly growing while crafting <em>awesome software</em>, and helping others doing the same. <a href="http://www.andreavallotti.tech/en/page/about">More.</a></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/andrea-vallotti-b379313/" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+      
+      <span class="sidebar-button-desc">LinkedIn</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/AndreaVallotti" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-language"></i>
+      
+      <span class="sidebar-button-desc">Italiano</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              post-header-cover--partial"
+       style="background-image:url('http://res.cloudinary.com/andreavallotti/image/upload/v1535206236/blog/images/fp-modeling/fp_modeling.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Modeling and separation of concerns in functional programming
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  
+    <time itemprop="datePublished" datetime="2018-08-29T00:00:00Z">
+      
+  
+  
+  
+  
+    29 August 2018
+  
+
+    </time>
+  
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://www.andreavallotti.tech/en/categories/development">Development</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>After <a href="http://www.andreavallotti.tech/en/2017/09/there-and-back-again/">my first experiment</a> with functional programming,
+I decided to further study it in depth. Therefore, last March I attended
+<a href="https://www.avanscoperta.it/en/training/lean-and-functional-domain-modelling-workshop/">&ldquo;Lean and Functional Domain Modelling&rdquo;</a>
+workshop, organized by <a href="https://twitter.com/avanscoperta">Avanscoperta</a>, and held
+by <a href="https://twitter.com/_md">Marcello Duarte</a>. The workshop gave me good hints about
+functional modeling and fueled my curiosity to learn <a href="https://www.scala-lang.org/">Scala</a>
+and experiment more this paradigm.</p>
+
+<p>In order to tackle this challenge I studied and practiced a lot. After some months,
+and several discussions with <a href="https://twitter.com/matteobaglini">Matteo Baglini</a>,
+I have been able to put together the puzzle, and I wrote this post.
+The main goal is to walk through the steps I took to implement a simple domain logic,
+described below, and the related persistence layer. Pushing side effects at the application
+boundaries, in order to create a pure domain logic, has been my North Star in this
+experiment.</p>
+
+<p>As stated above, I used <em>Scala</em> as programming language for the sample code. Moreover
+I used <a href="https://typelevel.org/cats/">Cats</a> library in order to obtain more functional
+abstraction than those available in the language itself.</p>
+
+<p>As usual, the source code is on <a href="https://github.com/VenomAV/FunctionalProgrammingModeling">GitHub</a>.</p>
+
+<h2 id="domain-definition">Domain definition</h2>
+
+<p>In this post I implement the domain used by Marcello Duarte in his workshop: the
+expense sheet process. This is the process followed by the employees of a company
+in order to request reimbursement for travel expenses.</p>
+
+<p>Below are listed the three types of reimbursable expenses of this domain:</p>
+
+<ul>
+<li>travel expenses, which need to specify departure and arrival cities;</li>
+<li>food expenses, whose amount have to be less than a threshold defined by the company;</li>
+<li>accommodation expenses, which need to specify the name of the hotel where the employee
+stayed.</li>
+</ul>
+
+<p>An employee can claim reimbursement also for expenses other than those described
+above, but, in this case, she has to provide a detailed description. Finally, for
+all expenses, the date, antecedent to the filling of the expense sheet, and the
+due amount have to be specified.</p>
+
+<p>In order to claim a reimbursement, the employee has to fill an expense sheet with
+her name and at least an expense. Once claimed, the expense sheet cannot be modified.</p>
+
+<p>In this post, the approval process of the claim request is out of scope.</p>
+
+<h2 id="roadmap">Roadmap</h2>
+
+<p>I am going to describe the approach I followed when developing the application. In
+particular:</p>
+
+<ul>
+<li>how to implement the domain logic according to the pure functional paradigm;</li>
+<li>how to use <a href="https://martinfowler.com/bliki/ContractTest.html">contract test</a> in
+order to implement the persistence layer, which allowed me to create two completely
+exchangeable implementations: one that accesses PostgreSQL using <a href="https://tpolecat.github.io/doobie/">Doobie</a>,
+and an in-memory test double;</li>
+<li>the implementation of the application services;</li>
+<li>how to simplify the code by removing some of the effects previously introduced
+for error management.</li>
+</ul>
+
+<h2 id="pure-implementation-of-the-domain-logic">Pure implementation of the domain logic</h2>
+
+<p>The first thing I did in order to implement the domain logic was to design the signatures
+of the functions of the domain algebra. Following the requirements described above,
+I came up with this:</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>ExpenseService.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">object ExpenseService[Employee, Expense, OpenExpenseSheet, ClaimedExpenseSheet,
+  PendingClaim] {
+  def openFor(employee: Employee): ValidationResult[OpenExpenseSheet] = ???
+
+  def addExpenseTo(expense: Expense, expenseSheet: OpenExpenseSheet):
+    ValidationResult[OpenExpenseSheet] = ???
+
+  def claim(expenseSheet: OpenExpenseSheet):
+    ValidationResult[(ClaimedExpenseSheet, PendingClaim)] = ???
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>At first I did not implement nor the operations neither the data types involved.
+Using the generic type and  <code>???</code> notation of <em>Scala</em>, I just defined the signatures
+of the functions.</p>
+
+<p>Since in pure functional programming functions should not have any effects except
+those declared in the function signature, you cannot use exceptions for error management.
+For this reason I used the effect <code>ValidationResult</code> as the return type of all
+the functions.</p>
+
+<p><code>ValidationResult</code> is an alias of the generic class <code>ValidateNel</code> provided
+by <em>Cats</em>. Such class is an <a href="https://en.wikipedia.org/wiki/Applicative_functor">applicative</a>
+which could contain a valid result or a non empty list of errors. In this way, just
+looking at the function signature, the user could understand that the computations
+could return a valid result, e.g. <code>OpenExpenseSheet</code> for <code>openFor</code>, or a
+list of errors.</p>
+
+<p>After this first analysis, I decided to implement the data types needed by the above
+depicted operations. Therefore I defined the following classes and traits.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>Employee.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">sealed case class Employee (id : EmployeeId, name: String, surname: String)
+
+sealed case class EmployeeId(uuid: UUID)</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>Expense.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">sealed trait Expense {
+  def cost: Money
+  def date: Date
+}
+
+case class TravelExpense(cost: Money, date: Date, from: String, to: String)
+  extends Expense
+
+case class FoodExpense(cost: Money, date: Date) extends Expense
+
+case class AccommodationExpense(cost: Money, date: Date, hotel: String) extends Expense
+
+case class OtherExpense(cost: Money, date: Date, description: String) extends Expense</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>ExpenseSheet.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">sealed trait ExpenseSheet {
+  def id: ExpenseSheetId
+  def employee: Employee
+  def expenses: List[Expense]
+}
+
+case class OpenExpenseSheet (id: ExpenseSheetId,
+                             employee: Employee,
+                             expenses:List[Expense]) extends ExpenseSheet
+
+case class ClaimedExpenseSheet (id: ExpenseSheetId,
+                                employee: Employee,
+                                expenses:List[Expense]) extends ExpenseSheet
+
+sealed case class ExpenseSheetId(uuid: UUID)</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>Claim.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">sealed trait Claim {
+  def id: ClaimId
+  def employee: Employee
+  def expenses: NonEmptyList[Expense]
+}
+
+case class PendingClaim (id: ClaimId, employee: Employee,
+  expenses: NonEmptyList[Expense]) extends Claim
+
+sealed case class ClaimId(uuid: UUID)</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>These classes have some interesting features which I would like to highlight:</p>
+
+<ul>
+<li>all classes are <code>case</code> classes. This allows, among other things, to use
+<a href="https://docs.scala-lang.org/tour/pattern-matching.html">pattern matching</a> on them;</li>
+<li>traits are declared <code>sealed</code>. This instructs <em>Scala</em> that all extending classes
+have to be placed in the same <code>.scala</code> file. This guarantees that the types
+used by the domain logic can be extended only from within the current project;</li>
+<li>I defined an id case class for each classes that has one. By avoiding to directly
+use Java&rsquo;s <code>UUID</code>, it is not possible, for example, to mistakenly use an id
+of <code>ExpenseSheet</code> as an id of <code>Claim</code>.</li>
+</ul>
+
+<p>Using a <code>sealed trait</code> with the related <code>case class</code>es is useful for two
+purposes. Regarding <code>ExpenseSheet</code>, it allowed to define its feasible states
+(<code>Open</code> and <code>Claimed</code>), while for the <code>Expense</code>, it allows define the
+allowed kinds of expense (<code>Travel</code>, <code>Accomodation</code>, <code>Food</code> and <code>Other</code>).</p>
+
+<h3 id="smart-constructor-idiom">Smart constructor idiom</h3>
+
+<p>Once defined the data types, I implemented the business rules. Among them
+there are some which are related to the process, discussed further on, and others
+which are related to the validation of input data needed to create domain objects.
+For example:</p>
+
+<ul>
+<li>for travel expenses is mandatory to specify the departure and arrival cities;</li>
+<li>each expense item need to contain the amount and the date when it happened;</li>
+<li>etc.</li>
+</ul>
+
+<p>In order to implement this kind of rule and to ensure that the domain entities used
+by the application are valid, it is really useful the &ldquo;smart constructor idiom&rdquo; pattern
+described in <a href="https://www.manning.com/books/functional-and-reactive-domain-modeling">&ldquo;Functional and Reactive Domain Modeling&rdquo;</a>.
+In order to apply the pattern I just declared the above class constructors as <code>private</code>
+and defined, in the related <a href="https://docs.scala-lang.org/tour/singleton-objects.html">companion objects</a>,
+the needed <a href="https://en.wikipedia.org/wiki/Factory_method_pattern">factory methods</a>.
+These functions are responsible to validate data before creating the expected instance.
+The code below shows an example of this pattern:</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>Expense.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">object Expense {
+  private def validateDate(date: Date): ValidationResult[Date] = {
+    if (date == null || date.after(Calendar.getInstance.getTime))
+      &#34;date cannot be in the future&#34;.invalidNel
+    else date.validNel
+
+  private def validateCost(cost: Money): ValidationResult[Money] =
+    if (cost.amount &lt;= 0) &#34;cost is less or equal to zero&#34;.invalidNel
+    else cost.validNel
+
+  private def maxCostLimitValidation(cost: Money): ValidationResult[Money] =
+    if (cost.amount &gt;= 50) &#34;cost is greater than or equal to 50&#34;.invalidNel
+    else cost.validNel
+
+  def createFood(cost: Money, date: Date): ValidationResult[FoodExpense] =
+    (validateCost(cost), validateDate(date), maxCostLimitValidation(cost))
+      .mapN((c, d, _) =&gt; FoodExpense(c, d))
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>The code above is a typical usage of <code>ValidationResult</code> applicative.
+The three required validations (<code>validateCost</code>, <code>validateDate</code> and <code>maxCostLimitValidation</code>)
+are independently executed and, thanks to <em>Cats</em>&rsquo; function <code>mapN</code>, the instance
+of <code>ExpenseFood</code> is created only if all the validations successfully complete.
+On the other hand, if one or more validations fail, the result of <code>mapN</code> will
+be an <code>Invalid</code> containing the list of found errors. See <a href="https://typelevel.org/cats/datatypes/validated.html"><code>Validated</code></a>
+for more details.</p>
+
+<p>I implemented the smart constructors of other entities in the same way.</p>
+
+<h3 id="domain-service">Domain service</h3>
+
+<p>Once defined all the data types of the domain and the related smart constructors,
+the implementation of the domain service described above has been straightforward.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>ExpenseService.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">object ExpenseService {
+  def openFor(employee: Employee): ValidationResult[OpenExpenseSheet] =
+    ExpenseSheet.createOpen(employee, List[Expense]())
+
+  def addExpenseTo(expense: Expense, expenseSheet: OpenExpenseSheet):
+    ValidationResult[OpenExpenseSheet] =
+    ExpenseSheet.createOpen(expenseSheet.id,
+                            expenseSheet.employee,
+                            expenseSheet.expenses :&#43; expense)
+
+  def claim(expenseSheet: OpenExpenseSheet):
+    ValidationResult[(ClaimedExpenseSheet, PendingClaim)] =
+    expenseSheet.expenses match {
+      case h::t =&gt;
+        (ExpenseSheet.createClaimed(expenseSheet.id,
+                                    expenseSheet.employee,
+                                    expenseSheet.expenses),
+        PendingClaim.create(expenseSheet.employee, NonEmptyList(h, t))).mapN((_, _))
+      case _ =&gt; &#34;Cannot claim empty expense sheet&#34;.invalidNel
+    }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>As already stated before, in order to have a pure functional domain logic is mandatory
+to avoid hidden side effects. For this reason the function <code>claim</code> return a pair.
+The first is the claimed expense sheet, thus no more modifiable, while the second
+is the pending claim, which will follow the related approval process.</p>
+
+<h2 id="database-access">Database access</h2>
+
+<p>In order to implement the data access layer, I decided to use the <a href="https://deviq.com/repository-pattern/">repository</a>
+pattern and the <a href="https://martinfowler.com/bliki/ContractTest.html">contract test</a>
+approach to simultaneously develop a in-memory test double, to be used in the application
+service tests, and a real version which access PostgreSQL, to be used in the real
+application. I used <a href="http://www.scalatest.org/">ScalaTest</a> as test library.</p>
+
+<p>Let&rsquo;s start from the trait which defines the function provided by the <code>Employee</code>
+repository.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>EmployeeRepository.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">trait EmployeeRepository[F[_]] {
+  def get(id: EmployeeId) : F[ApplicationResult[Employee]]
+  def save(employee: Employee): F[ApplicationResult[Unit]]
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>The repository provides two simple operations: <code>get</code> e <code>save</code>. Moreover,
+it is generic w.r.t. the effect <code>F[_]</code> which will be defined by the concrete
+implementations. As shown below, this allows to use different effects in the real
+and in-memory implementations.</p>
+
+<p>In the signature of the methods I also used a concrete effects: <code>ApplicationResult</code>.
+The latter is an alias of the generic type <code>Either</code> of <em>Scala</em>, which is used
+when a computation may succeed or not. E.g., the <code>get</code> function will return a
+<code>Right</code> of <code>Employee</code> if it will find the employee, otherwise it will return
+a <code>Left</code> of <code>ErrorList</code>. Unlike <code>ValidateNel</code>, <code>Either</code> is a <a href="https://en.wikipedia.org/wiki/Monad_(functional_programming)">monad</a>,
+this will allow to write the application service more concisely.</p>
+
+<p>Once defined the interface of the repository, I wrote the first test.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>EmployeeRepositoryContractTest.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">abstract class EmployeeRepositoryContractTest[F[_]](implicit M:Monad[F])
+  extends FunSpec with Matchers {
+
+  describe(&#34;get&#34;) {
+    it(&#34;should retrieve existing element&#34;) {
+      val id : EmployeeId = UUID.randomUUID()
+      val name = s&#34;A $id&#34;
+      val surname = s&#34;V $id&#34;
+      val sut = createRepositoryWith(List(Employee(id, name, surname)))
+
+      run(sut.get(id)) should be(Right(Employee(id, name, surname)))
+    }
+  }
+
+  def createRepositoryWith(employees: List[Employee]): EmployeeRepository[F]
+
+  def run[A](toBeExecuted: F[A]) : A
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>The test is defined in an abstract class since, to be actually run, it needs two support
+functions which will be defined differently for each concrete implementation:</p>
+
+<ul>
+<li><code>createRepositoryWith</code>, which allows to initialize the persistence (DB or memory)
+with the needed data, and returns a concrete instance of <code>EmployeeRepository</code>;</li>
+<li><code>run</code>, which allows to actually run the effects returned by the methods of
+the repository.</li>
+</ul>
+
+<p>Moreover, the abstract class requires that a monad exists for the effect <code>F</code>.
+The <a href="https://docs.scala-lang.org/tour/implicit-parameters.html"><code>implicit</code></a> keyword
+instructs <em>Scala</em> to automatically look for a valid instance of <code>Monad[F]</code> when
+creating an instance of the repository.</p>
+
+<p>Now let&rsquo;s see the in-memory implementation of the test.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>AcceptanceTestUtils.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">object AcceptanceTestUtils {
+  case class TestState(employees: List[Employee],
+                       expenseSheets: List[ExpenseSheet],
+                       claims: List[Claim])
+
+  type Test[A] = State[TestState, A]
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>InMemoryEmployeeRepositoryTest.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">class InMemoryEmployeeRepositoryTest extends EmployeeRepositoryContractTest[Test]
+  implicit var state : TestState = _
+
+  override def createRepositoryWith(employees: List[Employee]):
+    EmployeeRepository[Test] = {
+    state = TestState(
+      employees,
+      List(),
+      List())
+    new InMemoryEmployeeRepository
+  }
+
+  override def run[A](executionUnit: Test[A]): A = executionUnit.runA(state).value
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>The test uses the <a href="https://typelevel.org/cats/datatypes/state.html"><code>State</code></a>
+monad with the state <code>TestState</code> in order to simulate the persistence. <code>State</code>
+is a structure used in functional programming to functionally express computations
+which requires changing the application state. This let us observe, for example,
+the changed application state when the <code>save</code> function is used.</p>
+
+<p>The <code>InMemoryEmployeeRepository</code> is really simple. It uses the <code>State</code> functions
+to represent the desired elaboration.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>InMemoryEmployeeRepository.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">class InMemoryEmployeeRepository extends EmployeeRepository[Test] {
+  override def get(id: EmployeeId): Test[ApplicationResult[Employee]] =
+    State {
+      state =&gt; (state, state.employees.find(_.id == id)
+                         .orError(s&#34;Unable to find employee $id&#34;))
+    }
+
+  override def save(employee: Employee): Test[ApplicationResult[Unit]] =
+    State {
+      state =&gt; (state.copy(employees = employee :: state.employees), Right(()))
+    }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Analyzing the <code>get</code> function, you can notice that the state does not change after
+the elaboration and the returned result is the required employee, if present. On
+the other hand, for the <code>save</code> function the returned state is a copy of the previous
+one, with the new employee added to the corresponding list, while the return value
+is just <code>Right</code> of <code>Unit</code>. As you can see from the code, the initial instance
+of <code>TestState</code> is never modified, instead a new instance is always created.</p>
+
+<p>Once verified the correct behavior of <code>InMemoryRepository</code>, lets see the implementation
+of the test and production classes to access the data on PostgreSQL.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>DoobieEmployeeRepositoryTest.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">class DoobieEmployeeRepositoryTest
+  extends EmployeeRepositoryContractTest[ConnectionIO] {
+  implicit var xa: Aux[IO, Unit] = _
+
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+    xa = Transactor.fromDriverManager[IO](
+      &#34;org.postgresql.Driver&#34;,
+      &#34;jdbcpostgres&#34;,
+      &#34;postgres&#34;,
+      &#34;p4ssw0r#&#34;
+    )
+  }
+
+  override def createRepositoryWith(employees: List[Employee]):
+    EmployeeRepository[ConnectionIO] = {
+    val employeeRepository = new DoobieEmployeeRepository
+
+    employees.traverse(employeeRepository.save(_))
+      .transact(xa).unsafeRunSync()
+
+    employeeRepository
+  }
+
+  def run[A](toBeExecuted: ConnectionIO[A]): A =
+    toBeExecuted.transact(xa).unsafeRunSync
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>DoobieEmployeeRepository.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">class DoobieEmployeeRepository extends EmployeeRepository[ConnectionIO] {
+  override def get(id: EmployeeId): ConnectionIO[ApplicationResult[Employee]] =
+    sql&#34;select * from employees where id=$id&#34;.query[Employee]
+      .unique
+      .attempt
+      .map(_.leftMap({
+        case UnexpectedEnd =&gt; ErrorList.of(s&#34;Unable to find employee $id&#34;)
+        case x =&gt; x.toError
+      }))
+
+  override def save(employee: Employee): ConnectionIO[ApplicationResult[Unit]] =
+    sql&#34;insert into employees (id, name, surname) values (${employee.id}, ${employee.name}, ${employee.surname})&#34;
+      .update.run.attempt.map(_.map(_ =&gt;()).leftMap(_.toError))
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Beyond the particularities due to the use of <em>Doobie</em> for accessing the database,
+what is more interesting in this implementation is the usage of the effect <code>ConnectionIO</code>.
+The latter is just an alias of <a href="https://typelevel.org/cats/datatypes/freemonad.html"><code>Free</code></a>
+monad provided by <em>Cats</em>. <code>Free</code> is a structure of the functional programming
+used to represent the side effects in a pure way. E.g., accessing a database, writing
+a log. etc.</p>
+
+<p><code>ConnectionIO</code> is a specialization of <code>Free</code>, provided by <em>Doobie</em>, to represent
+the interaction with databases. As shown in the <code>run</code> method of the <code>DoobieEmployeeRepositoryTest</code>
+class, the execution of this monad is unsafe since, interacting with an external
+system, exception can be thrown during its execution. This is clearly depicted in
+the name of the function <code>unsafeRunSync</code>. What is more fascinating of this approach
+is that everything, except the method <code>run</code>, is purely functional and the error
+management can be done in a single place.</p>
+
+<h2 id="application-services">Application services</h2>
+
+<p>Once implemented the domain logic and data access layer, all I needed to do is to
+put everything together by implementing an application service. In order to verify
+the correct behavior of the latter, I created some tests which use the in-memory test
+doubles of the repositories. Lets see an example.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>Employee.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">class ExpenseApplicationServiceTest extends FunSpec with Matchers {
+  implicit val er: InMemoryEmployeeRepository = new InMemoryEmployeeRepository()
+  implicit val esr: InMemoryExpenseSheetRepository =
+    new InMemoryExpenseSheetRepository()
+  implicit val cr: InMemoryClaimRepository = new InMemoryClaimRepository()
+
+  describe(&#34;addExpenseTo&#34;) {
+    it(&#34;should add an expense to an open expense sheet&#34;) {
+      val employee = Employee.create(&#34;A&#34;, &#34;V&#34;).toOption.get
+      val expense = Expense.createTravel(
+        Money(1, &#34;EUR&#34;), new Date(), &#34;Florence&#34;, &#34;Barcelona&#34;).toOption.get
+      val expenseSheet = ExpenseSheet.createOpen(employee, List()).toOption.get
+
+      val newState = ExpenseApplicationService
+        .addExpenseTo[Test](expense, expenseSheet.id)
+        .runS(TestState(List(employee), List(expenseSheet), List())).value
+
+      newState.expenseSheets should be(
+        List(OpenExpenseSheet(expenseSheet.id, employee, List(expense))))
+    }
+  }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>In order to let the test be more realistic I took advantage of the smart constructor
+previously defined. I used <code>toOption.get</code> method to obtain the instance of
+the domain entities built by the smart constructors. This should never happen in
+a functional program. In fact, if the result of the smart constructor was of type
+<code>Invalid</code>, calling <code>toOption.get</code> method on it would raise an exception.
+This would break the <a href="https://wiki.haskell.org/Referential_transparency">referential transparency</a>
+of the code, which will not be pure anymore. I did it in the test code just because
+I was sure that data were valid.</p>
+
+<p>The flow of the test above is quite simple:</p>
+
+<ul>
+<li>arrange the application state as expected by the test;</li>
+<li>invoke the application service function under test, using the <code>runS</code> method
+of <code>State</code> to actually execute the operations;</li>
+<li>verify that the new application state matches the expected one.</li>
+</ul>
+
+<p>Let&rsquo;s see the complete implementation of the application service <code>ExpenseApplicationService</code>.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>Employee.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">object ExpenseApplicationService {
+  def openFor[F[_]](id: EmployeeId)
+    (implicit M:Monad[F],
+      er: EmployeeRepository[F],
+      esr: ExpenseSheetRepository[F]) : F[ApplicationResult[Unit]] =
+    (for {
+      employee &lt;- er.get(id).toEitherT
+      openExpenseSheet &lt;- ExpenseService.openFor(employee).toEitherT[F]
+      result &lt;- esr.save(openExpenseSheet).toEitherT
+    } yield result).value
+
+  def addExpenseTo[F[_]](expense: Expense, id: ExpenseSheetId)
+    (implicit M:Monad[F],
+      esr: ExpenseSheetRepository[F]) : F[ApplicationResult[Unit]] =
+    (for {
+      openExpenseSheet &lt;- getOpenExpenseSheet[F](id)
+      newOpenExpenseSheet &lt;- ExpenseService.addExpenseTo(expense, openExpenseSheet)
+                               .toEitherT[F]
+      result &lt;- esr.save(newOpenExpenseSheet).toEitherT
+    } yield result).value
+
+  def claim[F[_]](id: ExpenseSheetId)
+    (implicit M:Monad[F],
+      esr: ExpenseSheetRepository[F],
+      cr: ClaimRepository[F]) : F[ApplicationResult[Unit]] =
+    (for {
+      openExpenseSheet &lt;- getOpenExpenseSheet[F](id)
+      pair &lt;- ExpenseService.claim(openExpenseSheet).toEitherT[F]
+      (claimedExpenseSheet, pendingClaim) = pair
+      _ &lt;- esr.save(claimedExpenseSheet).toEitherT
+      _ &lt;- cr.save(pendingClaim).toEitherT
+    } yield ()).value
+
+  private def getOpenExpenseSheet[F[_]](id: ExpenseSheetId)
+    (implicit M:Monad[F], esr: ExpenseSheetRepository[F]) :
+    EitherT[F, ErrorList, OpenExpenseSheet] =
+    for {
+      expenseSheet &lt;- esr.get(id).toEitherT
+      openExpenseSheet &lt;- toOpenExpenseSheet(expenseSheet).toEitherT[F]
+    } yield openExpenseSheet
+
+  private def toOpenExpenseSheet(es: ExpenseSheet) :
+    ApplicationResult[OpenExpenseSheet] = es match {
+    case b: OpenExpenseSheet =&gt; Right(b)
+    case _ =&gt; Left(ErrorList.of(s&#34;${es.id} is not an open expense sheet&#34;))
+  }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>As previously explained for the repository traits, the implementation of the application
+service is generic w.r.t. the effect <code>F[_]</code>. Therefore also this piece of code
+is purely functional even if it interacts with the persistence.</p>
+
+<p>It&rsquo;s worth to point out that each function provided by the application service gets
+the needed repositories as implicit parameters. As shown in the test code, using
+the keyword <code>implicit</code> makes the invocation of the functions easier since the
+caller does not need to explicitly pass the repository as parameters. <em>Scala</em> is
+responsible to locate valid instances, if any, and pass them to the function.</p>
+
+<p>Using the <a href="https://docs.scala-lang.org/tour/for-comprehensions.html">for comprehensions</a>
+notation of <em>Scala</em> the body of the functions are really clean. It looks like reading
+an imperative program. We are actually looking to the description of a computation,
+which will be executed only when the monad&rsquo;s will be unwrapped (e.g. using the
+method <code>run</code> of the <code>State</code> monad).</p>
+
+<p>Using the monads with <em>for comprehensions</em> let the computation fails as soon as any
+of the instruction fails, i.e. a function returns <code>Left[T]</code>. In this case the
+computation stops and the error is returned to the client code.</p>
+
+<h3 id="usage-of-eithert-monad-trasformer">Usage of <em>EitherT</em> monad trasformer</h3>
+
+<p>You probably noticed the use of <code>toEitherT</code> methods almost everywhere. This is
+due to the fact that the <em>for comprehensions</em> notation works with one monad at a
+time. The functions involved instead use more monads. For example, the <code>get</code>
+function of <code>EmployeeRepository</code> returns <code>F[ApplicationResult[Employee]]</code>
+while <code>openFor</code> of <code>ExpenseService</code> returns <code>ValidationResult[OpenExpenseSheet]</code>
+which, to be precise, is not even a monad.</p>
+
+<p>That&rsquo;s why I decided to use the <code>EitherT</code> monad transformer. Through this structure
+it is possible to combine an <code>Either</code> monad with any other monad, in our case
+<code>F</code>, obtaining a monad whose effect is the composition of the effects of the
+original monads.</p>
+
+<p>The <code>toEitherT</code> functions that are seen in the code are used to transform all
+the types used in <code>EitherT[F, _, ErrorList]</code>. In this way the <em>for comprehensions</em>
+can be used effectively and the code is much cleaner.</p>
+
+<p>You can see the code before and after using the monad transformer by browsing the
+<em>GitHub</em> repository.</p>
+
+<p>In the next section we will see how, by modifying the application code, it is possible
+to eliminate the use of <code>EitherT</code> and further improve the readability of the
+application service.</p>
+
+<h2 id="removing-nested-effects">Removing nested effects</h2>
+
+<p>As anticipated, in the code there are nested effects. This is due to the fact that
+I developed the application trying to use the appropriate effect for each layer.
+Once completed, the redundancy/verbosity of the code was evident due to the accumulation
+of these effects. Therefore, it was appropriate a refactoring of the program to simplify
+it as much as possible.</p>
+
+<p>The <code>ApplicationResult</code> type, which is simply an alias of the <code>EitherT</code> monad,
+was introduced to handle application errors at the <code>ExpenseApplicationService</code>
+service level. On the other hand, the <code>ConnectionIO</code> monad, used by <em>Doobie</em>,
+also has the ability to handle errors. Obviously, the application logic can not directly
+use <code>ConnectionIO</code> because this would make it unusable in different contexts
+(e.g. with another database access library). What would be needed is to guarantee
+that the generic effect <code>F[_]</code> has the ability to handle errors. This would allow,
+for example, to simplify the type of return of the functions of <code>ExpenseApplicationService</code>
+from so <code>F[ApplicationResult[_]]</code> to so <code>F[_]</code>.</p>
+
+<p>To obtain the necessary guarantee, it was enough to request that a <code>MonadError</code>
+exists for <code>F</code> (see, line 3 below) instead of requesting just a <code>Monad</code> as
+previously seen.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>ExpenseApplicationService.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">object ExpenseApplicationService {
+  def openFor[F[_]](id: EmployeeId)
+    (implicit ME:MonadError[F, Throwable],
+      er: EmployeeRepository[F],
+      esr: ExpenseSheetRepository[F]) : F[ExpenseSheetId] =
+    for {
+      employee &lt;- er.get(id)
+      openExpenseSheet &lt;- ExpenseService.openFor(employee)
+      _ &lt;- esr.save(openExpenseSheet)
+    } yield openExpenseSheet.id
+
+  def addExpenseTo[F[_]](expense: Expense, id: ExpenseSheetId)
+    (implicit ME:MonadError[F, Throwable],
+      esr: ExpenseSheetRepository[F]) : F[Unit] =
+    for {
+      openExpenseSheet &lt;- getOpenExpenseSheet[F](id)
+      newOpenExpenseSheet &lt;- ExpenseService.addExpenseTo(expense, openExpenseSheet)
+      result &lt;- esr.save(newOpenExpenseSheet)
+    } yield result
+
+  def claim[F[_]](id: ExpenseSheetId)
+    (implicit ME:MonadError[F, Throwable],
+      esr: ExpenseSheetRepository[F],
+      cr: ClaimRepository[F]) : F[ClaimId] =
+    for {
+      openExpenseSheet &lt;- getOpenExpenseSheet[F](id)
+      pair &lt;- ExpenseService.claim(openExpenseSheet)
+      (claimedExpenseSheet, pendingClaim) = pair
+      _ &lt;- esr.save(claimedExpenseSheet)
+      _ &lt;- cr.save(pendingClaim)
+    } yield pendingClaim.id
+
+  private def getOpenExpenseSheet[F[_]](id: ExpenseSheetId)
+    (implicit ME:MonadError[F, Throwable],
+      esr: ExpenseSheetRepository[F]): F[OpenExpenseSheet] =
+    for {
+      expenseSheet &lt;- esr.get(id)
+      openExpenseSheet &lt;- toOpenExpenseSheet(expenseSheet)
+    } yield openExpenseSheet
+
+  private def toOpenExpenseSheet[F[_]](es: ExpenseSheet)
+    (implicit ME:MonadError[F, Throwable]) : F[OpenExpenseSheet] =
+    es match {
+      case b: OpenExpenseSheet =&gt; ME.pure(b)
+      case _ =&gt; ME.raiseError(new Error(s&#34;${es.id} is not an open expense sheet&#34;))
+    }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>With this simple change, I was able to remove all invocation to <code>toEitherT</code> from
+the code. At line 45 you can see how, using the <code>MonadError</code>, the way to notify
+errors to the caller is changed. The application service does not know how this happens,
+it only knows that the effect <code>F</code> has this capability.</p>
+
+<p>Obviously I had to adapt the rest of the code to this change, for example, I could
+simplify the <code>DoobieEmployeeRepository</code> because I no longer need to map the exceptions
+in the <code>ApplicationResult</code> type.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight scala">
+  <figcaption>
+    
+      <span>DoobieEmployeeRepository.scala</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="scala code-highlight">class DoobieEmployeeRepository(implicit ME: MonadError[ConnectionIO, Throwable]) 
+  extends EmployeeRepository[ConnectionIO] {
+  override def get(id: EmployeeId): ConnectionIO[Employee] =
+    sql&#34;select * from employees where id=$id&#34;.query[Employee]
+      .unique
+      .recoverWith({
+        case UnexpectedEnd =&gt; ME.raiseError(new Error(s&#34;Unable to find employee $id&#34;))
+      })
+
+  override def save(employee: Employee): ConnectionIO[Unit] =
+    sql&#34;insert into employees (id, name, surname) values (${employee.id}, ${employee.name}, ${employee.surname})&#34;
+      .update.run.map(_ =&gt; ())
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>The only exception still mapped is <code>UnexpectedEnd</code> because in this case I wanted
+the repository to throw an exception with a more meaningful message for the domain.</p>
+
+<p>It was not easy to find a refactoring method that would allow to maintain the code
+compilable, the tests green and, at the same time, would allow to replace the effect
+used by the functions in small steps. In fact, changing the effect at one point in
+the code inevitably led me to change the majority of the code. This made the code
+non-compilable, preventing me from performing the tests, and then verifying the correctness
+of the changes, for unacceptable periods.</p>
+
+<p>For this reason, I decided to tackle the refactoring by duplication, namely:</p>
+
+<ul>
+<li>for each set of functions and the related tests (e.g. <code>ExpenseService</code> e <code>ExpenseServiceTest</code>):
+
+<ul>
+<li>I created copies with suffix ME (<em>Monad Error</em>);</li>
+<li>I modified the copied tests and functions to make them work correctly with the
+new effect;</li>
+</ul></li>
+<li>once the whole production code has been duplicated and the correct behaviors of
+both versions has been verified through tests, I have been able to eliminate
+the old functions and rename the new ones by eliminating the suffix ME.</li>
+</ul>
+
+<p>This process allowed me to refactor the code incrementally avoiding spending a lot
+of time without verifying the outcome of the made changes.</p>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<p>This experiment was very useful for several aspects. In particular, it let me:</p>
+
+<ul>
+<li>improve the approach to functional domain modeling;</li>
+<li>experiment and use some common effects of functional programming, and understand
+their possible applications;</li>
+<li>understand to what extent the side effects, that inevitably a real software produces,
+can be pushed to the boundaries of the application.</li>
+</ul>
+
+<p>Moreover, from a practical point of view I realized the difficulty in doing refactoring,
+especially when I modified the used effects. I am now convinced that in functional
+programming it is better to dedicate more attention to the design phase, at least
+for the effects, compared to OOP.</p>
+
+<p>Overall this experiment was challenging. In fact, during the different development
+phases, I had to consider and deal with three distinct aspects (each equally important):</p>
+
+<ul>
+<li><em>Scala</em> syntax;</li>
+<li>the concepts of functional programming;</li>
+<li>the implementation provided by <em>Cats</em> and <em>Scala</em> of these concepts.</li>
+</ul>
+
+<p>There are still aspects that I intend to deepen in the future. The most important
+is the composition of effects. In fact, in the above example the only used effect
+is <code>ConnectionIO</code> to allow access to the DB, but a more complex application may
+require the use of other effects: write/read on filesystems, access resources using
+<em>HTTP</em> requests, etc. There are various approaches to dealing with these scenarios
+and I would like to try them out to understand their applicability.</p>
+
+<p>I conclude by thanking <a href="https://twitter.com/matteobaglini">Matteo Baglini</a> for the
+passion he always demonstrates when explaining functional programming concepts, and
+for his precious suggestions that have been very useful to clean up the code and
+to better understand what I was doing.</p>
+
+<p>Full speed ahead!</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/en/tags/functional-programming/">functional programming</a>
+
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/en/tags/scala/">Scala</a>
+
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/en/tags/modeling/">modeling</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/en/2018/01/coderetreat-florence/" data-tooltip="Coderetreat Florence">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fen%2f2018%2f08%2fmodeling-and-separation-of-concerns-in-functional-programming%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fen%2f2018%2f08%2fmodeling-and-separation-of-concerns-in-functional-programming%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fen%2f2018%2f08%2fmodeling-and-separation-of-concerns-in-functional-programming%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 Andrea Vallotti. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/en/2018/01/coderetreat-florence/" data-tooltip="Coderetreat Florence">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fen%2f2018%2f08%2fmodeling-and-separation-of-concerns-in-functional-programming%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fen%2f2018%2f08%2fmodeling-and-separation-of-concerns-in-functional-programming%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fen%2f2018%2f08%2fmodeling-and-separation-of-concerns-in-functional-programming%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fen%2f2018%2f08%2fmodeling-and-separation-of-concerns-in-functional-programming%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fen%2f2018%2f08%2fmodeling-and-separation-of-concerns-in-functional-programming%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fen%2f2018%2f08%2fmodeling-and-separation-of-concerns-in-functional-programming%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Andrea Vallotti</h4>
+    
+      <div id="about-card-bio">Software enthusiast: architect, developer, and technology scout. Agile addicted. MCSD - App Builder, MCSA - Cloud Platform, CSM, and CSPO. Enjoy in constantly growing while crafting <em>awesome software</em>, and helping others doing the same. <a href="http://www.andreavallotti.tech/en/page/about">More.</a></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Software Adventurer
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Italy
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2018/08/modeling-and-separation-of-concerns-in-functional-programming/">
+                <h3 class="media-heading">Modeling and separation of concerns in functional programming</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">After my first experiment with functional programming, I decided to further study it in depth. Therefore, last March I attended &ldquo;Lean and Functional Domain Modelling&rdquo; workshop, organized by Avanscoperta, and held by Marcello Duarte. The workshop gave me good hints about functional modeling and fueled my curiosity to learn Scala and experiment more this paradigm.
+In order to tackle this challenge I studied and practiced a lot. After some months, and several discussions with Matteo Baglini, I have been able to put together the puzzle, and I wrote this post.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2018/01/coderetreat-florence/">
+                <h3 class="media-heading">Coderetreat Florence</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">&ldquo;What matters is the journey&rdquo; (cit. Stefano Leli). This is the essence of Coderetreat.
+I discovered this format during Urbino&rsquo;s Italian Agile Day 2017. During that event, I enjoyed practicing Test Driven Development (TDD) with other participants, and learning from the facilitators Matteo Vaccari, Stefano Leli and Gabriele Tondi. I liked the format so much that I decided to propose it in Florence, where I live, in order to let developers of my community to enjoy it and have fun together.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2018/01/event-sourcing-and-cqrs-in-c/">
+                <h3 class="media-heading">Event Sourcing and CQRS in C#</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">As promised in my previous post, in this article I examine practical aspects related to DDD and, in particular to CQRS and Event Sourcing patterns.
+The main goal of my experiment is to implement an aggregate according to the Event Sourcing paradigm, and to create a separate read model to feed the pages of a Web application.
+Before presenting the example, I am going to briefly introduce the main architectural patterns that have been used since DDD launch.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2017/11/strategic-domain-driven-design/">
+                <h3 class="media-heading">Strategic Domain-Driven Design</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">I was inspired to such an extent by Evans&rsquo; Blue Book, that I got passionate about Domain-Driven Design. I was still in the United States when, four months in advance, I registered to the Strategic Domain-Driven Design workshop held by Alberto Brandolini (aka ziobrando) and organized by Avanscoperta. I definitely wanted to attend.
+Then, taken from the day to day activities, I lost the sense of time, when mid-October, I received an email from Avanscoperta that reminded me of the upcoming course.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/">
+                <h3 class="media-heading">Using EF Core&#39;s migration with Docker and MySQL</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">In this post I explain how to create a .NET Core 2.0 console application which reads, and writes, data from MySQL, and uses Entity Framework Core, and migrations, in order to persist data and manage the DB schema. Furthermore I will show how to use Docker to be able to develop the application independently by the chosen environment.
+In order to highlight the needed steps, I split the post in this way:</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2017/09/there-and-back-again/">
+                <h3 class="media-heading">There and Back Again</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Sep 9, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">For those who loves Tolkien, the title could seem uppish. After all, I traveled 7.600 km, much more than Bilbo and fellowship, I met people I could hardly understand, and I talked to a dragon&hellip; Ok, the latter is not true, but let me believe so 😃
+Jokes aside, I spent the first six months of this year in Indianapolis, USA. In this period, I had the chance to appreciate how lively Indiana&rsquo;s tech community is.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/2017/08/console.writeline-hello-world/">
+                <h3 class="media-heading">Console.WriteLine( &#34;Hello, World!&#34; );</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Every single experiment I did as a programmer began in this way: show Hello, World! on the monitor. Therefore I decided to start this new experiment (writing a blog) in the same way.
+Who knows me well can tell that I never did my best in humanities, therefore &ldquo;writing a blog&rdquo; is not exactly in my style. However, I strongly believe that sharing experiences is essential in my job for two main reasons:</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/en/post/">
+                <h3 class="media-heading">Posts</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         8 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/andreavallotti/image/upload/blog/images/cover-NGC4258-M106.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+
+
+<script src="http://www.andreavallotti.tech/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.registerLanguage("fsharp",function(e){var t={b:"<",e:">",c:[e.inherit(e.TM,{b:/'[a-zA-Z0-9_]+/})]};return{aliases:["fs"],k:"abstract and as assert base begin class default delegate do done downcast downto elif else end exception extern false finally for fun function global if in inherit inline interface internal lazy let match member module mutable namespace new null of open or override private public rec return select sig static struct then to true try type upcast use val void when where while with yield",i:/\/\*/,c:[{cN:"keyword",b:/\b(yield|return|let|do)!/},{cN:"string",b:'@"',e:'"',c:[{b:'""'}]},{cN:"string",b:'"""',e:'"""'},e.C("\\(\\*","\\*\\)"),{cN:"class",bK:"type",e:"\\(|=|$",eE:!0,c:[e.UTM,t]},{cN:"meta",b:"\\[<",e:">\\]",r:10},{cN:"symbol",b:"\\B('[A-Za-z])\\b",c:[e.BE]},e.CLCM,e.inherit(e.QSM,{i:null}),e.CNM]}});
+  hljs.registerLanguage("yaml", function(e) { var b = "true false yes no null", a = "^[ \\-]*", r = "[a-zA-Z_][\\w\\-]*", t = { cN: "attr", v: [{ b: a + r + ":" }, { b: a + '"' + r + '":' }, { b: a + "'" + r + "':" }] }, c = { cN: "template-variable", v: [{ b: ", e: " }, { b: "%{", e: "}" }] }, l = { cN: "string", r: 0, v: [{ b: /'/, e: /'/ }, { b: /"/, e: /"/ }, { b: /\S+/ }], c: [e.BE, c] }; return { cI: !0, aliases: ["yml", "YAML", "yaml"], c: [t, { cN: "meta", b: "^---s*$", r: 10 }, { cN: "string", b: "[\\|>] *$", rE: !0, c: l.c, e: t.v[0].b }, { b: "<%[%=-]?", e: "[%-]?%>", sL: "ruby", eB: !0, eE: !0, r: 0 }, { cN: "type", b: "!!" + e.UIR }, { cN: "meta", b: "&" + e.UIR + "$" }, { cN: "meta", b: "\\*" + e.UIR + "$" }, { cN: "bullet", b: "^ *-", r: 0 }, e.HCM, { bK: b, k: { literal: b } }, e.CNM, l] } });
+  hljs.registerLanguage("dockerfile", function(e) { return { aliases: ["docker"], cI: !0, k: "from maintainer expose env arg user onbuild stopsignal", c: [e.HCM, e.ASM, e.QSM, e.NM, { bK: "run cmd entrypoint volume add copy workdir label healthcheck shell", starts: { e: /[^\\]\n/, sL: "bash" } }], i: "</" } });
+  hljs.registerLanguage("scala",function(e){var t={cN:"meta",b:"@[A-Za-z]+"},a={cN:"subst",v:[{b:"\\$[A-Za-z0-9_]+"},{b:"\\${",e:"}"}]},r={cN:"string",v:[{b:'"',e:'"',i:"\\n",c:[e.BE]},{b:'"""',e:'"""',r:10},{b:'[a-z]+"',e:'"',i:"\\n",c:[e.BE,a]},{cN:"string",b:'[a-z]+"""',e:'"""',c:[a],r:10}]},c={cN:"symbol",b:"'\\w[\\w\\d_]*(?!')"},i={cN:"type",b:"\\b[A-Z][A-Za-z0-9_]*",r:0},s={cN:"title",b:/[^0-9\n\t "'(),.`{}\[\]:;][^\n\t "'(),.`{}\[\]:;]+|[^0-9\n\t "'(),.`{}\[\]:;=]/,r:0},n={cN:"class",bK:"class object trait type",e:/[:={\[\n;]/,eE:!0,c:[{bK:"extends with",r:10},{b:/\[/,e:/\]/,eB:!0,eE:!0,r:0,c:[i]},{cN:"params",b:/\(/,e:/\)/,eB:!0,eE:!0,r:0,c:[i]},s]},l={cN:"function",bK:"def",e:/[:={\[(\n;]/,eE:!0,c:[s]};return{k:{literal:"true false null",keyword:"type yield lazy override def with val var sealed abstract private trait object if forSome for while throw finally protected extends import final return else break new catch super class case package default try this match continue throws implicit"},c:[e.CLCM,e.CBCM,r,c,i,l,n,e.CNM,t]}});
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    var languageFilter = (block.classList && block.classList.length > 1) ? [].slice.apply(block.classList) : null;
+    var autoDetected = hljs.highlightAuto(block.innerText, languageFilter);
+
+    autoDetected.value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/www.andreavallotti.tech\/en\/2018\/08\/modeling-and-separation-of-concerns-in-functional-programming\/';
+          
+            this.page.identifier = '\/en\/2018\/08\/modeling-and-separation-of-concerns-in-functional-programming\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'andreavallotti';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#000"
+    },
+    "button": {
+      "background": "#f1d600"
+    }
+  },
+  "content": {
+    "message": "This website uses cookies to ensure you get the best experience on our website.",
+    "dismiss": "Got it!",
+    "link": "Learn more",
+    "href": "/en/page/cookie"
+  }
+})});
+</script>
+    
+  </body>
+</html>
+

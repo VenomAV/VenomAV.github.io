@@ -1,0 +1,2162 @@
+
+
+  
+    
+  
+
+
+  
+
+
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.54.0">
+    <meta name="theme" content="Tranquilpeak 0.3.1-BETA">
+    <title>Event Sourcing e CQRS in C#</title>
+    <meta name="author" content="Andrea Vallotti">
+    <meta name="keywords" content="ddd, cqrs, event sourcing, architecture, development, dot-net, agile, cloud, azure, developers">
+
+    <link rel="icon" href="http://www.andreavallotti.tech/images/favicon.png">
+    
+
+    
+    <meta name="description" content="Come promesso al termine del post precedente, in questo articolo approfondirò gli aspetti pratici legati al DDD ed in particolare ai pattern CQRS ed Event Sourcing.
+L’obiettivo principale dell’esperimento è quello di implementare un aggregato secondo il paradigma Event Sourcing e di creare un modello di lettura separato per alimentare le pagine di un&rsquo;applicazione Web.
+Prima di presentare l&rsquo;esempio pratico farò una breve introduzione dei principali pattern architetturali che sono stati utilizzati dalla nascita del DDD.">
+    <meta property="og:description" content="Come promesso al termine del post precedente, in questo articolo approfondirò gli aspetti pratici legati al DDD ed in particolare ai pattern CQRS ed Event Sourcing.
+L’obiettivo principale dell’esperimento è quello di implementare un aggregato secondo il paradigma Event Sourcing e di creare un modello di lettura separato per alimentare le pagine di un&rsquo;applicazione Web.
+Prima di presentare l&rsquo;esempio pratico farò una breve introduzione dei principali pattern architetturali che sono stati utilizzati dalla nascita del DDD.">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Event Sourcing e CQRS in C#">
+    <meta property="og:url" content="http://www.andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/">
+    <meta property="og:site_name" content="Development: people, code &amp; me">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Come promesso al termine del post precedente, in questo articolo approfondirò gli aspetti pratici legati al DDD ed in particolare ai pattern CQRS ed Event Sourcing.
+L’obiettivo principale dell’esperimento è quello di implementare un aggregato secondo il paradigma Event Sourcing e di creare un modello di lettura separato per alimentare le pagine di un&rsquo;applicazione Web.
+Prima di presentare l&rsquo;esempio pratico farò una breve introduzione dei principali pattern architetturali che sono stati utilizzati dalla nascita del DDD.">
+    
+      <meta name="twitter:creator" content="@AndreaVallotti">
+    
+    
+      <meta property="fb:app_id" content="170534096895468">
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="https://res.cloudinary.com/andreavallotti/image/upload/blog/images/event-sourcing-cqrs/Event_Sourcing_CQRS.jpg">
+    
+
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://www.andreavallotti.tech/css/style-u6mk0ojoywresbx8iepslrmmhl4stuhrsxuwhkpwrkrx7mryjcaimasnk4pi.min.css" />
+    
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-105324949-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://www.andreavallotti.tech/it/">Development: people, code &amp; me</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://www.andreavallotti.tech/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=90" alt="Foto dell&#39;autore" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://www.andreavallotti.tech/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Foto dell&#39;autore" />
+        </a>
+        <h4 class="sidebar-profile-name">Andrea Vallotti</h4>
+        
+          <h5 class="sidebar-profile-bio">Appassionato di software: architetto, sviluppatore e technology scout. Agilista entusiasta. MCSD - App Builder, MCSA - Cloud Platform, CSM, e CSPO. Mi diverte imparare sempre cose nuove, mentre creo <em>software eccezionale</em> e aiuto gli altri a fare lo stesso. <a href="http://www.andreavallotti.tech/it/page/about">Continua.</a></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categorie</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archivio</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">Chi sono</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/andrea-vallotti-b379313/" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+      
+      <span class="sidebar-button-desc">LinkedIn</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/AndreaVallotti" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/it/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://www.andreavallotti.tech/en/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-language"></i>
+      
+      <span class="sidebar-button-desc">English</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              post-header-cover--partial"
+       style="background-image:url('https://res.cloudinary.com/andreavallotti/image/upload/blog/images/event-sourcing-cqrs/Event_Sourcing_CQRS.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Event Sourcing e CQRS in C#
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  
+    <time itemprop="datePublished" datetime="2018-01-08T00:00:00Z">
+      
+  
+  
+  
+  
+    8 Gennaio 2018
+  
+
+    </time>
+  
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://www.andreavallotti.tech/it/categories/sviluppo">Sviluppo</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>Come promesso al termine del <a href="http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/">post precedente</a>,
+in questo articolo approfondirò gli aspetti pratici legati al DDD ed in particolare
+ai pattern <a href="https://martinfowler.com/bliki/CQRS.html">CQRS</a> ed <a href="https://martinfowler.com/eaaDev/EventSourcing.html">Event Sourcing</a>.</p>
+
+<p>L’obiettivo principale dell’esperimento è quello di implementare un aggregato secondo
+il paradigma Event Sourcing e di creare un modello di lettura separato per alimentare
+le pagine di un&rsquo;applicazione Web.</p>
+
+<p>Prima di presentare l&rsquo;esempio pratico farò una breve introduzione dei principali
+pattern architetturali che sono stati utilizzati dalla nascita del DDD.</p>
+
+<p>Fare propria la mentalità necessaria per utilizzare al meglio CQRS e Event Sourcing
+non è stato facile. Devo però dire che alla fine ci sono riuscito grazie alle fondamenta
+gettate dal <a href="https://www.avanscoperta.it/it/training/strategic-domain-driven-design/">corso di Avanscoperta</a>,
+da una massiccia dose di letture (il <a href="https://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577">libro rosso di Vaugh Vernon</a>
+e molti post), e da un numero adeguato di tentativi sempre supportati da test.</p>
+
+<p>Il codice completo da cui sono presi gli esempi utilizzati nel resto del post è disponibile
+su <a href="https://github.com/VenomAV/EventSourcingCQRS">GitHub</a>.</p>
+
+<p>Il viaggio continua. Nel frattempo faccio tesoro delle esperienze fatte e mi
+godo la vista del panorama all&rsquo;orizzonte.</p>
+
+<h2 id="evoluzione-architetture">Evoluzione architetture</h2>
+
+<p>Il <a href="https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215">libro blu di Evans</a>
+è stato pubblicato nel 2003 e da allora hanno fatto la loro comparsa diversi stili
+architetturali. Durante questa evoluzione le linee guida del DDD sono rimaste sempre
+valide al netto di alcuni tecnicismi necessari per l&rsquo;implementazione delle varie
+architetture.</p>
+
+<h3 id="layered-architecture">Layered architecture</h3>
+
+<p>L&rsquo;architettura originale utilizzata da Evans per isolare la logica di dominio dalle
+altre responsabilità di un&rsquo;applicazione è la layered architecture. I layer standard
+in cui suddividere un&rsquo;applicazione sono:</p>
+
+<ul>
+<li><strong>UI</strong>, è lo strato responsabile di visualizzare le informazioni all&rsquo;utente e interpretare
+i comandi di quest&rsquo;ultimo;</li>
+<li><strong>Applicazione</strong>, definisce gli scenari di utilizzo dell&rsquo;applicazione stessa. Coordina
+gli oggetti di dominio e si occupa di gestire tutte le attività necessarie al corretto
+funzionamento dell&rsquo;applicazione. Ad esempio, sicurezza, transazioni, etc.;</li>
+<li><strong>Dominio</strong>, contiene tutto ciò che riguarda la logica di dominio. Lo stato degli
+oggetti di dominio è gestito da questo strato anche se la persistenza degli oggetti
+stessi è delegata all&rsquo;infrastruttura. Questo è lo strato dove vengono applicate
+le linee guida del DDD;</li>
+<li><strong>Infrastruttura</strong>, non contiene né logica di dominio né logica applicativa,
+ma fornisce le implementazioni tecniche che servono agli altri strati per funzionare.
+Ad esempio, persistenza, gestione delle transazioni, etc.</li>
+</ul>
+
+<p>La regola fondamentale di questa architettura è che ogni layer può dipendere soltanto
+da quelli sottostanti. L&rsquo;unico modo per gli strati sottostanti di comunicare con
+quelli superiori è tramite l&rsquo;utilizzo di pattern tipo <a href="https://en.wikipedia.org/wiki/Observer_pattern">Observer</a>
+e <a href="https://en.wikipedia.org/wiki/Mediator_pattern">Mediator</a>.</p>
+
+<p>La separazione netta del modello di dominio in uno strato distinto dagli altri consente
+di sviluppare e testare le regole di business in totale autonomia rispetto al resto
+dell&rsquo;applicazione.</p>
+
+<p>Unico neo di questo approccio è dato dalla dipendenza, seppur mitigata dall&rsquo;uso di
+interfacce chiare e ben definite, dello strato di dominio da quello di infrastruttura.</p>
+
+<h3 id="hexagonal-architecture">Hexagonal architecture</h3>
+
+<p>La <a href="http://alistair.cockburn.us/Hexagonal+architecture">Hexagonal architecture</a> di
+Alistair Cockburn, risolve i problemi dell&rsquo;architettura precedente e introduce un
+modo più simmetrico di pensare all&rsquo;applicazione. Sostanzialmente in questa architettura
+non c&rsquo;è più un sopra e un sotto ma soltanto l&rsquo;interno e l&rsquo;esterno.</p>
+
+<p><em>L&rsquo;interno</em> è costituito da quelli che prima erano lo strato applicativo e quello
+di dominio, definiti semplicemente &ldquo;applicazione&rdquo; da Cockburn. Ovvero tutto quello
+che implementa i casi d&rsquo;uso di interesse del business. L&rsquo;interno comunica con l&rsquo;esterno
+tramite &ldquo;porte&rdquo; definite dall&rsquo;applicazione stessa. Esempi di porte possono essere
+la API pubblica dell&rsquo;applicazione, l&rsquo;interfaccia di accesso ai dati e quella di pubblicazione
+degli eventi di dominio.</p>
+
+<p><em>L&rsquo;esterno</em> è costituito da tutto ciò che interagisce con l&rsquo;applicazione o, vice
+versa, con cui quest&rsquo;ultima interagisce. L&rsquo;interazione avviene sempre tramite adattatori
+i quali o adattano i segnali esterni alla API dell&rsquo;applicazione o implementano le
+interfacce necessarie al corretto funzionamento di quest&rsquo;ultima. Esempi di adattatori
+sono i controller che interpretano le richieste HTTP ed invocano le API dell&rsquo;applicazione
+o l&rsquo;implementazione SQL delle interfacce di accesso ai dati.</p>
+
+<p>Quella che per Cockburn è l&rsquo;applicazione in DDD viene comunemente suddivisa in due
+livelli concentrici:</p>
+
+<ul>
+<li>quello più interno costituito dal modello di dominio che implementa le regole di
+business;</li>
+<li>e quello più esterno costituito dagli application service i quali definiscono gli
+scenari di utilizzo.</li>
+</ul>
+
+<p>Questa architettura consente di sviluppare l&rsquo;applicazione in totale autonomia rispetto
+a tutto ciò che le sta intorno (UI, database, etc.), consentendo quindi di eseguirla,
+e testarla, in varie configurazioni: con UI, da riga di comando, etc.</p>
+
+<p>La Hexagonal architecture è ampiamente adottata e sta alla base di tutte le architetture
+venute dopo, compresi i pattern descritti di seguito.</p>
+
+<h3 id="cqrs">CQRS</h3>
+
+<p>Negli approcci tradizionali, alcuni descritti sopra, viene utilizzato un unico modello
+dati, e i relativi servizi, sia per le operazioni di scrittura che per quelle di
+lettura. Questo porta spesso alla creazione di modelli non ottimali e che espongono
+troppe informazioni. Inoltre, questo può portare ad un eccessivo accoppiamento fra
+il modello e il codice client che lo utilizza.</p>
+
+<p>Il <a href="https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf">Command Query Responsibility Segregation</a>
+(o per gli amici CQRS) è un pattern architetturale il quale, come dice il nome stesso,
+prevede di separare totalmente la responsabilità di modificare i dati (Command)
+da quella di leggerli (Query). La formalizzazione di questo approccio viene generalmente
+attribuita a <a href="https://twitter.com/gregyoung">Greg Young</a>.</p>
+
+<p>L&rsquo;utilizzo di due modelli totalmente distinti per lo operazioni di scrittura e per
+quelle di lettura, previsto dal CQRS, consente invece di progettare e ottimizzare
+al meglio ogni modello per le operazioni di sua competenza. Oltre
+a questo, l&rsquo;utilizzo di modelli distinti consente anche di selezionare le tecnologie
+più adeguate per le due esigenze. Ad esempio potremmo decidere di utilizzare meccanismi
+di persistenza diversi perché in lettura potrebbe essere più adeguato utilizzare
+un DB relazionale mentre in scrittura potremmo preferire un NoSQL.</p>
+
+<p>Una volta separati i modelli di lettura e scrittura, possiamo anche scalare diversamente
+l&rsquo;infrastruttura necessaria a supportarli. Spesso succede che il numero di scritture
+in un sistema è molto inferiore alle letture. Per cui, utilizzando modelli e tecnologie
+separate, nulla ci vieta di scalare di più l&rsquo;infrastruttura di lettura rispetto
+a quella di scrittura.</p>
+
+<p>Ovviamente i due modelli devono essere sincronizzati per garantire che le informazioni
+lette siano consistenti con quelle scritte. La consistenza non è detto che sia immediata
+ma deve comunque essere garantito che sarà raggiunta. In DDD la sincronizzazione
+avviene attraverso i <a href="http://domainlanguage.com/wp-content/uploads/2016/05/DDD_Reference_2015-03.pdf">Domain Event</a>
+generati dagli aggregati.</p>
+
+<p>L&rsquo;uso dei Domain Event per sincronizzare il modello di lettura con quello di scrittura
+ha un solo punto debole: generalmente l&rsquo;emissione di un evento e la persistenza non
+sono transazionali. Questo è dovuto dal fatto che il sistema di gestione dei messaggi
+e quello per la persistenza sono sistemi distinti (e.g. RabbitMQ e SQL Server).</p>
+
+<h3 id="event-sourcing">Event sourcing</h3>
+
+<p><a href="https://martinfowler.com/eaaDev/EventSourcing.html">Event sourcing</a> (ES) permette
+di affrontare il problema appena descritto in modo estremamente elegante. Vediamo
+come.</p>
+
+<p>Normalmente per persistere un aggregato, la fotografia in un dato momento del suo
+stato viene salvata su un database. Utilizzando ES invece, ciò che viene salvato
+non è lo stato attuale dell&rsquo;aggregato ma la sequenza dei Domain Event che hanno portato
+l&rsquo;aggregato nel suo stato attuale. Per ricaricare un aggregato è sufficiente leggere
+tutti gli eventi ad esso associati e ricalcolare il suo stato a partire dagli eventi
+stessi.</p>
+
+<p>In questo modo ogni volta che viene modificato un aggregato non si aggiorna un record
+esistente ma se ne appende uno nuovo al flusso degli eventi che lo rappresentano.
+Questo approccio è molto efficiente perché si annulla il rischio di lock concorrenti
+sui record di una tabella e, di conseguenza, le possibilità di deadlock fra thread
+di scrittura diversi.</p>
+
+<p>Questo tipo di persistenza prende il nome di <em>event store</em>. È possibile crearsi il
+proprio event store come descritto nel <a href="https://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577">libro di Vaughn Vernon</a>,
+utilizzando un database relazionale, oppure, come vedremo in seguito, si può utilizzare
+un prodotto esistente che fornisce questa funzionalità specifica.</p>
+
+<p>Tornando al problema della non transanzionalità accennato in precedenza, utilizzando
+un event store si ha un unico posto in cui vengono salvati i Domain Event e, implicitamente,
+lo stato degli aggregati. È quindi sufficiente leggere gli eventi da pubblicare dall&rsquo;event
+store per evitare rischi di inconsistenza tra il modello di scrittura e quello di
+lettura.</p>
+
+<h2 id="l-applicazione">L&rsquo;applicazione</h2>
+
+<p>Passiamo alla pratica. Per approfondire i pattern architetturali brevemente descritti
+sopra e sperimentarli praticamente, ho deciso di sviluppare un&rsquo;applicazione di prova
+con l&rsquo;obiettivo di implementare un aggregato secondo il paradigma Event Sourcing
+e di creare un modello di lettura separato che potesse essere utilizzato per alimentare
+le pagine dell&rsquo;applicazione Web.</p>
+
+<p>Inoltre, ho voluto utilizzare <a href="https://eventstore.org/">Event Store</a> per la parte
+di persistenza degli eventi. Come dice il nome stesso Event Store è un <em>event store</em>
+sviluppato, tra gli altri, da Greg Young.</p>
+
+<p>L&rsquo;applicazione consente di creare dei carrelli e di aggiungerci dei prodotti specificando
+la loro quantità. I casi d&rsquo;uso sono molto semplici:</p>
+
+<ul>
+<li>deve essere possibile creare un carrello fornendo il cliente a cui appartiene;</li>
+<li>deve essere possibile aggiungere un prodotto al carrello specificando la quantità
+a patto che il prodotto non sia già presente nel carrello;</li>
+<li>deve essere possibile modificare la quantità di un prodotto già presente in un
+carrello;</li>
+<li>infine per ogni prodotto non deve essere possibile aggiungere più di 50 unità.</li>
+</ul>
+
+<p>L&rsquo;applicazione è sviluppata con ASP.NET Core, C# e Docker.</p>
+
+<h2 id="modellare-un-aggregato-secondo-event-sourcing">Modellare un aggregato secondo Event Sourcing</h2>
+
+<p>Come prima cosa, per affrontare il problema descritto sopra, sono partito dalla modellazione
+dell&rsquo;aggregato carrello (<code>Cart</code>). Seguendo un approccio classico, ho iniziato a
+pensare alle proprietà delle classi che avrei dovuto persistere sul database utilizzando
+Entity Framework ma, dopo un primo momento di indecisione, ho cambiato strategia.</p>
+
+<p>Ho quindi iniziato a pensare agli eventi di dominio che l&rsquo;aggregato avrebbe dovuto
+generare nei vari casi d&rsquo;uso descritti sopra e sono partito dalla creazione di un
+nuovo carello.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>Estratto di CartTest.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">[Fact]
+public void GivenNoCartExistsWhenCreateOneThenCartCreatedEvent()
+{
+    var cart = new Cart(DefaultCartId, DefaultCustomerId);
+
+    AssertSingleUncommittedEvent&lt;CartCreatedEvent&gt;(cart, @event =&gt;
+    {
+      Assert.Equal(DefaultCartId, @event.AggregateId);
+      Assert.Equal(DefaultCustomerId, @event.CustomerId);
+    });
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Come si può capire dal test, quando creo una nuova istanza di carrello, passandogli
+il proprio identificativo e quello del cliente a cui è associato, mi aspetto che
+sia stato emesso un solo evento di tipo <code>CartCreatedEvent</code> e che l&rsquo;evento contenga
+le informazioni corrette. Il metodo <code>AssertSingleUncommittedEvent</code> è un metodo di
+utilità della classe di test per verificare gli eventi generati dall&rsquo;aggregato e
+non ancora persistiti.</p>
+
+<p>Seguendo il paradigma Event Sourcing ogni azione eseguita su un aggregato, anche
+la sua creazione, si divide in tre passi concettuali:</p>
+
+<ol>
+<li>la verifica dei parametri di ingresso e dello stato dell&rsquo;aggregato al fine di
+verificare la fattibilità dell&rsquo;azione stessa;</li>
+<li>in caso positivo dei controlli precedenti, l&rsquo;emissione degli eventi scatenati
+dall&rsquo;azione;</li>
+<li>l&rsquo;aggiornamento dello stato dell&rsquo;aggregato in funzione degli eventi di cui sopra.</li>
+</ol>
+
+<p>La separazione dei passi 2 e 3, come vedremo in seguito, è necessaria quando dobbiamo
+ricreare un oggetto a partire dagli eventi presenti sull&rsquo;event store. Con queste
+linee guida, per soddisfare il test sopra, ho creato la classe seguente.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>Estratto di Cart.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class Cart : AggregateBase&lt;CartId&gt;
+{
+    private CustomerId CustomerId { get; set; }
+
+    public Cart(CartId cartId, CustomerId customerId) : this()
+    {
+        if (cartId == null) throw new ArgumentNullException(nameof(cartId));
+        if (customerId == null) throw new ArgumentNullException(nameof(customerId));
+        RaiseEvent(new CartCreatedEvent(cartId, customerId));
+    }
+
+    internal void Apply(CartCreatedEvent ev)
+    {
+        Id = ev.AggregateId;
+        CustomerId = ev.CustomerId;
+    }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Il codice sopra rispecchia esattamente i tre passi descritti in precedenza: controllo
+(righe 7 e 8), emissione eventi (riga 9) e aggiornamento dello stato (metodo <code>Apply</code>).</p>
+
+<p>Al fine di rendere più semplice la lettura della classe <code>Cart</code> e evitare ripetizioni
+del codice ho creato la classe base <code>AggregateBase</code> che sostanzialmente agisce da
+<a href="https://martinfowler.com/eaaCatalog/layerSupertype.html">Layer Supertype</a> per gli
+aggregati del dominio. La classe base è descritta più in dettaglio successivamente.</p>
+
+<p>In modo del tutto analogo a quanto fatto per la creazione di un nuovo carrello, per
+implementare il caso d&rsquo;uso dell&rsquo;aggiunta di un prodotto al carrello sono partito
+dalla definizione del test.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>Estratto di CartTest.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">[Fact]
+public void GivenACartWhenAddAProductThenProductAddedEvent()
+{
+    var cart = new Cart(DefaultCartId, DefaultCustomerId);
+    ClearUncommittedEvents(cart);
+
+    cart.AddProduct(DefaultProductId, 2);
+
+    AssertSingleUncommittedEvent&lt;ProductAddedEvent&gt;(cart, @event =&gt;
+    {
+        Assert.Equal(DefaultProductId, @event.ProductId);
+        Assert.Equal(2, @event.Quantity);
+        Assert.Equal(DefaultCartId, @event.AggregateId);
+        Assert.Equal(0, @event.AggregateVersion);
+    });
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+L&rsquo;unica differenza rispetto al test precedente è l&rsquo;utilizzo del metodo di utilità
+<code>ClearUncommittedEvents</code> per svuotare la lista degli eventi ancora da salvare. A
+parte questo dettaglio, anche in questo caso la lettura del test è molto semplice:
+quando aggiungo un prodotto al carrello mi aspetto che venga emesso l&rsquo;evento corrispondente
+contenente i dati necessari a descrivere l&rsquo;operazione appena avvenuta.</p>
+
+<p>È fondamentale notare che non ho fatto alcuna asserzione sullo stato (proprietà o
+campi) della classe <code>Cart</code>. Infatti in questo caso non mi interessa sapere come la
+classe gestisce internamente il suo stato, ma semplicemente voglio accertarmi che
+vengano emessi gli eventi corretti. Sono quest&rsquo;ultimi infatti che mi consentiranno
+in seguito di costruire un modello di lettura per la mia applicazione web.</p>
+
+<p>Questa è la perfetta applicazione del principio del <a href="https://www.youtube.com/watch?v=7Lb5ZErTMZU">Cavaliere Nero</a>,
+noto ai più come &ldquo;incapsulamento&rdquo;. Non potrò mai ringraziare abbastanza <a href="https://twitter.com/ziobrando">Ziobrando</a>
+per aver trovato una metafora così esplicativa per un concetto così semplice e spesso
+sottovalutato.</p>
+
+<p>Lo stato dell&rsquo;aggregato è fondamentale per il corretto funzionamento di quest&rsquo;ultimo.
+Per accertarmi che l&rsquo;aggregato gestisse correttamente lo stato è stato sufficiente
+aggiungere il seguente test.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>Estratto di CartTest.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">[Fact]
+public void GivenACartWithAProductWhenAddingTheSameProductThenThrowsCartException()
+{
+    var cart = new Cart(DefaultCartId, DefaultCustomerId);
+
+    cart.AddProduct(DefaultProductId, 2);
+    ClearUncommittedEvents(cart);
+
+    Assert.Throws&lt;CartException&gt;(() =&gt; { cart.AddProduct(DefaultProductId, 1); });
+    Assert.Empty(GetUncommittedEventsOf(cart));
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Se <code>Cart</code> non gestisse correttamente il proprio stato non avrebbe modo di controllare
+se il prodotto è già presente nel carrello o meno.</p>
+
+<p>Dati i test sopra, l&rsquo;implementazione del comportamento atteso è stata la seguente:
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>Estratto di Cart.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class Cart : AggregateBase&lt;CartId&gt;
+{
+  private List&lt;CartItem&gt; Items { get; set; }
+
+  public void AddProduct(ProductId productId, int quantity)
+  {
+    if (productId == null)
+    {
+      throw new ArgumentNullException(nameof(productId));
+    }
+    if (ContainsProduct(productId))
+    {
+      throw new CartException($&#34;Product {productId} already added&#34;);
+    }
+    RaiseEvent(new ProductAddedEvent(productId, quantity));
+  }
+
+  internal void Apply(ProductAddedEvent ev)
+  {
+    Items.Add(new CartItem(ev.ProductId, ev.Quantity));
+  }
+
+  private bool ContainsProduct(ProductId productId)
+  {
+    return Items.Any(x =&gt; x.ProductId == productId);
+  }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>Estratto di CartItem.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class CartItem
+{
+  public CartItem(ProductId productId, int quantity)
+  {
+    ProductId = productId;
+    Quantity = quantity;
+  }
+
+  public ProductId ProductId { get; }
+
+  public int Quantity { get; }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Come si vede il carrello mantiene una lista di oggetti aggiunti nel suo stato, ma
+la lista non è accessibile in alcun modo all&rsquo;esterno perché è strettamente funzionale
+all&rsquo;implementazione dei comportamenti attesi e non deve essere utilizzata in alcun
+modo dal codice client per consultazione. Vorrei far notare che per l&rsquo;implementazione
+dei casi d&rsquo;uso presi in considerazione fino ad ora, non sarebbe stato necessario
+mantenere le quantità nella lista. Sarebbe stato sufficiente mantenere una lista
+di identificativi di prodotto. La quantità è presente solo perché funzionale agli
+altri casi d&rsquo;uso descritti sopra.</p>
+
+<p>Dato che l&rsquo;articolo è già piuttosto denso di concetti eviterò di descrivere l&rsquo;implementazione
+degli altri casi d&rsquo;uso e lascio a chi è interessato la consultazione del codice su
+<a href="https://github.com/VenomAV/EventSourcingCQRS">GitHub</a>.</p>
+
+<h3 id="aggregatebase">AggregateBase</h3>
+
+<p><code>AggregateBase</code> implementa due interfacce basilari. La prima è <code>IAggregate</code> la quale
+stabilisce che ogni aggregato debba avere un identificativo.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>IAggregate.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public interface IAggregate&lt;TId&gt;
+{
+    TId Id { get; }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<p>La seconda interfaccia invece definisce le firme dei metodi necessari per funzionare
+correttamente con il paradigma Event Sourcing. Ogni aggregato deve avere una versione
+(<code>Version</code>) per poter gestire eventuali conflitti di scrittura. Deve essere inoltre
+possibile applicare un evento di dominio (<code>ApplyEvent</code>), utile per caricare un aggregato
+dall&rsquo;event store. Deve essere infine possibile ottenere l&rsquo;elenco degli eventi non
+ancora salvati sull&rsquo;event store (<code>GetUncommittedEvents</code>) e svuotarlo (<code>ClearUncommittedEvents</code>).
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>IEventSourcingAggregate.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">internal interface IEventSourcingAggregate&lt;TAggregateId&gt;
+{
+    long Version { get; }
+    void ApplyEvent(IDomainEvent&lt;TAggregateId&gt; @event, long version);
+    IEnumerable&lt;IDomainEvent&lt;TAggregateId&gt;&gt; GetUncommittedEvents();
+    void ClearUncommittedEvents();
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+L&rsquo;interfaccia è dichiarata <code>internal</code> perché sia visibile solo internamente all&rsquo;assembly
+che contiene gli oggetti di dominio. Questo è un dettaglio implementativo che non
+è di interesse per chi utilizza gli aggregati.</p>
+
+<p>La classe <code>AggregateBase</code> implementa le interfacce sopra in modo abbastanza lineare.
+Le implementazioni che meritano un approfondimento sono due: <code>ApplyEvent</code> e <code>RaiseEvent</code>.</p>
+
+<p><strong>ApplyEvent</strong> - per evitare duplicazioni, il metodo <code>ApplyEvent</code>, verifica che l&rsquo;evento
+da applicare non sia fra quelli ancora da salvare. Nel caso in cui l&rsquo;evento sia effettivamente
+da applicare, il costrutto a riga 18 consente di invocare il metodo specifico per
+applicare l&rsquo;evento di dominio.</p>
+
+<p>Nel caso della classe <code>Cart</code> e dell&rsquo;evento <code>CartCreatedEvent</code>, l&rsquo;uso della parola
+chiave <code>dynamic</code> consente alla classe <code>AggregateBase</code> di invocare dinamicamente a
+runtime il metodo <code>internal void Apply(CartCreatedEvent ev)</code> della classe <code>Cart</code>.</p>
+
+<p><a href="https://gist.github.com/heemskerkerik/0a850919f6467431963f667ae260092f">Questo benchmark</a>
+mostra come l&rsquo;invocazione dinamica dei metodi, pur essendo più lenta rispetto all&rsquo;uso
+di <code>switch</code> e pattern matching, sia comunque molto più veloce rispetto ad altre possibili
+implementazioni.</p>
+
+<p><strong>RaiseEvent</strong> - questo metodo garantisce di assegnare la versione e l&rsquo;identificativo
+dell&rsquo;aggregato corretti all&rsquo;evento che viene emesso, semplificando così il codice
+della classe <code>Cart</code>. Inoltre, prima di accodare l&rsquo;evento emesso a quelli da salvare,
+applica l&rsquo;evento stesso all&rsquo;aggregato in modo che lo stato di quest&rsquo;ultimo sia consistente
+con gli eventi emessi.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>AggregateBase.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public abstract class AggregateBase&lt;TId&gt; : 
+  IAggregate&lt;TId&gt;, IEventSourcingAggregate&lt;TId&gt;
+{
+  public const long NewAggregateVersion = -1;
+
+  private readonly ICollection&lt;IDomainEvent&lt;TId&gt;&gt; _uncommittedEvents = 
+    new LinkedList&lt;IDomainEvent&lt;TId&gt;&gt;();
+  private long _version = NewAggregateVersion;
+
+  public TId Id { get; protected set;  }
+
+  long IEventSourcingAggregate&lt;TId&gt;.Version =&gt; _version;
+
+  void IEventSourcingAggregate&lt;TId&gt;.ApplyEvent(IDomainEvent&lt;TId&gt; @event, long version)
+  {
+    if (!_uncommittedEvents.Any(x =&gt; Equals(x.EventId, @event.EventId)))
+    {
+      ((dynamic)this).Apply((dynamic)@event);
+      _version = version;
+    }
+  }
+
+  void IEventSourcingAggregate&lt;TId&gt;.ClearUncommittedEvents()
+    =&gt; _uncommittedEvents.Clear();
+
+  IEnumerable&lt;IDomainEvent&lt;TId&gt;&gt; IEventSourcingAggregate&lt;TId&gt;.GetUncommittedEvents()
+    =&gt; _uncommittedEvents.AsEnumerable();
+
+  protected void RaiseEvent&lt;TEvent&gt;(TEvent @event)
+      where TEvent: DomainEventBase&lt;TId&gt;
+  {
+    IDomainEvent&lt;TId&gt; eventWithAggregate = @event.WithAggregate(
+      Equals(Id, default(TId)) ? @event.AggregateId : Id,
+      _version);
+
+    ((IEventSourcingAggregate&lt;TId&gt;)this).ApplyEvent(eventWithAggregate, _version &#43; 1);
+    _uncommittedEvents.Add(@event);
+  }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h3 id="persistenza">Persistenza</h3>
+
+<p>Seguendo un approccio classico al DDD, per poter accedere agli aggregati e per persisterli
+definirei un&rsquo;interfaccia <code>IRepository</code> nel domain model con le classiche operazioni
+<code>GetByID</code>, <code>Remove</code>, <code>Save</code> ed eventuali metodi di ricerca più o meno specializzati.
+Dopodiché implementerei tale interfaccia in qualche assembly di supporto. Tale implementazione
+sarebbe dipendente a qualche meccanismo di persistenza e tale dipendenza sarebbe
+sicuramente esplicitata dal nome dell&rsquo;implementazione stessa, e.g. <code>EntityFrameworkRepository</code>.</p>
+
+<p>Utilizzando Event Sourcing la definizione dell&rsquo;interfaccia, e la relativa implementazione,
+assumono una forma diversa. Prima di tutto l&rsquo;interfaccia <code>IRepository</code> è più semplice.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>IRepository.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public interface IRepository&lt;TAggregate, TAggregateId&gt;
+  where TAggregate: IAggregate&lt;TAggregateId&gt;
+{
+  Task&lt;TAggregate&gt; GetByIdAsync(TAggregateId id);
+
+  Task SaveAsync(TAggregate aggregate);
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Fare delle ricerche per attributo su un event store è complesso e decisamente poco
+performante. Inoltre gli event store sono meccanismi di persistenza in sola aggiunta
+per cui non è possibile cancellare gli eventi scritti in precedenza. Per questi motivi
+le uniche operazioni sensate diventano il recupero di un aggregato tramite identificativo
+e il salvataggio di un aggregato, sia esso nuovo o preesistente.</p>
+
+<p>Per quanto riguarda l&rsquo;implementazione invece, il repository deve essere a conoscenza
+almeno dei metodi dell&rsquo;interfaccia <code>IEventSourcingAggregate</code> per poter accedere agli
+eventi di dominio emessi dall&rsquo;aggregato e per poter passare gli eventi recuperati
+dall&rsquo;event store. Per questo motivo è più naturale mettere parte dell&rsquo;implementazione
+del repository nello stesso assembly che contiene il domain model.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>EventSourcingRepository.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class EventSourcingRepository&lt;TAggregate, TAggregateId&gt; :
+    IRepository&lt;TAggregate, TAggregateId&gt;
+  where TAggregate : AggregateBase&lt;TAggregateId&gt;, IAggregate&lt;TAggregateId&gt;
+  where TAggregateId : IAggregateId
+{
+  private readonly IEventStore eventStore;
+  private readonly ITransientDomainEventPublisher publisher;
+
+  public EventSourcingRepository(IEventStore eventStore,
+    ITransientDomainEventPublisher publisher)
+  {
+    this.eventStore = eventStore;
+    this.publisher = publisher;
+  }
+
+  public async Task&lt;TAggregate&gt; GetByIdAsync(TAggregateId id)
+  {
+    try
+    {
+      var aggregate = CreateEmptyAggregate();
+      IEventSourcingAggregate&lt;TAggregateId&gt; aggregatePersistence = aggregate;
+
+      foreach (var @event in await eventStore.ReadEventsAsync(id))
+      {
+        aggregatePersistence.ApplyEvent(@event.DomainEvent, @event.EventNumber);
+      }
+      return aggregate;
+    }
+    catch (EventStoreAggregateNotFoundException)
+    {
+      return null;
+    }
+    catch (EventStoreCommunicationException ex)
+    {
+      throw new RepositoryException(&#34;Unable to access persistence layer&#34;, ex);
+    }
+  }
+
+  public async Task SaveAsync(TAggregate aggregate)
+  {
+    try
+    {
+      IEventSourcingAggregate&lt;TAggregateId&gt; aggregatePersistence = aggregate;
+
+      foreach (var @event in aggregatePersistence.GetUncommittedEvents())
+      {
+        await eventStore.AppendEventAsync(@event);
+        await publisher.PublishAsync((dynamic)@event);
+      }
+      aggregatePersistence.ClearUncommittedEvents();
+    }
+    catch (EventStoreCommunicationException ex)
+    {
+      throw new RepositoryException(&#34;Unable to access persistence layer&#34;, ex);
+    }
+  }
+
+  private TAggregate CreateEmptyAggregate()
+  {
+    return (TAggregate)typeof(TAggregate)
+      .GetConstructor(
+        BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, 
+        null, new Type[0], new ParameterModifier[0])
+      .Invoke(new object[0]);
+  }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<p>La parte dell&rsquo;implementazione del repository che resta fuori dal domain model è quella
+relativa allo specifico event store utilizzato. A questo scopo ho introdotto l&rsquo;interfaccia
+<code>IEventStore</code>. L&rsquo;implementazione di tale interfaccia è spiegata più avanti.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>IEventStore.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public interface IEventStore
+{
+  Task&lt;IEnumerable&lt;Event&lt;TAggregateId&gt;&gt;&gt; ReadEventsAsync&lt;TAggregateId&gt;(TAggregateId id)
+    where TAggregateId: IAggregateId;
+
+  Task&lt;AppendResult&gt; AppendEventAsync&lt;TAggregateId&gt;(IDomainEvent&lt;TAggregateId&gt; @event)
+    where TAggregateId: IAggregateId;
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<p>Tornando alla classe <code>EventSourcingRepository</code>, si vede come il metodo <code>GetByIdAsync</code>
+applichi tutti gli eventi recuperati dall&rsquo;event store ad un&rsquo;istanza vuota dell&rsquo;aggregato
+tramite il metodo <code>ApplyEvent</code>. L&rsquo;istanza vuota dell&rsquo;aggregato viene creata utilizzando
+il metodo <code>CreateEmptyAggregate</code>. Tale metodo fa uso della reflection di C# per creare
+un aggregato utilizzando il costruttore di default. Ho scelto di utilizzare la reflection
+perché voglio che gli aggregati possano dichiarare il costruttore di default privato,
+come nel caso della classe <code>Cart</code>. Questo perché il fatto di esporre o meno il costruttore
+di default è una scelta progettuale dell&rsquo;aggregato, e non deve essere un&rsquo;imposizione
+dovuta alle scelte architetturali.</p>
+
+<p>Per quanto riguarda il metodo <code>SaveAsync</code>, si occupa di recuperare gli eventi non
+ancora salvati dall&rsquo;aggregato, di salvarli sull&rsquo;event store e, se tutto va bene,
+di rimuoverli dall&rsquo;aggregato.</p>
+
+<p>Ho scelto di utilizzare questo metodo anche per pubblicare gli eventi salvati internamente
+all&rsquo;applicazione tramite l&rsquo;interfaccia <code>ITransientDomainEventPublisher</code>. La classe
+che implementa questa interfaccia non è altro che un <em>lightweight publisher</em> come
+descritto nel <a href="https://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577">libro rosso di Vaugh Vernon</a>
+al capitolo 8 &ldquo;Domain Events&rdquo;. A differenza di quanto spiegato nel libro, nella mia
+applicazione di esempio gli eventi vengono pubblicati dal repository invece che dagli
+aggregati. Questo per due motivi: il codice degli aggregati risulta più semplice
+e il metodo <code>SaveAsync</code> è l&rsquo;unico in cui siamo sicuri che gli eventi sono stati veramente
+salvati e che non ci sono stati conflitti di alcun genere.</p>
+
+<h2 id="event-store">Event Store</h2>
+
+<p>Per questo esperimento ho deciso di implementare la persistenza del modello Event
+Sourcing utilizzando <a href="https://eventstore.org/">Event Store</a>. Per utilizzarlo ho incluso
+l&rsquo;immagine Docker <code>eventstore/eventstore</code> nel file <code>docker-compose.yml</code> del mio progetto.
+Ho utilizzato la configurazione di base perché per il mio esperimento ho avuto esigenze
+particolari.</p>
+
+<p>Per dialogare con il server Event Store ho installato nella mia soluzione il pacchetto
+NuGet <code>EventStore.ClientAPI.NetCore</code>, versione 4.0.3-rc. Non avendo mai utilizzato
+questo prodotto ho scritto alcuni test per verificare il comportamento della libreria
+e del server. Dopodiché ho implementato l&rsquo;interfaccia <code>IEventStore</code> descritta sopra.</p>
+
+<p>Event Store offre molte funzionalità interessanti come le proiezioni. Per poterle
+utilizzare è necessario memorizzare gli eventi in formato JSON. Dato che altri event
+store potrebbero fare affidamento a formati diversi, ho deciso di implementare la
+serializzazione e deserializzazione degli eventi a questo livello.</p>
+
+<p>Per essere più conciso non riporto qui l&rsquo;implementazione che comunque è disponibile
+sul repository <a href="https://github.com/VenomAV/EventSourcingCQRS/tree/master/EventSourcingCQRS.Domain.EventStore/EventStoreEventStore.cs">GitHub</a>.</p>
+
+<h2 id="cqrs-e-modello-di-lettura">CQRS e modello di lettura</h2>
+
+<p>Come già detto più volte in precedenza, utilizzando Event Sourcing per implementare
+la logica di business non abbiamo più un modello di lettura da utilizzare per visualizzare
+i dati all&rsquo;utente. Per risolvere questo problema viene in nostro soccorso CQRS.</p>
+
+<p>Seguendo le linee guida di questo pattern ho creato un semplice modello si lettura
+che si adattasse all&rsquo;interfaccia web che volevo realizzare.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>EventSourcingCQRS.ReadModel\Cart\Cart.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class Cart : IReadEntity
+{
+  public string Id { get; set; }
+  public int TotalItems { get; set; }
+  public string CustomerId { get; set; }
+  public string CustomerName { get; set; }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>EventSourcingCQRS.ReadModel\Cart\CartItem.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class CartItem : IReadEntity
+{
+    public string Id { get; private set; }
+    public string CartId { get; set; }
+    public string ProductId { get; set; }
+    public string ProductName { get; set; }
+    public int Quantity { get; set; }
+
+    public static CartItem CreateFor(string cartId, string productId)
+    {
+      return new CartItem
+      {
+        Id = IdFor(cartId, productId),
+        CartId = cartId,
+        ProductId = productId
+      };
+    }
+
+    public static string IdFor(string cartId, string productId)
+    {
+      return $&#34;{productId}@{cartId}&#34;;
+    }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<p>Questo modello deve essere tenuto sincronizzato con il modello di scrittura, e per
+questo motivo ho creato la classe <code>CartUpdater</code> la quale, gestendo gli eventi generati
+dal modello di scrittura, si occupasse di aggiornare il modello di lettura.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>CartUpdater.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class CartUpdater : IDomainEventHandler&lt;CartId, CartCreatedEvent&gt;,
+  IDomainEventHandler&lt;CartId, ProductAddedEvent&gt;,
+  IDomainEventHandler&lt;CartId, ProductQuantityChangedEvent&gt;
+{
+  private readonly IReadOnlyRepository&lt;Customer.Customer&gt; customerRepository;
+  private readonly IReadOnlyRepository&lt;Product.Product&gt; productRepository;
+  private readonly IRepository&lt;Cart.Cart&gt; cartRepository;
+  private readonly IRepository&lt;Cart.CartItem&gt; cartItemRepository;
+
+  public CartUpdater(IReadOnlyRepository&lt;Customer.Customer&gt; customerRepository,
+    IReadOnlyRepository&lt;Product.Product&gt; productRepository,
+    IRepository&lt;Cart.Cart&gt; cartRepository,
+    IRepository&lt;Cart.CartItem&gt; cartItemRepository)
+  {
+    this.customerRepository = customerRepository;
+    this.productRepository = productRepository;
+    this.cartRepository = cartRepository;
+    this.cartItemRepository = cartItemRepository;
+  }
+
+  public async Task HandleAsync(CartCreatedEvent @event)
+  {
+    var customer = await customerRepository.GetByIdAsync(
+      @event.CustomerId.IdAsString());
+
+    await cartRepository.InsertAsync(new Cart.Cart
+      {
+        Id = @event.AggregateId.IdAsString(),
+        CustomerId = customer.Id,
+        CustomerName = customer.Name,
+        TotalItems = 0
+      });
+  }
+
+  public async Task HandleAsync(ProductAddedEvent @event)
+  {
+    var product = await productRepository.GetByIdAsync(@event.ProductId.IdAsString());
+    var cart = await cartRepository.GetByIdAsync(@event.AggregateId.IdAsString());
+    var cartItem = Cart.CartItem.CreateFor(
+      @event.AggregateId.IdAsString(),
+      @event.ProductId.IdAsString());
+
+    cartItem.ProductName = product.Name;
+    cartItem.Quantity = @event.Quantity;
+    cart.TotalItems &#43;= @event.Quantity;
+    await cartRepository.UpdateAsync(cart);
+    await cartItemRepository.InsertAsync(cartItem);
+  }
+
+  public async Task HandleAsync(ProductQuantityChangedEvent @event)
+  {
+    var cartItemId = Cart.CartItem.IdFor(
+      @event.AggregateId.IdAsString(),
+      @event.ProductId.IdAsString());
+    var cartItem = (await cartItemRepository
+      .FindAllAsync(x =&gt; x.Id == cartItemId))
+      .Single();
+    var cart = await cartRepository.GetByIdAsync(@event.AggregateId.IdAsString());
+
+    cart.TotalItems &#43;= @event.NewQuantity - @event.OldQuantity;
+    cartItem.Quantity = @event.NewQuantity;
+
+    await cartRepository.UpdateAsync(cart);
+    await cartItemRepository.UpdateAsync(cartItem);
+  }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Le interfacce <code>IRepository</code> e <code>IReadOnlyRepositoy</code> non hanno niente a che vedere
+con l&rsquo;interfaccia <code>IRepository</code> descritta nel paragrafo <em>Repository</em>. Queste interfacce
+infatti appartengono al progetto <code>EventSourcingCQRS.ReadModel</code> e sono quelle utilizzate
+per accedere al modello di lettura. L&rsquo;unica interazione fra la classe <code>CartUpdater</code>
+e il modello di scrittura avviene esclusivamente tramite gli eventi di dominio generati
+da quest&rsquo;ultimo.</p>
+
+<p>Per inciso, l&rsquo;implmentazione di <code>IRepository</code> e <code>IReadOnlyRepositoy</code> utilizzata in
+questa applicazione di esempio utilizza <a href="https://www.mongodb.com/">MongoDB</a> e niente
+ha a che vedere con Event Store.</p>
+
+<p>Un problema che spesso si ha quando si vuole utilizzare CQRS è il possibile ritardo
+che si può avere nell&rsquo;aggiornamento del modello di lettura a seguito di azioni su
+quello di scrittura. Data la natura esemplificativa di questa applicazione ho deciso
+di risolvere questo problema molto semplicemente: ho registrato <code>CartUpdater</code> come
+consumatore del lightweight publisher descritto sopra. Così facendo ho la garanzia
+che l&rsquo;aggiornamento del modello di lettura sia completato prima che il metodo <code>SaveAsync</code>
+(vedi paragrafo <em>Repository</em>) sia concluso.</p>
+
+<p>Questo non è certamente il modo corretto per gestire questo problema dato che riduce
+la scalabilità del sistema legando le operazioni sul modello di dominio all&rsquo;aggiornamento
+del modello di lettura. Ciononostante, se si sta lavorando su un applicazione esistente
+e si vuole introdurre gradualmente questi pattern, questa è sicuramente una strada
+percorribile.</p>
+
+<p>Tornando al codice, chi si occupa di coordinare le azioni sul modello di scrittura
+con l&rsquo;aggiornamento del modello di lettura è il servizio applicativo <code>CartWriter</code>
+riportato qui sotto.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>CartWriter.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class CartWriter : ICartWriter
+{
+  private readonly IRepository&lt;Cart, CartId&gt; cartRepository;
+  private readonly ITransientDomainEventSubscriber subscriber;
+  private readonly IEnumerable&lt;IDomainEventHandler&lt;CartId, CartCreatedEvent&gt;&gt; cartCreatedEventHandlers;
+  private readonly IEnumerable&lt;IDomainEventHandler&lt;CartId, ProductAddedEvent&gt;&gt; productAddedEventHandlers;
+  private readonly IEnumerable&lt;IDomainEventHandler&lt;CartId, ProductQuantityChangedEvent&gt;&gt; productQuantityChangedEventHandlers;
+
+  public CartWriter(IRepository&lt;Cart, CartId&gt; cartRepository, ITransientDomainEventSubscriber subscriber,
+      IEnumerable&lt;IDomainEventHandler&lt;CartId, CartCreatedEvent&gt;&gt; cartCreatedEventHandlers,
+      IEnumerable&lt;IDomainEventHandler&lt;CartId, ProductAddedEvent&gt;&gt; productAddedEventHandlers,
+      IEnumerable&lt;IDomainEventHandler&lt;CartId, ProductQuantityChangedEvent&gt;&gt; productQuantityChangedEventHandlers)
+  {
+    this.cartRepository = cartRepository;
+    this.subscriber = subscriber;
+    this.cartCreatedEventHandlers = cartCreatedEventHandlers;
+    this.productAddedEventHandlers = productAddedEventHandlers;
+    this.productQuantityChangedEventHandlers = productQuantityChangedEventHandlers;
+  }
+
+  public async Task AddProductAsync(string cartId, string productId, int quantity)
+  {
+    var cart = await cartRepository.GetByIdAsync(new CartId(cartId));
+
+    subscriber.Subscribe&lt;ProductAddedEvent&gt;(
+      async @event =&gt; await HandleAsync(productAddedEventHandlers, @event));
+    cart.AddProduct(new ProductId(productId), quantity);
+    await cartRepository.SaveAsync(cart);
+  }
+
+  public async Task ChangeProductQuantityAsync(
+      string cartId, string productId, int quantity)
+  {
+    var cart = await cartRepository.GetByIdAsync(new CartId(cartId));
+
+    subscriber.Subscribe&lt;ProductQuantityChangedEvent&gt;(
+      async @event =&gt; await HandleAsync(productQuantityChangedEventHandlers, @event));
+    cart.ChangeProductQuantity(new ProductId(productId), quantity);
+    await cartRepository.SaveAsync(cart);
+  }
+
+  public async Task CreateAsync(string customerId)
+  {
+    var cart = new Cart(CartId.NewCartId(), new CustomerId(customerId));
+
+    subscriber.Subscribe&lt;CartCreatedEvent&gt;(
+      async @event =&gt; await HandleAsync(cartCreatedEventHandlers, @event));
+    await cartRepository.SaveAsync(cart);
+  }
+
+  public async Task HandleAsync&lt;T&gt;(
+      IEnumerable&lt;IDomainEventHandler&lt;CartId, T&gt;&gt; handlers, T @event)
+    where T : IDomainEvent&lt;CartId&gt;
+  {
+    foreach (var handler in handlers)
+    {
+      await handler.HandleAsync(@event);
+    }
+  }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Come si può vedere dal codice, il servizio <code>CartWriter</code> non conosce direttamente
+la classe <code>CartUpdater</code>. Quest&rsquo;ultima viene iniettata come implementazione dell&rsquo;interfaccia
+<code>IDomainEventHandler</code>. <code>CartWriter</code> si occupa di registrare tutti gli handler per
+la gestione degli eventi di dominio.</p>
+
+<p>L&rsquo;interfaccia <code>ITransientDomainEventSubscriber</code> è la controparte dell&rsquo;interfaccia
+<code>ITransientDomainEventPublisher</code> vista in precedenza. Entrambe le interfacce in realtà
+sono implementate dalla classe <code>TransientDomainEventPubSub</code> la quale si occupa di
+recapitare a tutti i consumatori registrati gli eventi di dominio emessi. Questa
+classe si chiama <em>transient</em> perché garantisce che le sottoscrizioni siano valide
+solamente all&rsquo;interno di un singolo contesto di esecuzione. Questo fa sì che gli
+handler registrati durante un&rsquo;operazione non vengano invocati dalle successive
+operazioni.</p>
+
+<p>Il servizio <code>CartWriter</code> visto in precedenza non è altro che la facade del nostro
+modello di scrittura. Per simmetria esiste una facade per il modello di lettura la
+quale, senza troppa fantasia, si chiama <code>CartReader</code>.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs">
+  <figcaption>
+    
+      <span>CartReader.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="cs code-highlight">public class CartReader : ICartReader
+{
+  private readonly IReadOnlyRepository&lt;Cart&gt; cartRepository;
+  private readonly IReadOnlyRepository&lt;CartItem&gt; cartItemRepository;
+
+  public CartReader(IReadOnlyRepository&lt;Cart&gt; cartRepository,
+      IReadOnlyRepository&lt;CartItem&gt; cartItemRepository)
+  {
+    this.cartRepository = cartRepository;
+    this.cartItemRepository = cartItemRepository;
+  }
+
+  public async Task&lt;IEnumerable&lt;Cart&gt;&gt; FindAllAsync(
+      Expression&lt;Func&lt;Cart, bool&gt;&gt; predicate)
+  {
+    return await cartRepository.FindAllAsync(predicate);
+  }
+
+  public async Task&lt;Cart&gt; GetByIdAsync(string id)
+  {
+    return await cartRepository.GetByIdAsync(id);
+  }
+
+  public async Task&lt;IEnumerable&lt;CartItem&gt;&gt; GetItemsOfAsync(string cartId)
+  {
+    return await cartItemRepository.FindAllAsync(x =&gt; x.CartId == cartId);
+  }
+}</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+Questa classe utilizza i repository del modello di lettura per ritornare le informazioni
+al client.</p>
+
+<p>Riassumendo, per implementare il pattern CQRS, e poter visualizzare i dati all&rsquo;utente,
+ho creato un modello di lettura (<code>Cart</code> e <code>CartItem</code>) che tengo sincronizzato con
+il modello di dominio tramite <code>CartUpdater</code> e ho fornito due servizi applicativi
+(<code>CartWriter</code> e <code>CartReader</code>) i quali separano nettamente le operazioni di scrittura
+da quelle di lettura.</p>
+
+<p>La potenza di questo approccio sta nel fatto che posso creare quanti modelli di lettura
+voglio, in funzione delle caratteristiche che devo sviluppare. Oltre a questo, nel
+caso in cui un modello di lettura esistente non sia più adeguato, e.g. perché sono
+cambiati i requisiti, posso eliminarlo e crearne uno nuovo. Il nuovo modello verrebbe
+popolato andando a rieseguire gli eventi di dominio passati presenti nell&rsquo;event store.</p>
+
+<h2 id="conclusioni">Conclusioni</h2>
+
+<p>Il post è sicuramente il più lungo che ho scritto fino ad oggi ma l&rsquo;argomento meritava
+tutto lo spazio e il tempo che gli ho dedicato e anche molto di più. Il codice che
+ho prodotto durante l&rsquo;esperimento è più di quello che sono riuscito a presentare
+ed è disponibile su <a href="https://github.com/VenomAV/EventSourcingCQRS">GitHub</a>.</p>
+
+<p>Event Sourcing è un paradigma diverso da quello con cui uno sviluppatore è normalmente
+abituato a pensare e richiede un certo cambio di mentalità. Una volta fatto proprio
+risulta molto semplice. Ci sono aspetti che avrebbero meritato ulteriori approfondimenti
+ma che non hanno trovato spazio in questo post: gestione degli snapshot, pubblicazione
+degli eventi ad altre applicazioni e correzione degli errori solo per nominare quelle
+più importanti.</p>
+
+<p>CQRS diventa indispensabile se si vuole usare Event Sourcing ma può essere utilizzato
+anche da solo. Per utilizzarlo al pieno delle sue possibilità è necessario gestire
+correttamente i possibili ritardi nell&rsquo;aggiornamento del modello di lettura. Per
+questo motivo la sua adozione deve essere valutata caso per caso, ma è molto flessibile
+e le potenzialità che ho sperimentato sono sicuramente interessanti.</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGS</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/ddd/">ddd</a>
+
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/cqrs/">cqrs</a>
+
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/event-sourcing/">event sourcing</a>
+
+  <a class="tag tag--primary tag--small" href="http://www.andreavallotti.tech/it/tags/architecture/">architecture</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/" data-tooltip="Coderetreat Firenze">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">SUCCESSIVA</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/" data-tooltip="Strategic Domain-Driven Design">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PRECEDENTE</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2018%2f01%2fevent-sourcing-e-cqrs-in-c%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2018%2f01%2fevent-sourcing-e-cqrs-in-c%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2018%2f01%2fevent-sourcing-e-cqrs-in-c%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 Andrea Vallotti. Tutti i diritti riservati
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/" data-tooltip="Coderetreat Firenze">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">SUCCESSIVA</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/" data-tooltip="Strategic Domain-Driven Design">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PRECEDENTE</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2018%2f01%2fevent-sourcing-e-cqrs-in-c%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2018%2f01%2fevent-sourcing-e-cqrs-in-c%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2018%2f01%2fevent-sourcing-e-cqrs-in-c%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2018%2f01%2fevent-sourcing-e-cqrs-in-c%2f">
+        <i class="fa fa-google-plus"></i><span>Condividi su Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2018%2f01%2fevent-sourcing-e-cqrs-in-c%2f">
+        <i class="fa fa-facebook-official"></i><span>Condividi su Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2fwww.andreavallotti.tech%2fit%2f2018%2f01%2fevent-sourcing-e-cqrs-in-c%2f">
+        <i class="fa fa-twitter"></i><span>Condividi su Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/100b4dd001736bba121c252821f9c063?s=110" alt="Foto dell&#39;autore" />
+    
+    <h4 id="about-card-name">Andrea Vallotti</h4>
+    
+      <div id="about-card-bio">Appassionato di software: architetto, sviluppatore e technology scout. Agilista entusiasta. MCSD - App Builder, MCSA - Cloud Platform, CSM, e CSPO. Mi diverte imparare sempre cose nuove, mentre creo <em>software eccezionale</em> e aiuto gli altri a fare lo stesso. <a href="http://www.andreavallotti.tech/it/page/about">Continua.</a></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Software Adventurer
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Italia
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Ricerca" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">Nessun articolo trovato</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/">
+                <h3 class="media-heading">Modellazione e separazione delle responsabilità con la programmazione funzionale</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Dopo il mio primo esperimento con la programmazione funzionale, ho deciso di approfondire ulteriormente l&rsquo;argomento. Per questo ho partecipato al workshop &ldquo;Lean and Functional Domain Modelling&rdquo; organizzato da Avanscoperta e tenuto da Marcello Duarte lo scorso marzo. Il workshop mi ha fornito dei buoni spunti su come affrontare la modellazione in ottica funzionale e ha alimentato ancor di più la mia voglia di sperimentare questo paradigma utilizzando Scala.
+Per affrontare questa sfida c&rsquo;è voluto studio e allenamento.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/">
+                <h3 class="media-heading">Coderetreat Firenze</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">“Quello che conta è il viaggio” (cit. Stefano Leli). Questa è l’essenza del Coderetreat.
+Ho scoperto questo format durante gli Italian Agile Day 2017 di Urbino. In quell&rsquo;occasione mi sono divertito ad esercitarmi con gli altri partecipanti mentre a farci da facilitatori c&rsquo;erano Matteo Vaccari, Stefano Leli e Gabriele Tondi. Il formato mi è piaciuto a tal punto che ho deciso di riproporlo a Firenze, dove vivo, per dare la possibilità di fare la mia stessa esperienza alla mia comunità di sviluppatori.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/">
+                <h3 class="media-heading">Event Sourcing e CQRS in C#</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Come promesso al termine del post precedente, in questo articolo approfondirò gli aspetti pratici legati al DDD ed in particolare ai pattern CQRS ed Event Sourcing.
+L’obiettivo principale dell’esperimento è quello di implementare un aggregato secondo il paradigma Event Sourcing e di creare un modello di lettura separato per alimentare le pagine di un&rsquo;applicazione Web.
+Prima di presentare l&rsquo;esempio pratico farò una breve introduzione dei principali pattern architetturali che sono stati utilizzati dalla nascita del DDD.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/">
+                <h3 class="media-heading">Strategic Domain-Driven Design</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Dopo la lettura del libro blu di Evans mi sono appassionato al Domain-Driven Design. Ero ancora in America quando, con quattro mesi di anticipo, mi iscrissi al workshop Strategic Domain-Driven Design di Alberto Brandolini (aka ziobrando) organizzato da Avanscoperta. Non volevo certo perdermelo.
+Poi, preso dal caos di tutti i giorni, avevo perso il senso del tempo quando, a metà ottobre, ho ricevuto una mail da parte di Avanscoperta che mi ha ricordato del corso imminente: è stato come se qualcuno mi avesse regalato un fine settimana alla spa!</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/">
+                <h3 class="media-heading">Utilizzare le migrazioni di EF Core con Docker e MySQL</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">In questo post spiegherò come creare un&rsquo;applicazione console .NET Core 2.0 la quale legga e scriva i propri dati su MySQL e che utilizzi Entity Framework Core, e le migrazioni, per la persistenza e l&rsquo;aggiornamento dello schema del DB. Inoltre mostrerò come utilizzare Docker in modo da poter sviluppare l&rsquo;applicazione indipendentemente dall&rsquo;ambiente utilizzato.
+Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente modo:
+ creazione progetto console .</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/09/there-and-back-again/">
+                <h3 class="media-heading">There and Back Again</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Sep 9, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Per gli estimatori di Tolkien, il titolo del post può sembrare presuntuoso ma in fin dei conti ho viaggiato per 7.600 km, molti più di Bilbo e compagnia, ho incontrato persone delle quali non capivo la lingua, più o meno, e ho parlato con un drago&hellip; Ok, questo non l&rsquo;ho fatto, ma lasciatemelo credere 😃
+Scherzi a parte, ho passato i primi sei mesi di quest&rsquo;anno ad Indianapolis negli Stati Uniti.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/2017/08/console.writeline-hello-world/">
+                <h3 class="media-heading">Console.WriteLine( &#34;Hello, World!&#34; );</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Così sono iniziati tutti gli esperimenti che ho fatto nella mia vita da informatico: scrivere Hello, World! a video. Quindi ho pensato di iniziare nello stesso modo questo nuovo esperimento: tenere un blog in cui scrivere di argomenti che ritengo interessanti e sui quali mi piacerebbe sentire l&rsquo;opinione degli altri.
+Chi mi conosce sa benissimo che le materie umanistiche non sono mai state il mio forte per cui &ldquo;scrivere un blog&rdquo; non è esattamente nelle mie corde.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://www.andreavallotti.tech/it/post/">
+                <h3 class="media-heading">Posts</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="Nessun articolo trovato"
+         data-message-one="1 articolo trovato"
+         data-message-other="{n} articoli trovati">
+         8 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/andreavallotti/image/upload/blog/images/cover-NGC4258-M106.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+
+
+<script src="http://www.andreavallotti.tech/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.registerLanguage("fsharp",function(e){var t={b:"<",e:">",c:[e.inherit(e.TM,{b:/'[a-zA-Z0-9_]+/})]};return{aliases:["fs"],k:"abstract and as assert base begin class default delegate do done downcast downto elif else end exception extern false finally for fun function global if in inherit inline interface internal lazy let match member module mutable namespace new null of open or override private public rec return select sig static struct then to true try type upcast use val void when where while with yield",i:/\/\*/,c:[{cN:"keyword",b:/\b(yield|return|let|do)!/},{cN:"string",b:'@"',e:'"',c:[{b:'""'}]},{cN:"string",b:'"""',e:'"""'},e.C("\\(\\*","\\*\\)"),{cN:"class",bK:"type",e:"\\(|=|$",eE:!0,c:[e.UTM,t]},{cN:"meta",b:"\\[<",e:">\\]",r:10},{cN:"symbol",b:"\\B('[A-Za-z])\\b",c:[e.BE]},e.CLCM,e.inherit(e.QSM,{i:null}),e.CNM]}});
+  hljs.registerLanguage("yaml", function(e) { var b = "true false yes no null", a = "^[ \\-]*", r = "[a-zA-Z_][\\w\\-]*", t = { cN: "attr", v: [{ b: a + r + ":" }, { b: a + '"' + r + '":' }, { b: a + "'" + r + "':" }] }, c = { cN: "template-variable", v: [{ b: ", e: " }, { b: "%{", e: "}" }] }, l = { cN: "string", r: 0, v: [{ b: /'/, e: /'/ }, { b: /"/, e: /"/ }, { b: /\S+/ }], c: [e.BE, c] }; return { cI: !0, aliases: ["yml", "YAML", "yaml"], c: [t, { cN: "meta", b: "^---s*$", r: 10 }, { cN: "string", b: "[\\|>] *$", rE: !0, c: l.c, e: t.v[0].b }, { b: "<%[%=-]?", e: "[%-]?%>", sL: "ruby", eB: !0, eE: !0, r: 0 }, { cN: "type", b: "!!" + e.UIR }, { cN: "meta", b: "&" + e.UIR + "$" }, { cN: "meta", b: "\\*" + e.UIR + "$" }, { cN: "bullet", b: "^ *-", r: 0 }, e.HCM, { bK: b, k: { literal: b } }, e.CNM, l] } });
+  hljs.registerLanguage("dockerfile", function(e) { return { aliases: ["docker"], cI: !0, k: "from maintainer expose env arg user onbuild stopsignal", c: [e.HCM, e.ASM, e.QSM, e.NM, { bK: "run cmd entrypoint volume add copy workdir label healthcheck shell", starts: { e: /[^\\]\n/, sL: "bash" } }], i: "</" } });
+  hljs.registerLanguage("scala",function(e){var t={cN:"meta",b:"@[A-Za-z]+"},a={cN:"subst",v:[{b:"\\$[A-Za-z0-9_]+"},{b:"\\${",e:"}"}]},r={cN:"string",v:[{b:'"',e:'"',i:"\\n",c:[e.BE]},{b:'"""',e:'"""',r:10},{b:'[a-z]+"',e:'"',i:"\\n",c:[e.BE,a]},{cN:"string",b:'[a-z]+"""',e:'"""',c:[a],r:10}]},c={cN:"symbol",b:"'\\w[\\w\\d_]*(?!')"},i={cN:"type",b:"\\b[A-Z][A-Za-z0-9_]*",r:0},s={cN:"title",b:/[^0-9\n\t "'(),.`{}\[\]:;][^\n\t "'(),.`{}\[\]:;]+|[^0-9\n\t "'(),.`{}\[\]:;=]/,r:0},n={cN:"class",bK:"class object trait type",e:/[:={\[\n;]/,eE:!0,c:[{bK:"extends with",r:10},{b:/\[/,e:/\]/,eB:!0,eE:!0,r:0,c:[i]},{cN:"params",b:/\(/,e:/\)/,eB:!0,eE:!0,r:0,c:[i]},s]},l={cN:"function",bK:"def",e:/[:={\[(\n;]/,eE:!0,c:[s]};return{k:{literal:"true false null",keyword:"type yield lazy override def with val var sealed abstract private trait object if forSome for while throw finally protected extends import final return else break new catch super class case package default try this match continue throws implicit"},c:[e.CLCM,e.CBCM,r,c,i,l,n,e.CNM,t]}});
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    var languageFilter = (block.classList && block.classList.length > 1) ? [].slice.apply(block.classList) : null;
+    var autoDetected = hljs.highlightAuto(block.innerText, languageFilter);
+
+    autoDetected.value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/www.andreavallotti.tech\/it\/2018\/01\/event-sourcing-e-cqrs-in-c\/';
+          
+            this.page.identifier = '\/it\/2018\/01\/event-sourcing-e-cqrs-in-c\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'andreavallotti';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#000"
+    },
+    "button": {
+      "background": "#f1d600"
+    }
+  },
+  "content": {
+    "message": "Questo sito utilizza cookie per offrire agli utenti servizi e funzionalità avanzate. Continuando la navigazione nel sito autorizzi l’uso dei cookie.",
+    "dismiss": "Accetto i cookie",
+    "link": "Per saperne di più clicca qui",
+    "href": "/it/page/cookie"
+  }
+})});
+</script>
+    
+  </body>
+</html>
+

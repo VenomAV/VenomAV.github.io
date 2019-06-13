@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Modellazione on Development: people, code &amp; me</title>
+    <link>http://www.andreavallotti.tech/it/tags/modellazione/</link>
+    <description>Recent content in Modellazione on Development: people, code &amp; me</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 29 Aug 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.andreavallotti.tech/it/tags/modellazione/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Modellazione e separazione delle responsabilità con la programmazione funzionale</title>
+      <link>http://www.andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/</link>
+      <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/</guid>
+      <description>Dopo il mio primo esperimento con la programmazione funzionale, ho deciso di approfondire ulteriormente l&amp;rsquo;argomento. Per questo ho partecipato al workshop &amp;ldquo;Lean and Functional Domain Modelling&amp;rdquo; organizzato da Avanscoperta e tenuto da Marcello Duarte lo scorso marzo. Il workshop mi ha fornito dei buoni spunti su come affrontare la modellazione in ottica funzionale e ha alimentato ancor di più la mia voglia di sperimentare questo paradigma utilizzando Scala.
+Per affrontare questa sfida c&amp;rsquo;è voluto studio e allenamento.</description>
+    </item>
+    
+  </channel>
+</rss>

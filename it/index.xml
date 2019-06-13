@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Development: people, code &amp; me</title>
+    <link>http://www.andreavallotti.tech/it/</link>
+    <description>Recent content on Development: people, code &amp; me</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 29 Aug 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.andreavallotti.tech/it/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Modellazione e separazione delle responsabilità con la programmazione funzionale</title>
+      <link>http://www.andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/</link>
+      <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/</guid>
+      <description>Dopo il mio primo esperimento con la programmazione funzionale, ho deciso di approfondire ulteriormente l&amp;rsquo;argomento. Per questo ho partecipato al workshop &amp;ldquo;Lean and Functional Domain Modelling&amp;rdquo; organizzato da Avanscoperta e tenuto da Marcello Duarte lo scorso marzo. Il workshop mi ha fornito dei buoni spunti su come affrontare la modellazione in ottica funzionale e ha alimentato ancor di più la mia voglia di sperimentare questo paradigma utilizzando Scala.
+Per affrontare questa sfida c&amp;rsquo;è voluto studio e allenamento.</description>
+    </item>
+    
+    <item>
+      <title>Coderetreat Firenze</title>
+      <link>http://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/</link>
+      <pubDate>Wed, 31 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/</guid>
+      <description>“Quello che conta è il viaggio” (cit. Stefano Leli). Questa è l’essenza del Coderetreat.
+Ho scoperto questo format durante gli Italian Agile Day 2017 di Urbino. In quell&amp;rsquo;occasione mi sono divertito ad esercitarmi con gli altri partecipanti mentre a farci da facilitatori c&amp;rsquo;erano Matteo Vaccari, Stefano Leli e Gabriele Tondi. Il formato mi è piaciuto a tal punto che ho deciso di riproporlo a Firenze, dove vivo, per dare la possibilità di fare la mia stessa esperienza alla mia comunità di sviluppatori.</description>
+    </item>
+    
+    <item>
+      <title>Event Sourcing e CQRS in C#</title>
+      <link>http://www.andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/</link>
+      <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/</guid>
+      <description>Come promesso al termine del post precedente, in questo articolo approfondirò gli aspetti pratici legati al DDD ed in particolare ai pattern CQRS ed Event Sourcing.
+L’obiettivo principale dell’esperimento è quello di implementare un aggregato secondo il paradigma Event Sourcing e di creare un modello di lettura separato per alimentare le pagine di un&amp;rsquo;applicazione Web.
+Prima di presentare l&amp;rsquo;esempio pratico farò una breve introduzione dei principali pattern architetturali che sono stati utilizzati dalla nascita del DDD.</description>
+    </item>
+    
+    <item>
+      <title>Strategic Domain-Driven Design</title>
+      <link>http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/</link>
+      <pubDate>Wed, 22 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/2017/11/strategic-domain-driven-design/</guid>
+      <description>Dopo la lettura del libro blu di Evans mi sono appassionato al Domain-Driven Design. Ero ancora in America quando, con quattro mesi di anticipo, mi iscrissi al workshop Strategic Domain-Driven Design di Alberto Brandolini (aka ziobrando) organizzato da Avanscoperta. Non volevo certo perdermelo.
+Poi, preso dal caos di tutti i giorni, avevo perso il senso del tempo quando, a metà ottobre, ho ricevuto una mail da parte di Avanscoperta che mi ha ricordato del corso imminente: è stato come se qualcuno mi avesse regalato un fine settimana alla spa!</description>
+    </item>
+    
+    <item>
+      <title>Utilizzare le migrazioni di EF Core con Docker e MySQL</title>
+      <link>http://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/</link>
+      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/</guid>
+      <description>In questo post spiegherò come creare un&amp;rsquo;applicazione console .NET Core 2.0 la quale legga e scriva i propri dati su MySQL e che utilizzi Entity Framework Core, e le migrazioni, per la persistenza e l&amp;rsquo;aggiornamento dello schema del DB. Inoltre mostrerò come utilizzare Docker in modo da poter sviluppare l&amp;rsquo;applicazione indipendentemente dall&amp;rsquo;ambiente utilizzato.
+Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente modo:
+ creazione progetto console .</description>
+    </item>
+    
+    <item>
+      <title>There and Back Again</title>
+      <link>http://www.andreavallotti.tech/it/2017/09/there-and-back-again/</link>
+      <pubDate>Mon, 04 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/2017/09/there-and-back-again/</guid>
+      <description>Per gli estimatori di Tolkien, il titolo del post può sembrare presuntuoso ma in fin dei conti ho viaggiato per 7.600 km, molti più di Bilbo e compagnia, ho incontrato persone delle quali non capivo la lingua, più o meno, e ho parlato con un drago&amp;hellip; Ok, questo non l&amp;rsquo;ho fatto, ma lasciatemelo credere 😃
+Scherzi a parte, ho passato i primi sei mesi di quest&amp;rsquo;anno ad Indianapolis negli Stati Uniti.</description>
+    </item>
+    
+    <item>
+      <title>Console.WriteLine( &#34;Hello, World!&#34; );</title>
+      <link>http://www.andreavallotti.tech/it/2017/08/console.writeline-hello-world/</link>
+      <pubDate>Tue, 29 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/2017/08/console.writeline-hello-world/</guid>
+      <description>Così sono iniziati tutti gli esperimenti che ho fatto nella mia vita da informatico: scrivere Hello, World! a video. Quindi ho pensato di iniziare nello stesso modo questo nuovo esperimento: tenere un blog in cui scrivere di argomenti che ritengo interessanti e sui quali mi piacerebbe sentire l&amp;rsquo;opinione degli altri.
+Chi mi conosce sa benissimo che le materie umanistiche non sono mai state il mio forte per cui &amp;ldquo;scrivere un blog&amp;rdquo; non è esattamente nelle mie corde.</description>
+    </item>
+    
+    <item>
+      <title>Chi sono</title>
+      <link>http://www.andreavallotti.tech/it/page/about/</link>
+      <pubDate>Wed, 26 Jul 2017 18:01:31 +0200</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/page/about/</guid>
+      <description>Facevo ancora le elementari a Castello quando ebbi il primo incontro con il Commodore 64. Il gioco non partì e rimase solo un cursore lampeggiante a video. Provai subito a scrivere qualcosa aspettandomi che il PC rispondesse&amp;hellip; in fin dei conti WarGames era uscito pochi anni prima!
+A tredici anni probabilmente ero uno dei pochi a sapere cosa avrebbe fatto da grande: programmare i computer perché facessero quello che volevo. Non sapevo esattamente cosa questo significasse, ma non appena ne ebbi l&amp;rsquo;occasione iniziai a sperimentare!</description>
+    </item>
+    
+    <item>
+      <title>Cookies</title>
+      <link>http://www.andreavallotti.tech/it/page/cookie/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.andreavallotti.tech/it/page/cookie/</guid>
+      <description>Per far funzionare bene questo sito, a volte installiamo sul tuo dispositivo dei piccoli file di dati che si chiamano &amp;ldquo;cookies&amp;rdquo;. Anche la maggior parte dei grandi siti fanno lo stesso.
+Cosa sono i cookies? Un cookie è un piccolo file di testo che i siti salvano sul tuo computer o dispositivo mobile mentre li visiti. Grazie ai cookies il sito ricorda le tue azioni e preferenze (per es. login, lingua, dimensioni dei caratteri e altre impostazioni di visualizzazione) in modo che tu non debba reinserirle quando torni sul sito o navighi da una pagina all&amp;rsquo;altra.</description>
+    </item>
+    
+  </channel>
+</rss>
