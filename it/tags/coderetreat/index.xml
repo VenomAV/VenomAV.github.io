@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Coderetreat on Development: people, code &amp; me</title>
-    <link>http://www.andreavallotti.tech/it/tags/coderetreat/</link>
+    <link>https://www.andreavallotti.tech/it/tags/coderetreat/</link>
     <description>Recent content in Coderetreat on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 31 Jan 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://www.andreavallotti.tech/it/tags/coderetreat/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.andreavallotti.tech/it/tags/coderetreat/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Coderetreat Firenze</title>
-      <link>http://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/</link>
+      <link>https://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/</link>
       <pubDate>Wed, 31 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/</guid>
+      <guid>https://www.andreavallotti.tech/it/2018/01/coderetreat-firenze/</guid>
       <description>“Quello che conta è il viaggio” (cit. Stefano Leli). Questa è l’essenza del Coderetreat.
 Ho scoperto questo format durante gli Italian Agile Day 2017 di Urbino. In quell&amp;rsquo;occasione mi sono divertito ad esercitarmi con gli altri partecipanti mentre a farci da facilitatori c&amp;rsquo;erano Matteo Vaccari, Stefano Leli e Gabriele Tondi. Il formato mi è piaciuto a tal punto che ho deciso di riproporlo a Firenze, dove vivo, per dare la possibilità di fare la mia stessa esperienza alla mia comunità di sviluppatori.</description>
     </item>

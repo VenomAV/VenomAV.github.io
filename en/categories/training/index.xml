@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Training on Development: people, code &amp; me</title>
-    <link>http://www.andreavallotti.tech/en/categories/training/</link>
+    <link>https://www.andreavallotti.tech/en/categories/training/</link>
     <description>Recent content in Training on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 31 Jan 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://www.andreavallotti.tech/en/categories/training/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.andreavallotti.tech/en/categories/training/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Coderetreat Florence</title>
-      <link>http://www.andreavallotti.tech/en/2018/01/coderetreat-florence/</link>
+      <link>https://www.andreavallotti.tech/en/2018/01/coderetreat-florence/</link>
       <pubDate>Wed, 31 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/2018/01/coderetreat-florence/</guid>
+      <guid>https://www.andreavallotti.tech/en/2018/01/coderetreat-florence/</guid>
       <description>&amp;ldquo;What matters is the journey&amp;rdquo; (cit. Stefano Leli). This is the essence of Coderetreat.
 I discovered this format during Urbino&amp;rsquo;s Italian Agile Day 2017. During that event, I enjoyed practicing Test Driven Development (TDD) with other participants, and learning from the facilitators Matteo Vaccari, Stefano Leli and Gabriele Tondi. I liked the format so much that I decided to propose it in Florence, where I live, in order to let developers of my community to enjoy it and have fun together.</description>
     </item>
     
     <item>
       <title>Strategic Domain-Driven Design</title>
-      <link>http://www.andreavallotti.tech/en/2017/11/strategic-domain-driven-design/</link>
+      <link>https://www.andreavallotti.tech/en/2017/11/strategic-domain-driven-design/</link>
       <pubDate>Wed, 22 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/2017/11/strategic-domain-driven-design/</guid>
+      <guid>https://www.andreavallotti.tech/en/2017/11/strategic-domain-driven-design/</guid>
       <description>I was inspired to such an extent by Evans&amp;rsquo; Blue Book, that I got passionate about Domain-Driven Design. I was still in the United States when, four months in advance, I registered to the Strategic Domain-Driven Design workshop held by Alberto Brandolini (aka ziobrando) and organized by Avanscoperta. I definitely wanted to attend.
 Then, taken from the day to day activities, I lost the sense of time, when mid-October, I received an email from Avanscoperta that reminded me of the upcoming course.</description>
     </item>

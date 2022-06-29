@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Development: people, code &amp; me</title>
-    <link>http://www.andreavallotti.tech/it/categories/</link>
+    <link>https://www.andreavallotti.tech/it/categories/</link>
     <description>Recent content in Categories on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     
-	<atom:link href="http://www.andreavallotti.tech/it/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.andreavallotti.tech/it/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Formazione</title>
-      <link>http://www.andreavallotti.tech/it/categories/formazione/</link>
+      <link>https://www.andreavallotti.tech/it/categories/formazione/</link>
       <pubDate>Wed, 31 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/it/categories/formazione/</guid>
+      <guid>https://www.andreavallotti.tech/it/categories/formazione/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Sviluppo</title>
-      <link>http://www.andreavallotti.tech/it/categories/sviluppo/</link>
+      <link>https://www.andreavallotti.tech/it/categories/sviluppo/</link>
       <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/it/categories/sviluppo/</guid>
+      <guid>https://www.andreavallotti.tech/it/categories/sviluppo/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Varie</title>
-      <link>http://www.andreavallotti.tech/it/categories/varie/</link>
+      <link>https://www.andreavallotti.tech/it/categories/varie/</link>
       <pubDate>Tue, 29 Aug 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/it/categories/varie/</guid>
+      <guid>https://www.andreavallotti.tech/it/categories/varie/</guid>
       <description></description>
     </item>
     

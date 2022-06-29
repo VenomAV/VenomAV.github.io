@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Pages on Development: people, code &amp; me</title>
-    <link>http://www.andreavallotti.tech/en/page/</link>
+    <link>https://www.andreavallotti.tech/en/page/</link>
     <description>Recent content in Pages on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 26 Jul 2017 18:01:31 +0200</lastBuildDate>
     
-	<atom:link href="http://www.andreavallotti.tech/en/page/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.andreavallotti.tech/en/page/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>About me</title>
-      <link>http://www.andreavallotti.tech/en/page/about/</link>
+      <link>https://www.andreavallotti.tech/en/page/about/</link>
       <pubDate>Wed, 26 Jul 2017 18:01:31 +0200</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/page/about/</guid>
+      <guid>https://www.andreavallotti.tech/en/page/about/</guid>
       <description>I was a kid in Castello when, for the first time, I met with a Commodore 64. The game didn&amp;rsquo;t load, nothing happened but a blinking cursor on the screen. Immediately I typed a command on the keyboard waiting for an answer&amp;hellip; after all, WarGames was released just few years earlier.
 At thirteen I was probably one of the few kids knowing exactly what to do when grown up: programming computers and let them do what I want.</description>
     </item>
     
     <item>
       <title>Cookies</title>
-      <link>http://www.andreavallotti.tech/en/page/cookie/</link>
+      <link>https://www.andreavallotti.tech/en/page/cookie/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/page/cookie/</guid>
+      <guid>https://www.andreavallotti.tech/en/page/cookie/</guid>
       <description>To make this site work properly, we sometimes place small data files called cookies on your device. Most big websites do this too.
 What are cookies? A cookie is a small text file that a website saves on your computer or mobile device when you visit the site. It enables the website to remember your actions and preferences (such as login, language, font size and other display preferences) over a period of time, so you don’t have to keep re-entering them whenever you come back to the site or browse from one page to another.</description>
     </item>

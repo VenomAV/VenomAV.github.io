@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>F# on Development: people, code &amp; me</title>
-    <link>http://www.andreavallotti.tech/en/tags/f#/</link>
+    <link>https://www.andreavallotti.tech/en/tags/f#/</link>
     <description>Recent content in F# on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Mon, 04 Sep 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://www.andreavallotti.tech/en/tags/f#/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.andreavallotti.tech/en/tags/f#/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>There and Back Again</title>
-      <link>http://www.andreavallotti.tech/en/2017/09/there-and-back-again/</link>
+      <link>https://www.andreavallotti.tech/en/2017/09/there-and-back-again/</link>
       <pubDate>Mon, 04 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/2017/09/there-and-back-again/</guid>
+      <guid>https://www.andreavallotti.tech/en/2017/09/there-and-back-again/</guid>
       <description>For those who loves Tolkien, the title could seem uppish. After all, I traveled 7.600 km, much more than Bilbo and fellowship, I met people I could hardly understand, and I talked to a dragon&amp;hellip; Ok, the latter is not true, but let me believe so 😃
 Jokes aside, I spent the first six months of this year in Indianapolis, USA. In this period, I had the chance to appreciate how lively Indiana&amp;rsquo;s tech community is.</description>
     </item>

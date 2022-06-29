@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Development: people, code &amp; me</title>
-    <link>http://www.andreavallotti.tech/en/categories/</link>
+    <link>https://www.andreavallotti.tech/en/categories/</link>
     <description>Recent content in Categories on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     
-	<atom:link href="http://www.andreavallotti.tech/en/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.andreavallotti.tech/en/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Development</title>
-      <link>http://www.andreavallotti.tech/en/categories/development/</link>
+      <link>https://www.andreavallotti.tech/en/categories/development/</link>
       <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/categories/development/</guid>
+      <guid>https://www.andreavallotti.tech/en/categories/development/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Miscellaneous</title>
-      <link>http://www.andreavallotti.tech/en/categories/miscellaneous/</link>
+      <link>https://www.andreavallotti.tech/en/categories/miscellaneous/</link>
       <pubDate>Tue, 29 Aug 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/categories/miscellaneous/</guid>
+      <guid>https://www.andreavallotti.tech/en/categories/miscellaneous/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Training</title>
-      <link>http://www.andreavallotti.tech/en/categories/training/</link>
+      <link>https://www.andreavallotti.tech/en/categories/training/</link>
       <pubDate>Wed, 31 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/categories/training/</guid>
+      <guid>https://www.andreavallotti.tech/en/categories/training/</guid>
       <description></description>
     </item>
     

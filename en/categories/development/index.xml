@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Development on Development: people, code &amp; me</title>
-    <link>http://www.andreavallotti.tech/en/categories/development/</link>
+    <link>https://www.andreavallotti.tech/en/categories/development/</link>
     <description>Recent content in Development on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 29 Aug 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://www.andreavallotti.tech/en/categories/development/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.andreavallotti.tech/en/categories/development/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Modeling and separation of concerns in functional programming</title>
-      <link>http://www.andreavallotti.tech/en/2018/08/modeling-and-separation-of-concerns-in-functional-programming/</link>
+      <link>https://www.andreavallotti.tech/en/2018/08/modeling-and-separation-of-concerns-in-functional-programming/</link>
       <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/2018/08/modeling-and-separation-of-concerns-in-functional-programming/</guid>
+      <guid>https://www.andreavallotti.tech/en/2018/08/modeling-and-separation-of-concerns-in-functional-programming/</guid>
       <description>After my first experiment with functional programming, I decided to further study it in depth. Therefore, last March I attended &amp;ldquo;Lean and Functional Domain Modelling&amp;rdquo; workshop, organized by Avanscoperta, and held by Marcello Duarte. The workshop gave me good hints about functional modeling and fueled my curiosity to learn Scala and experiment more this paradigm.
 In order to tackle this challenge I studied and practiced a lot. After some months, and several discussions with Matteo Baglini, I have been able to put together the puzzle, and I wrote this post.</description>
     </item>
     
     <item>
       <title>Event Sourcing and CQRS in C#</title>
-      <link>http://www.andreavallotti.tech/en/2018/01/event-sourcing-and-cqrs-in-c/</link>
+      <link>https://www.andreavallotti.tech/en/2018/01/event-sourcing-and-cqrs-in-c/</link>
       <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/2018/01/event-sourcing-and-cqrs-in-c/</guid>
+      <guid>https://www.andreavallotti.tech/en/2018/01/event-sourcing-and-cqrs-in-c/</guid>
       <description>As promised in my previous post, in this article I examine practical aspects related to DDD and, in particular to CQRS and Event Sourcing patterns.
 The main goal of my experiment is to implement an aggregate according to the Event Sourcing paradigm, and to create a separate read model to feed the pages of a Web application.
 Before presenting the example, I am going to briefly introduce the main architectural patterns that have been used since DDD launch.</description>
@@ -34,20 +34,20 @@ Before presenting the example, I am going to briefly introduce the main architec
     
     <item>
       <title>Using EF Core&#39;s migration with Docker and MySQL</title>
-      <link>http://www.andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/</link>
+      <link>https://www.andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/</link>
       <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/</guid>
+      <guid>https://www.andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/</guid>
       <description>In this post I explain how to create a .NET Core 2.0 console application which reads, and writes, data from MySQL, and uses Entity Framework Core, and migrations, in order to persist data and manage the DB schema. Furthermore I will show how to use Docker to be able to develop the application independently by the chosen environment.
 In order to highlight the needed steps, I split the post in this way:</description>
     </item>
     
     <item>
       <title>There and Back Again</title>
-      <link>http://www.andreavallotti.tech/en/2017/09/there-and-back-again/</link>
+      <link>https://www.andreavallotti.tech/en/2017/09/there-and-back-again/</link>
       <pubDate>Mon, 04 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://www.andreavallotti.tech/en/2017/09/there-and-back-again/</guid>
+      <guid>https://www.andreavallotti.tech/en/2017/09/there-and-back-again/</guid>
       <description>For those who loves Tolkien, the title could seem uppish. After all, I traveled 7.600 km, much more than Bilbo and fellowship, I met people I could hardly understand, and I talked to a dragon&amp;hellip; Ok, the latter is not true, but let me believe so 😃
 Jokes aside, I spent the first six months of this year in Indianapolis, USA. In this period, I had the chance to appreciate how lively Indiana&amp;rsquo;s tech community is.</description>
     </item>
