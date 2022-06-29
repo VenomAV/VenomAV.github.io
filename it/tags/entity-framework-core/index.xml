@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Entity Framework Core on Development: people, code &amp; me</title>
-    <link>https://www.andreavallotti.tech/it/tags/entity-framework-core/</link>
+    <link>https://andreavallotti.tech/it/tags/entity-framework-core/</link>
     <description>Recent content in Entity Framework Core on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Tue, 10 Oct 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://www.andreavallotti.tech/it/tags/entity-framework-core/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://andreavallotti.tech/it/tags/entity-framework-core/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Utilizzare le migrazioni di EF Core con Docker e MySQL</title>
-      <link>https://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/</link>
+      <link>https://andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/</link>
       <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/</guid>
+      <guid>https://andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/</guid>
       <description>In questo post spiegherò come creare un&amp;rsquo;applicazione console .NET Core 2.0 la quale legga e scriva i propri dati su MySQL e che utilizzi Entity Framework Core, e le migrazioni, per la persistenza e l&amp;rsquo;aggiornamento dello schema del DB. Inoltre mostrerò come utilizzare Docker in modo da poter sviluppare l&amp;rsquo;applicazione indipendentemente dall&amp;rsquo;ambiente utilizzato.
 Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente modo:
  creazione progetto console .</description>

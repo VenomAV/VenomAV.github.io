@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>F# on Development: people, code &amp; me</title>
-    <link>https://www.andreavallotti.tech/it/tags/f#/</link>
+    <link>https://andreavallotti.tech/it/tags/f#/</link>
     <description>Recent content in F# on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Mon, 04 Sep 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://www.andreavallotti.tech/it/tags/f#/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://andreavallotti.tech/it/tags/f#/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>There and Back Again</title>
-      <link>https://www.andreavallotti.tech/it/2017/09/there-and-back-again/</link>
+      <link>https://andreavallotti.tech/it/2017/09/there-and-back-again/</link>
       <pubDate>Mon, 04 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/it/2017/09/there-and-back-again/</guid>
+      <guid>https://andreavallotti.tech/it/2017/09/there-and-back-again/</guid>
       <description>Per gli estimatori di Tolkien, il titolo del post può sembrare presuntuoso ma in fin dei conti ho viaggiato per 7.600 km, molti più di Bilbo e compagnia, ho incontrato persone delle quali non capivo la lingua, più o meno, e ho parlato con un drago&amp;hellip; Ok, questo non l&amp;rsquo;ho fatto, ma lasciatemelo credere 😃
 Scherzi a parte, ho passato i primi sei mesi di quest&amp;rsquo;anno ad Indianapolis negli Stati Uniti.</description>
     </item>

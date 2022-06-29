@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Coderetreat on Development: people, code &amp; me</title>
-    <link>https://www.andreavallotti.tech/en/tags/coderetreat/</link>
+    <link>https://andreavallotti.tech/en/tags/coderetreat/</link>
     <description>Recent content in Coderetreat on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 31 Jan 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://www.andreavallotti.tech/en/tags/coderetreat/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://andreavallotti.tech/en/tags/coderetreat/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Coderetreat Florence</title>
-      <link>https://www.andreavallotti.tech/en/2018/01/coderetreat-florence/</link>
+      <link>https://andreavallotti.tech/en/2018/01/coderetreat-florence/</link>
       <pubDate>Wed, 31 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/en/2018/01/coderetreat-florence/</guid>
+      <guid>https://andreavallotti.tech/en/2018/01/coderetreat-florence/</guid>
       <description>&amp;ldquo;What matters is the journey&amp;rdquo; (cit. Stefano Leli). This is the essence of Coderetreat.
 I discovered this format during Urbino&amp;rsquo;s Italian Agile Day 2017. During that event, I enjoyed practicing Test Driven Development (TDD) with other participants, and learning from the facilitators Matteo Vaccari, Stefano Leli and Gabriele Tondi. I liked the format so much that I decided to propose it in Florence, where I live, in order to let developers of my community to enjoy it and have fun together.</description>
     </item>

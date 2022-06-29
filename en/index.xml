@@ -2,41 +2,41 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Development: people, code &amp; me</title>
-    <link>https://www.andreavallotti.tech/en/</link>
+    <link>https://andreavallotti.tech/en/</link>
     <description>Recent content on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 29 Aug 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://www.andreavallotti.tech/en/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://andreavallotti.tech/en/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Modeling and separation of concerns in functional programming</title>
-      <link>https://www.andreavallotti.tech/en/2018/08/modeling-and-separation-of-concerns-in-functional-programming/</link>
+      <link>https://andreavallotti.tech/en/2018/08/modeling-and-separation-of-concerns-in-functional-programming/</link>
       <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/en/2018/08/modeling-and-separation-of-concerns-in-functional-programming/</guid>
+      <guid>https://andreavallotti.tech/en/2018/08/modeling-and-separation-of-concerns-in-functional-programming/</guid>
       <description>After my first experiment with functional programming, I decided to further study it in depth. Therefore, last March I attended &amp;ldquo;Lean and Functional Domain Modelling&amp;rdquo; workshop, organized by Avanscoperta, and held by Marcello Duarte. The workshop gave me good hints about functional modeling and fueled my curiosity to learn Scala and experiment more this paradigm.
 In order to tackle this challenge I studied and practiced a lot. After some months, and several discussions with Matteo Baglini, I have been able to put together the puzzle, and I wrote this post.</description>
     </item>
     
     <item>
       <title>Coderetreat Florence</title>
-      <link>https://www.andreavallotti.tech/en/2018/01/coderetreat-florence/</link>
+      <link>https://andreavallotti.tech/en/2018/01/coderetreat-florence/</link>
       <pubDate>Wed, 31 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/en/2018/01/coderetreat-florence/</guid>
+      <guid>https://andreavallotti.tech/en/2018/01/coderetreat-florence/</guid>
       <description>&amp;ldquo;What matters is the journey&amp;rdquo; (cit. Stefano Leli). This is the essence of Coderetreat.
 I discovered this format during Urbino&amp;rsquo;s Italian Agile Day 2017. During that event, I enjoyed practicing Test Driven Development (TDD) with other participants, and learning from the facilitators Matteo Vaccari, Stefano Leli and Gabriele Tondi. I liked the format so much that I decided to propose it in Florence, where I live, in order to let developers of my community to enjoy it and have fun together.</description>
     </item>
     
     <item>
       <title>Event Sourcing and CQRS in C#</title>
-      <link>https://www.andreavallotti.tech/en/2018/01/event-sourcing-and-cqrs-in-c/</link>
+      <link>https://andreavallotti.tech/en/2018/01/event-sourcing-and-cqrs-in-c/</link>
       <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/en/2018/01/event-sourcing-and-cqrs-in-c/</guid>
+      <guid>https://andreavallotti.tech/en/2018/01/event-sourcing-and-cqrs-in-c/</guid>
       <description>As promised in my previous post, in this article I examine practical aspects related to DDD and, in particular to CQRS and Event Sourcing patterns.
 The main goal of my experiment is to implement an aggregate according to the Event Sourcing paradigm, and to create a separate read model to feed the pages of a Web application.
 Before presenting the example, I am going to briefly introduce the main architectural patterns that have been used since DDD launch.</description>
@@ -44,60 +44,60 @@ Before presenting the example, I am going to briefly introduce the main architec
     
     <item>
       <title>Strategic Domain-Driven Design</title>
-      <link>https://www.andreavallotti.tech/en/2017/11/strategic-domain-driven-design/</link>
+      <link>https://andreavallotti.tech/en/2017/11/strategic-domain-driven-design/</link>
       <pubDate>Wed, 22 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/en/2017/11/strategic-domain-driven-design/</guid>
+      <guid>https://andreavallotti.tech/en/2017/11/strategic-domain-driven-design/</guid>
       <description>I was inspired to such an extent by Evans&amp;rsquo; Blue Book, that I got passionate about Domain-Driven Design. I was still in the United States when, four months in advance, I registered to the Strategic Domain-Driven Design workshop held by Alberto Brandolini (aka ziobrando) and organized by Avanscoperta. I definitely wanted to attend.
 Then, taken from the day to day activities, I lost the sense of time, when mid-October, I received an email from Avanscoperta that reminded me of the upcoming course.</description>
     </item>
     
     <item>
       <title>Using EF Core&#39;s migration with Docker and MySQL</title>
-      <link>https://www.andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/</link>
+      <link>https://andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/</link>
       <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/</guid>
+      <guid>https://andreavallotti.tech/en/2017/10/using-ef-cores-migration-with-docker-and-mysql/</guid>
       <description>In this post I explain how to create a .NET Core 2.0 console application which reads, and writes, data from MySQL, and uses Entity Framework Core, and migrations, in order to persist data and manage the DB schema. Furthermore I will show how to use Docker to be able to develop the application independently by the chosen environment.
 In order to highlight the needed steps, I split the post in this way:</description>
     </item>
     
     <item>
       <title>There and Back Again</title>
-      <link>https://www.andreavallotti.tech/en/2017/09/there-and-back-again/</link>
+      <link>https://andreavallotti.tech/en/2017/09/there-and-back-again/</link>
       <pubDate>Mon, 04 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/en/2017/09/there-and-back-again/</guid>
+      <guid>https://andreavallotti.tech/en/2017/09/there-and-back-again/</guid>
       <description>For those who loves Tolkien, the title could seem uppish. After all, I traveled 7.600 km, much more than Bilbo and fellowship, I met people I could hardly understand, and I talked to a dragon&amp;hellip; Ok, the latter is not true, but let me believe so 😃
 Jokes aside, I spent the first six months of this year in Indianapolis, USA. In this period, I had the chance to appreciate how lively Indiana&amp;rsquo;s tech community is.</description>
     </item>
     
     <item>
       <title>Console.WriteLine( &#34;Hello, World!&#34; );</title>
-      <link>https://www.andreavallotti.tech/en/2017/08/console.writeline-hello-world/</link>
+      <link>https://andreavallotti.tech/en/2017/08/console.writeline-hello-world/</link>
       <pubDate>Tue, 29 Aug 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/en/2017/08/console.writeline-hello-world/</guid>
+      <guid>https://andreavallotti.tech/en/2017/08/console.writeline-hello-world/</guid>
       <description>Every single experiment I did as a programmer began in this way: show Hello, World! on the monitor. Therefore I decided to start this new experiment (writing a blog) in the same way.
 Who knows me well can tell that I never did my best in humanities, therefore &amp;ldquo;writing a blog&amp;rdquo; is not exactly in my style. However, I strongly believe that sharing experiences is essential in my job for two main reasons:</description>
     </item>
     
     <item>
       <title>About me</title>
-      <link>https://www.andreavallotti.tech/en/page/about/</link>
+      <link>https://andreavallotti.tech/en/page/about/</link>
       <pubDate>Wed, 26 Jul 2017 18:01:31 +0200</pubDate>
       
-      <guid>https://www.andreavallotti.tech/en/page/about/</guid>
+      <guid>https://andreavallotti.tech/en/page/about/</guid>
       <description>I was a kid in Castello when, for the first time, I met with a Commodore 64. The game didn&amp;rsquo;t load, nothing happened but a blinking cursor on the screen. Immediately I typed a command on the keyboard waiting for an answer&amp;hellip; after all, WarGames was released just few years earlier.
 At thirteen I was probably one of the few kids knowing exactly what to do when grown up: programming computers and let them do what I want.</description>
     </item>
     
     <item>
       <title>Cookies</title>
-      <link>https://www.andreavallotti.tech/en/page/cookie/</link>
+      <link>https://andreavallotti.tech/en/page/cookie/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/en/page/cookie/</guid>
+      <guid>https://andreavallotti.tech/en/page/cookie/</guid>
       <description>To make this site work properly, we sometimes place small data files called cookies on your device. Most big websites do this too.
 What are cookies? A cookie is a small text file that a website saves on your computer or mobile device when you visit the site. It enables the website to remember your actions and preferences (such as login, language, font size and other display preferences) over a period of time, so you don’t have to keep re-entering them whenever you come back to the site or browse from one page to another.</description>
     </item>

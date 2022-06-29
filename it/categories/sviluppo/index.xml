@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Sviluppo on Development: people, code &amp; me</title>
-    <link>https://www.andreavallotti.tech/it/categories/sviluppo/</link>
+    <link>https://andreavallotti.tech/it/categories/sviluppo/</link>
     <description>Recent content in Sviluppo on Development: people, code &amp; me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 29 Aug 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://www.andreavallotti.tech/it/categories/sviluppo/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://andreavallotti.tech/it/categories/sviluppo/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Modellazione e separazione delle responsabilità con la programmazione funzionale</title>
-      <link>https://www.andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/</link>
+      <link>https://andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/</link>
       <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/</guid>
+      <guid>https://andreavallotti.tech/it/2018/08/modellazione-e-separazione-delle-responsabilit%C3%A0-con-la-programmazione-funzionale/</guid>
       <description>Dopo il mio primo esperimento con la programmazione funzionale, ho deciso di approfondire ulteriormente l&amp;rsquo;argomento. Per questo ho partecipato al workshop &amp;ldquo;Lean and Functional Domain Modelling&amp;rdquo; organizzato da Avanscoperta e tenuto da Marcello Duarte lo scorso marzo. Il workshop mi ha fornito dei buoni spunti su come affrontare la modellazione in ottica funzionale e ha alimentato ancor di più la mia voglia di sperimentare questo paradigma utilizzando Scala.
 Per affrontare questa sfida c&amp;rsquo;è voluto studio e allenamento.</description>
     </item>
     
     <item>
       <title>Event Sourcing e CQRS in C#</title>
-      <link>https://www.andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/</link>
+      <link>https://andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/</link>
       <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/</guid>
+      <guid>https://andreavallotti.tech/it/2018/01/event-sourcing-e-cqrs-in-c/</guid>
       <description>Come promesso al termine del post precedente, in questo articolo approfondirò gli aspetti pratici legati al DDD ed in particolare ai pattern CQRS ed Event Sourcing.
 L’obiettivo principale dell’esperimento è quello di implementare un aggregato secondo il paradigma Event Sourcing e di creare un modello di lettura separato per alimentare le pagine di un&amp;rsquo;applicazione Web.
 Prima di presentare l&amp;rsquo;esempio pratico farò una breve introduzione dei principali pattern architetturali che sono stati utilizzati dalla nascita del DDD.</description>
@@ -34,10 +34,10 @@ Prima di presentare l&amp;rsquo;esempio pratico farò una breve introduzione dei
     
     <item>
       <title>Utilizzare le migrazioni di EF Core con Docker e MySQL</title>
-      <link>https://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/</link>
+      <link>https://andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/</link>
       <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/</guid>
+      <guid>https://andreavallotti.tech/it/2017/10/utilizzare-le-migrazioni-di-ef-core-con-docker-e-mysql/</guid>
       <description>In questo post spiegherò come creare un&amp;rsquo;applicazione console .NET Core 2.0 la quale legga e scriva i propri dati su MySQL e che utilizzi Entity Framework Core, e le migrazioni, per la persistenza e l&amp;rsquo;aggiornamento dello schema del DB. Inoltre mostrerò come utilizzare Docker in modo da poter sviluppare l&amp;rsquo;applicazione indipendentemente dall&amp;rsquo;ambiente utilizzato.
 Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente modo:
  creazione progetto console .</description>
@@ -45,10 +45,10 @@ Al fine di evidenziare i passaggi necessari, ho suddiviso il post nel seguente m
     
     <item>
       <title>There and Back Again</title>
-      <link>https://www.andreavallotti.tech/it/2017/09/there-and-back-again/</link>
+      <link>https://andreavallotti.tech/it/2017/09/there-and-back-again/</link>
       <pubDate>Mon, 04 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://www.andreavallotti.tech/it/2017/09/there-and-back-again/</guid>
+      <guid>https://andreavallotti.tech/it/2017/09/there-and-back-again/</guid>
       <description>Per gli estimatori di Tolkien, il titolo del post può sembrare presuntuoso ma in fin dei conti ho viaggiato per 7.600 km, molti più di Bilbo e compagnia, ho incontrato persone delle quali non capivo la lingua, più o meno, e ho parlato con un drago&amp;hellip; Ok, questo non l&amp;rsquo;ho fatto, ma lasciatemelo credere 😃
 Scherzi a parte, ho passato i primi sei mesi di quest&amp;rsquo;anno ad Indianapolis negli Stati Uniti.</description>
     </item>
